@@ -48,7 +48,6 @@ export default async function Index() {
 
   return (
     <div className="w-full flex flex-col items-center">
-
       <NavigationBar />
 
       {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
