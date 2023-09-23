@@ -1,4 +1,11 @@
 import './globals.css'
+import { Mulish } from 'next/font/google'
+
+const mulish = Mulish({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mulish',
+})
 
 export const metadata = {
   title: 'Create Next App',
@@ -11,7 +18,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${mulish.variable}`}>
       <body>
         <main className="min-h-screen bg-background flex flex-col items-center">
           {children}
