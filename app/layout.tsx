@@ -1,3 +1,4 @@
+import { LandingPageNavigationBar } from '@/components/LandingPageNavigationBar'
 import './globals.css'
 
 export const metadata = {
