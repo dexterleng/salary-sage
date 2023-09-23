@@ -1,5 +1,5 @@
 import { DashboardNavigationBar } from "@/components/DashboardNavigationBar"
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation"
 import { cookies } from 'next/headers'
 
@@ -8,16 +8,18 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createRouteHandlerClient({ cookies })
-  const { data: session, error } = await supabase.auth.getSession()
+  const supabase = createServerComponentClient({ cookies })
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (error || !session) {
-    return redirect('/login');
+  if (!user) {
+    return redirect('/login/')
   }
 
   return (
     <div className="w-full">
-      <DashboardNavigationBar />
+      <DashboardNavigationBar user={user} />
       {children}
     </div>
   )
