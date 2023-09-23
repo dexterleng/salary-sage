@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
- 
+
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -15,7 +15,7 @@ type LandingPageNavigationBarProps = {
   user: User | null
 }
 
-export async function LandingPageNavigationBar({ user }: LandingPageNavigationBarProps) {
+export function LandingPageNavigationBar({ user }: LandingPageNavigationBarProps) {
   const unauthenticatedMenuItems = () => (
     <NavigationMenuList className="gap-1">
       <NavigationMenuItem>
@@ -38,7 +38,7 @@ export async function LandingPageNavigationBar({ user }: LandingPageNavigationBa
   return (
     <div className="flex items-center justify-end border-b w-full sticky top-0 px-10 z-50 h-14 supports-backdrop-blur:bg-background/60 bg-background/95">
       <NavigationMenu>
-        { user ? authenticatedMenuItems() : unauthenticatedMenuItems() }
+        {user ? authenticatedMenuItems() : unauthenticatedMenuItems()}
       </NavigationMenu>
     </div>
   )
