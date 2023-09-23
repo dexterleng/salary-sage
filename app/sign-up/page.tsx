@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,26 +18,28 @@ import {
 import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Icons } from "@/components/icons"
 import { Input } from '@/components/ui/input'
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string(),
+  password: z.string().min(6),
+  inviteCode: z.string(),
 })
 
-export default function Login() {
+export default function SignUp() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
+      inviteCode: "",
     },
   })
 
   const formRef = useRef(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("success");
     (formRef.current as any).submit();
   }
 
@@ -67,11 +70,11 @@ export default function Login() {
 
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl w-full text-center">Welcome back</CardTitle>
+          <CardTitle className="text-2xl w-full text-center">Get started</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form {...form} >
-            <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} action="/auth/sign-in" method="post" className="space-y-4">
+            <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} action="/auth/sign-up" method="post" className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"
@@ -79,7 +82,7 @@ export default function Login() {
                   <FormItem>
                     <FormLabel>Email address</FormLabel>
                     <FormControl>
-                      <Input placeholder="john@example.org" {...field} />
+                      <Input type='email' placeholder="john@example.org" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -92,19 +95,35 @@ export default function Login() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="••••••••••••••••" {...field} />
+                      <Input type='password' placeholder="••••••••••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" size='lg'>Log In</Button>
+              <FormField
+                control={form.control}
+                name="inviteCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Invite Code</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    <FormDescription>
+                      Salary Sage is currently invite-only. You can join the waitlist <Link href="/#waitlist" className='text-emerald-500 hover:underline'>here</Link>.
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" size='lg'>Create Account</Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter>
           <CardDescription className='w-full text-center font-light'>
-            Don't have an account? <Link href="/sign-up/" className='text-emerald-500 hover:underline'>Sign up</Link>
+            Already have an account? <Link href="/login/" className='text-emerald-500 hover:underline'>Log in</Link>
           </CardDescription>
         </CardFooter>
       </Card>

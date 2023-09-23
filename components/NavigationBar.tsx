@@ -3,11 +3,9 @@
 import * as React from "react"
 import Link from "next/link"
  
-import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import { buttonVariants } from "./ui/button"
@@ -18,10 +16,10 @@ export function NavigationBar() {
       <NavigationMenu>
         <NavigationMenuList className="gap-1">
           <NavigationMenuItem>
-            <Link href={"/"} className={buttonVariants({ variant: "outline", size: "sm" })}>Log In</Link>
+            <Link href={"/login"} className={buttonVariants({ variant: "outline", size: "sm" })}>Log In</Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href={"/"} className={buttonVariants({ size: "sm" })}>Sign Up</Link>
+            <Link href={"/sign-up"} className={buttonVariants({ size: "sm" })}>Sign Up</Link>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
