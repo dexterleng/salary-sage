@@ -19,7 +19,7 @@ type DashboardNavigationBarProps = {
 
 export function DashboardNavigationBar({ user }: DashboardNavigationBarProps) {
   return (
-    <div className="flex items-center justify-end border-b w-full sticky top-0 px-10 z-50 h-14 supports-backdrop-blur:bg-background/60 bg-background/95">
+    <div className="flex items-center justify-end shadow-glass w-full sticky top-0 px-10 z-50 h-14 supports-backdrop-blur:bg-card/60 bg-card/95">
       <NavigationMenu>
         <NavigationMenuList className="gap-1">
           <NavigationMenuItem>

@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { TypographyH2, TypographySubtle } from '@/components/ui/typography'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -69,7 +70,7 @@ export default function SignUp() {
 
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl w-full text-center">Create an account</CardTitle>
+          <CardTitle className="w-full text-center"><TypographyH2>Create an account</TypographyH2></CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form {...form} >
@@ -121,8 +122,10 @@ export default function SignUp() {
           </Form>
         </CardContent>
         <CardFooter>
-          <CardDescription className='w-full text-center font-muted'>
+          <CardDescription className='w-full text-center'>
+            <TypographySubtle>
             Already have an account? <Link href="/login/" className='text-primary hover:underline'>Log in</Link>
+            </TypographySubtle>
           </CardDescription>
         </CardFooter>
       </Card>
