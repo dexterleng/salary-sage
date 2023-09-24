@@ -39,9 +39,9 @@ export function TypographyLarge({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function TypographyBody({ children }: { children: React.ReactNode }) {
+export function TypographyBody({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <p className="text-base font-normal leading-snug">
+    <p className={`text-base font-normal leading-snug ${className}`}>
       {children}
     </p>
   )
