@@ -104,7 +104,7 @@ export default function Login() {
         </CardContent>
         <CardFooter>
           <CardDescription className='w-full text-center font-light'>
-            Don't have an account? <Link href="/sign-up/" className='text-emerald-500 hover:underline'>Sign up</Link>
+            Don't have an account? <Link href="/sign-up/" className='text-emerald-500 hover:text-emerald-600'>Sign up</Link>
           </CardDescription>
         </CardFooter>
       </Card>

@@ -112,7 +112,7 @@ export default function SignUp() {
                     </FormControl>
                     <FormMessage />
                     <FormDescription>
-                      Salary Sage is currently invite-only. You can join the waitlist <Link href="/#waitlist" className='text-emerald-500 hover:underline'>here</Link>.
+                      Salary Sage is currently invite-only. You can join the waitlist <Link href="/#waitlist" className='text-emerald-500 hover:text-emerald-600'>here</Link>.
                     </FormDescription>
                   </FormItem>
                 )}
@@ -123,7 +123,7 @@ export default function SignUp() {
         </CardContent>
         <CardFooter>
           <CardDescription className='w-full text-center font-light'>
-            Already have an account? <Link href="/login/" className='text-emerald-500 hover:underline'>Log in</Link>
+            Already have an account? <Link href="/login/" className='text-emerald-500 hover:text-emerald-600'>Log in</Link>
           </CardDescription>
         </CardFooter>
       </Card>
