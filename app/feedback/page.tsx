@@ -9,6 +9,9 @@ export default function Feedback() {
   const clarity = 78;
   const confidence = 42;
 
+  const positiveFeedback = ["You were very clear in your speech", "You were very confident in your speech"];
+  const negativeFeedback = ["You were not clear in your speech", "You were not confident in your speech"];
+
   return (
     <div className="px-32 py-12">
       <TypographyH1>Your Feedback</TypographyH1>
@@ -31,6 +34,11 @@ export default function Feedback() {
               <CardTitle>
                 <TypographyH2 className="ml-2">Where you did well</TypographyH2>
               </CardTitle>
+              <CardContent>
+                <div className="px-6 pb-6">
+                  
+                </div>
+              </CardContent>
             </CardHeader>
             <CardContent>
               <div className="px-6 pb-6">
