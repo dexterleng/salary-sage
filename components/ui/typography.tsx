@@ -9,7 +9,7 @@ export function TypographyH1({ children, className }: { children: React.ReactNod
 
 export function TypographyH2({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <h2 className={`scroll-m-20 text-3xl font-semibold tracking-tight leading-normal lg:leading-normal ${className}`}>
+    <h2 className={`scroll-m-20 text-3xl font-bold tracking-tight leading-normal lg:leading-normal ${className}`}>
       {children}
     </h2>
   )
