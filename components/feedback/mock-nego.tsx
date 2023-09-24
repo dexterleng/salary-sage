@@ -22,7 +22,7 @@ export default function MockNegotiation({ position, company, hintCount, intervie
       </div>
       <div className="flex gap-2 py-4">
         {interviewerStyles.map(style =>
-          <Button variant={"secondary"} className="pointer-events-none shadow-none">
+          <Button variant={"secondary"} className="pointer-events-none shadow-none" key={style}>
             {style}
           </Button>
         )}
@@ -43,7 +43,7 @@ export default function MockNegotiation({ position, company, hintCount, intervie
         </div>
         <div className="flex flex-col gap-2 mt-10">
           {transcript.map(line =>
-            <div className="mb-4">
+            <div className="mb-4" key={line}>
               <TypographyBody className="text-accent">0:00 Interviewer (AI)</TypographyBody>
               <TypographySmall>{line}</TypographySmall>
             </div>

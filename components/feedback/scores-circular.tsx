@@ -21,7 +21,7 @@ export default function ScoresCircular({ clarityScore, confidenceScore }: Scores
       {metrics.map(
         metric =>
         (
-          <div>
+          <div key={metric.title}>
             <div style={{ width: 126, height: 126 }}>
               <CircularProgressbar
                 value={metric.score}

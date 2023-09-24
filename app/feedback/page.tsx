@@ -40,7 +40,7 @@ export default function Feedback() {
             <CardContent>
               <div className="pb-6 px-2">
                 {positiveFeedback.map(line =>
-                  <Accordion type="single" collapsible>
+                  <Accordion type="single" collapsible key={line}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
@@ -68,7 +68,7 @@ export default function Feedback() {
             <CardContent>
               <div className="pb-6 px-2">
                 {negativeFeedback.map(line =>
-                  <Accordion type="single" collapsible>
+                  <Accordion type="single" collapsible key={line}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
