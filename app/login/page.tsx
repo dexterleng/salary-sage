@@ -36,7 +36,6 @@ export default function Login() {
   const formRef = useRef(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("success");
     (formRef.current as any).submit();
   }
 
@@ -92,7 +91,7 @@ export default function Login() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type='password' placeholder="••••••••••••••••" {...field} />
+                      <Input type='password' placeholder="•••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -103,8 +102,8 @@ export default function Login() {
           </Form>
         </CardContent>
         <CardFooter>
-          <CardDescription className='w-full text-center font-light'>
-            Don't have an account? <Link href="/sign-up/" className='text-emerald-500 hover:underline'>Sign up</Link>
+          <CardDescription className='w-full text-center font-muted'>
+            Don't have an account? <Link href="/sign-up/" className='text-primary hover:underline'>Sign up</Link>
           </CardDescription>
         </CardFooter>
       </Card>

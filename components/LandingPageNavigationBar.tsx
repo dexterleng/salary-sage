@@ -19,7 +19,7 @@ export function LandingPageNavigationBar({ user }: LandingPageNavigationBarProps
   const unauthenticatedMenuItems = () => (
     <NavigationMenuList className="gap-1">
       <NavigationMenuItem>
-        <Link href={"/login"} className={buttonVariants({ variant: "outline", size: "sm" })}>Log In</Link>
+        <Link href={"/login"} className={buttonVariants({ variant: "secondary", size: "sm" })}>Log In</Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
         <Link href={"/sign-up"} className={buttonVariants({ size: "sm" })}>Sign Up</Link>
