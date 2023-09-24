@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
  * 
  * Expect POST request with JSON body:
  * {
- *   "interviewData": {
+ *   "interview": {
  *     "companyName": str,
  *     "role": str,
  *     "minExpectedComp": int
