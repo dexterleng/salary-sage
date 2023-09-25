@@ -18,8 +18,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { useRef } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Icons } from "@/components/icons"
 import { Input } from '@/components/ui/input'
+import { TypographyH2, TypographySubtle } from '@/components/ui/typography'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -70,7 +70,7 @@ export default function SignUp() {
 
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl w-full text-center">Get started</CardTitle>
+          <CardTitle className="w-full text-center"><TypographyH2>Create an account</TypographyH2></CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form {...form} >
@@ -95,7 +95,7 @@ export default function SignUp() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type='password' placeholder="••••••••••••••••" {...field} />
+                      <Input type='password' placeholder="•••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -112,18 +112,20 @@ export default function SignUp() {
                     </FormControl>
                     <FormMessage />
                     <FormDescription>
-                      Salary Sage is currently invite-only. You can join the waitlist <Link href="/#waitlist" className='text-emerald-500 hover:text-emerald-600'>here</Link>.
+                      Salary Sage is currently invite-only. You can join the waitlist <Link href="/#waitlist" className='text-primary hover:underline'>here</Link>.
                     </FormDescription>
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" size='lg'>Create Account</Button>
+              <Button type="submit" className="w-full" size='lg'>Sign Up</Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter>
-          <CardDescription className='w-full text-center font-light'>
-            Already have an account? <Link href="/login/" className='text-emerald-500 hover:text-emerald-600'>Log in</Link>
+          <CardDescription className='w-full text-center'>
+            <TypographySubtle>
+            Already have an account? <Link href="/login/" className='text-primary hover:underline'>Log in</Link>
+            </TypographySubtle>
           </CardDescription>
         </CardFooter>
       </Card>
