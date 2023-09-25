@@ -1,4 +1,4 @@
-import { DashboardNavigationBar } from "@/components/DashboardNavigationBar"
+import { NavigationBar } from "@/components/NavigationBar"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation"
 import { cookies } from 'next/headers'
@@ -25,9 +25,6 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <DashboardNavigationBar user={user} />
-      {children}
-    </div>
+    <>{children}</>
   )
 }
