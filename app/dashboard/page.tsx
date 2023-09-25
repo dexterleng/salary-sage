@@ -131,7 +131,7 @@ export default function Dashboard() {
             Recent negotiations
           </h3>
           <div className="flex items-center space-x-2">
-            <Button size="sm" className="border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80">Practice Now</Button>
+            <Link href="/practice"><Button size="sm" className="border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80">Practice Now</Button></Link>
           </div>
         </div>
 

@@ -9,6 +9,31 @@ import AudioRecorder from "@/components/practice/audio-recorder";
 import { useState } from "react";
 
 export default function Practice() {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [responseData, setResponseData] = useState(null);
+
+  // temp delay function to simulate API request
+  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+  const handleApiRequest = async (audioData: Blob) => {
+    setIsProcessing(true);
+    try {
+      const formData = new FormData();
+      formData.append('audio', audioData, 'recording.webm');
+      await delay(5000);
+      // const response = await fetch('YOUR_API_ENDPOINT', {
+      //   method: 'POST',
+      //   body: formData,
+      // });
+
+      // const data = await response.json();
+      // setResponseData(data);
+    } catch (error) {
+      console.error('Error uploading audio:', error);
+    }
+    setIsProcessing(false);
+  };
+
   return (
     <div className="p-12 justify-center flex flex-col items-center">
       <div className="max-w-7xl w-full">
@@ -32,12 +57,16 @@ export default function Practice() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="px-2 pb-6">
-                <Card className="bg-secondary w-full h-72" />
+              <div className="px-2 pb-4">
+                <div className="bg-secondary w-full h-80">
+                  <div className="flex flex-col items-center justify-center h-full">
+                    {isProcessing ? 'true' : 'false'}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="flex-1">
+          <Card className={`flex-1 ${isProcessing ? 'opacity-50 bg-muted/10' : 'opacity-100 bg-card'}`}>
             <CardHeader>
               <CardTitle>
                 <div className="flex items-center">
@@ -52,7 +81,7 @@ export default function Practice() {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder />
+                <AudioRecorder onSubmit={handleApiRequest} isProcessing={isProcessing} />
               </div>
               <TypographySubtle className="absolute right-4 bottom-4">
                 Stuck? <Button variant="link" className="text-primary hover:underline -ml-4">Get Hints</Button>

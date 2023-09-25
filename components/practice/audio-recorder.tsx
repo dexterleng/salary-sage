@@ -3,13 +3,18 @@ import { TypographySmall } from "@/components/ui/typography";
 import { Mic, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function AudioRecorder() {
+type AudioRecorderProps = {
+  isProcessing: boolean;
+  onSubmit: (audioData: Blob) => void;
+};
+
+export default function AudioRecorder({ isProcessing, onSubmit }: AudioRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState('');
   const mediaRecorder = useRef<MediaRecorder | null>(null);
 
-  const handleRecordPause = () => {
+  const handleRecordToggle = () => {
     if (!isRecording) {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
@@ -35,22 +40,8 @@ export default function AudioRecorder() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('audio', audioData, 'recording.webm');
+    onSubmit(audioData);
 
-    try {
-      // const response = await fetch('YOUR_API_ENDPOINT', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-
-      // const data = await response.json();
-      // console.log('Upload successful:', data);
-    } catch (error) {
-      console.error('Error uploading audio:', error);
-    }
-
-    // Reset recorder
     setAudioData(null);
     setAudioURL('');
   };
@@ -60,16 +51,16 @@ export default function AudioRecorder() {
       {
         isRecording
           ? <div className='flex flex-col items-center justify-center'>
-            <Button variant="destructive" className="group rounded-full w-24 h-24" onClick={handleRecordPause}>
+            <Button variant="destructive" className="group rounded-full w-24 h-24" onClick={handleRecordToggle}>
               <Square className="w-12 h-12 stroke-destructive" />
             </Button>
             <TypographySmall className="mt-4 text-center text-destructive">Stop Recording</TypographySmall>
           </div>
           : <div className='flex flex-col items-center justify-center'>
-            <Button variant="secondary" className="group rounded-full w-24 h-24" onClick={handleRecordPause}>
+            <Button variant="secondary" className="group rounded-full w-24 h-24" disabled={isProcessing} onClick={handleRecordToggle}>
               <Mic className="w-12 h-12 stroke-accent group-hover:stroke-primary" />
             </Button>
-            <TypographySmall className="mt-4 text-center text-accent">Start Speaking</TypographySmall>
+            <TypographySmall className="mt-4 text-center text-accent">{ isProcessing ? 'Wait for your turn' : 'Start Speaking' }</TypographySmall>
           </div>
       }
 
