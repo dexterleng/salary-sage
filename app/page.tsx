@@ -1,6 +1,5 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import { LandingPageNavigationBar } from '@/components/LandingPageNavigationBar'
 import { TypographyH1, TypographyH2 } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
