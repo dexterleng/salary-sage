@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -131,7 +131,7 @@ export default function Dashboard() {
             Recent negotiations
           </h3>
           <div className="flex items-center space-x-2">
-            <Link href="/practice"><Button size="sm" className="border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80">Practice Now</Button></Link>
+            <Link href="/dashboard/negotiations/new" className={buttonVariants({ size: "sm", className: "border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80" })} >Practice Now</Link>
           </div>
         </div>
 
