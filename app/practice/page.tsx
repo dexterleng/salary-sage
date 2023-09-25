@@ -107,7 +107,7 @@ export default function Practice() {
                         : <audio controls={!isRecording} autoPlay={hasPracticeStarted} 
                           id="interviewer-audio"
                           onPlay={() => { setIsInterviewerSpeaking(true); }}
-                          onEnded={() => setIsInterviewerSpeaking(false)}
+                          onPause={() => setIsInterviewerSpeaking(false)}
                           src='/audio/abstract.mp3'></audio>
                     }
                   </div>
