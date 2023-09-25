@@ -66,7 +66,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex justify-center px-4 py-8 sm:p-12">
+    <div className="w-full flex justify-center px-4 py-8 sm:p-12">
       <div className="flex-1 space-y-4 max-w-5xl">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
@@ -131,7 +131,7 @@ export default function Dashboard() {
             Recent negotiations
           </h3>
           <div className="flex items-center space-x-2">
-            <Link href="/dashboard/negotiations/new" className={buttonVariants({ size: "sm", className: "border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80" })} >Practice Now</Link>
+            <Link href="/negotiations/new" className={buttonVariants({ size: "sm", className: "border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80" })} >Practice Now</Link>
           </div>
         </div>
 

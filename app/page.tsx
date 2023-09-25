@@ -17,7 +17,6 @@ export default async function Index() {
 
   return (
     <div className="w-full flex flex-col items-center bg-[url('/images/hero-bg.png')]">
-      <LandingPageNavigationBar user={user} />
       <div className="flex h-[calc(100vh-55px)] justify-center gap-8">
         <div className="animate-in flex flex-col gap-8 px-3 py-16 lg:py-24 justify-center">
           <TypographyH1>
