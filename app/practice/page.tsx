@@ -16,6 +16,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 
 export default function Practice() {
@@ -23,6 +28,8 @@ export default function Practice() {
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [responseData, setResponseData] = useState<HTMLAudioElement | null>(null);
+  const [hint, setHint] = useState('');
+  const [hintCount, setHintCount] = useState(0);
 
   useEffect(() => {
     if (hasPracticeStarted) {
@@ -39,7 +46,7 @@ export default function Practice() {
   // temp delay function to simulate API request
   const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const handleApiRequest = async (audioData: Blob) => {
+  const handleUserSubmitRequest = async (audioData: Blob) => {
     setIsProcessing(true);
     try {
       const formData = new FormData();
@@ -61,6 +68,11 @@ export default function Practice() {
       console.error('Error uploading audio:', error);
     }
     setIsProcessing(false);
+  };
+
+  const handleHintRequest = async () => {
+    setHint('Now is the time to talk about your other benefits such as annual bonus and health insurance.');
+    setHintCount(hintCount + 1);
   };
 
   return (
@@ -117,11 +129,17 @@ export default function Practice() {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder onSubmit={handleApiRequest} isProcessing={isProcessing || isInterviewerSpeaking} />
+                <AudioRecorder onSubmit={handleUserSubmitRequest} isProcessing={isProcessing || isInterviewerSpeaking} />
               </div>
-              <TypographySubtle className="absolute right-4 bottom-0">
-                Stuck? <Button variant="link" className="text-primary hover:underline -ml-4">Get Hints</Button>
-              </TypographySubtle>
+              <Popover>
+                <PopoverTrigger>
+                  <TypographySubtle className="absolute right-4 bottom-0">
+                    Stuck?
+                    <Button variant="link" className="text-primary hover:underline -ml-2" onClick={() => handleHintRequest()}>Get Hints</Button>
+                  </TypographySubtle>
+                </PopoverTrigger>
+                <PopoverContent className="bg-glass border-none" align="center">{hint}</PopoverContent>
+              </Popover>
             </CardContent>
           </Card>
         </div>
