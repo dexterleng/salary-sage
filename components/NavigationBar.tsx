@@ -104,6 +104,41 @@ export function NavigationBar({ user }: NavigationBarProps) {
     </NavigationMenu>
   );
 
+  const leftMenu = () => {
+    if (user && (pathname.startsWith("/dashboard") || pathname.startsWith("/negotiations"))) {
+      return (
+        <>
+        <NavigationMenuItem>
+          <Link
+            href="/dashboard/"
+            className={cn(
+              "text-sm",
+              pathname.startsWith("/dashboard")
+                ? "text-foreground font-semibold"
+                : "text-foreground/60 hover:text-foreground/80"
+            )}
+          >
+            Dashboard
+          </Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link
+            href="/negotiations/"
+            className={cn(
+              "text-sm",
+              pathname.startsWith("/negotiations")
+                ? "text-foreground font-semibold"
+                : "text-foreground/60 hover:text-foreground/80"
+            )}
+          >
+            Negotiations
+          </Link>
+        </NavigationMenuItem>
+      </>
+      )
+    }
+  }
+
   const rightMenu = () => {
     if (pathname.startsWith("/dashboard") || pathname.startsWith("/negotiations")) {
       return dashboardMenu();
@@ -120,36 +155,7 @@ export function NavigationBar({ user }: NavigationBarProps) {
               Salary Sage
             </Link>
           </NavigationMenuItem>
-          {user ? (
-            <>
-              <NavigationMenuItem>
-                <Link
-                  href="/dashboard/"
-                  className={cn(
-                    "text-sm",
-                    pathname.startsWith("/dashboard")
-                      ? "text-foreground font-semibold"
-                      : "text-foreground/60 hover:text-foreground/80"
-                  )}
-                >
-                  Dashboard
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  href="/negotiations/"
-                  className={cn(
-                    "text-sm",
-                    pathname.startsWith("/negotiations")
-                      ? "text-foreground font-semibold"
-                      : "text-foreground/60 hover:text-foreground/80"
-                  )}
-                >
-                  Negotiations
-                </Link>
-              </NavigationMenuItem>
-            </>
-          ) : null}
+          { leftMenu() }
         </NavigationMenuList>
       </NavigationMenu>
 
