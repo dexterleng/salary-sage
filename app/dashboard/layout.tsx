@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="w-full">
+    <div className="flex flex-col w-full min-h-screen">
       <DashboardNavigationBar user={user} />
       {children}
     </div>
