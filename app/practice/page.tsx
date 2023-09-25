@@ -158,6 +158,7 @@ export default function Practice() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <Link href='/feedback'><Button className="mt-8" size="lg">End Practice</Button></Link>
     </div>
   );
 }
