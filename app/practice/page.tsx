@@ -9,8 +9,10 @@ import AudioRecorder from "@/components/practice/audio-recorder";
 import { useState } from "react";
 
 export default function Practice() {
+  const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
+  const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [responseData, setResponseData] = useState(null);
+  const [responseData, setResponseData] = useState<HTMLAudioElement | null>(null);
 
   // temp delay function to simulate API request
   const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -28,6 +30,11 @@ export default function Practice() {
 
       // const data = await response.json();
       // setResponseData(data);
+
+      let audioUrl = require('@/public/audio/sample-audio.mp3');
+      let sound = new Audio(audioUrl);
+      setResponseData(sound);
+      sound.play();
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
@@ -51,7 +58,6 @@ export default function Practice() {
                   </div>
                   <div>
                     <TypographyBody className="ml-4 text-accent">Interviewer</TypographyBody>
-                    <TypographyBody className="ml-4">Good morning Charisma! I’m from the HR in Meta.</TypographyBody>
                   </div>
                 </div>
               </CardTitle>
@@ -60,13 +66,20 @@ export default function Practice() {
               <div className="px-2 pb-4">
                 <div className="bg-secondary w-full h-80">
                   <div className="flex flex-col items-center justify-center h-full">
-                    {isProcessing ? 'true' : 'false'}
+                    {
+                      isProcessing
+                        ? 'Waiting for your interviewer to reply...'
+                        : <audio controls autoPlay={hasPracticeStarted} 
+                        onPlay={() => { setHasPracticeStarted(true); setIsInterviewerSpeaking(true); }} 
+                        onEnded={() => setIsInterviewerSpeaking(false)}
+                        src='/audio/abstract.mp3'></audio>
+                    }
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className={`flex-1 ${isProcessing ? 'opacity-50 bg-muted/10' : 'opacity-100 bg-card'}`}>
+          <Card className={`flex-1 ${isProcessing || isInterviewerSpeaking || !hasPracticeStarted ? 'opacity-50 bg-muted/10' : 'opacity-100 bg-card'}`}>
             <CardHeader>
               <CardTitle>
                 <div className="flex items-center">
@@ -81,9 +94,9 @@ export default function Practice() {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder onSubmit={handleApiRequest} isProcessing={isProcessing} />
+                <AudioRecorder onSubmit={handleApiRequest} isProcessing={isProcessing || isInterviewerSpeaking || !hasPracticeStarted} />
               </div>
-              <TypographySubtle className="absolute right-4 bottom-4">
+              <TypographySubtle className="absolute right-4 bottom-0">
                 Stuck? <Button variant="link" className="text-primary hover:underline -ml-4">Get Hints</Button>
               </TypographySubtle>
             </CardContent>

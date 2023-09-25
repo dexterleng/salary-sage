@@ -51,7 +51,7 @@ export default function AudioRecorder({ isProcessing, onSubmit }: AudioRecorderP
       {
         isRecording
           ? <div className='flex flex-col items-center justify-center'>
-            <Button variant="destructive" className="group rounded-full w-24 h-24" onClick={handleRecordToggle}>
+            <Button variant="destructive" className="group bg-destructive/30 hover:bg-destructive/50 rounded-full w-24 h-24" onClick={handleRecordToggle}>
               <Square className="w-12 h-12 stroke-destructive" />
             </Button>
             <TypographySmall className="mt-4 text-center text-destructive">Stop Recording</TypographySmall>
@@ -60,7 +60,15 @@ export default function AudioRecorder({ isProcessing, onSubmit }: AudioRecorderP
             <Button variant="secondary" className="group rounded-full w-24 h-24" disabled={isProcessing} onClick={handleRecordToggle}>
               <Mic className="w-12 h-12 stroke-accent group-hover:stroke-primary" />
             </Button>
-            <TypographySmall className="mt-4 text-center text-accent">{ isProcessing ? 'Wait for your turn' : 'Start Speaking' }</TypographySmall>
+            <TypographySmall className="mt-4 text-center text-accent">
+              {
+                isProcessing
+                  ? 'Wait for your turn'
+                  : audioURL
+                    ? 'Re-record response'
+                    : 'Start Speaking'
+              }
+            </TypographySmall>
           </div>
       }
 
@@ -71,7 +79,7 @@ export default function AudioRecorder({ isProcessing, onSubmit }: AudioRecorderP
       )}
       {audioURL && !isRecording &&
         <Button onClick={handleSubmit}>
-          Continue
+          Confirm Response
         </Button>
       }
     </div>
