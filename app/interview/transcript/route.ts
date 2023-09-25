@@ -4,10 +4,7 @@ import { NextResponse } from 'next/server';
 /**
  * Given an interviewId, retrieves its entire transcript in chronological order.
  * 
- * Expects POST request with JSON body:
- * {
- *   "interviewId": int
- * }
+ * Expects GET request with url parameter: interviewId
  * 
  * Returns JSON response:
  * {
