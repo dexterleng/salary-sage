@@ -21,9 +21,9 @@ import { Input } from '@/components/ui/input'
 import { TypographyH2, TypographySubtle } from '@/components/ui/typography'
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-})
+  email: z.string().email().min(1),
+  password: z.string().min(6),
+});
 
 export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({

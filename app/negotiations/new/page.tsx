@@ -25,15 +25,28 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { TypographyH2, TypographySubtle } from "@/components/ui/typography";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
-const formSchema = z.object({
-  position: z.string(),
-  currentYearsOfExperience: z.number().int().min(0),
-  currentSalary: z.number().int().min(0),
-  expectedMinMonthlySalary: z.number().int().min(0),
-  expectedMaxMonthlySalary: z.number().int().min(0),
-}).refine((obj) => obj.expectedMinMonthlySalary <= obj.expectedMaxMonthlySalary, "Invalid income range");
+const formSchema = z
+  .object({
+    // position: z.string(),
+    company: z.string().min(0),
+    currentYearsOfExperience: z.coerce.number().int().min(0),
+    currentSalary: z.coerce.number().int().gt(0),
+    expectedMinMonthlySalary: z.coerce.number().int().gt(0).min(0),
+    expectedMaxMonthlySalary: z.coerce.number().int().gt(0).min(0),
+  })
+  .refine(
+    (obj) => obj.expectedMinMonthlySalary <= obj.expectedMaxMonthlySalary,
+    { message: "Invalid income range", path: ["expectedMaxMonthlySalary"] }
+  );
 
 export default function New() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,47 +56,66 @@ export default function New() {
   const formRef = useRef(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    (formRef.current as any).submit();
+    console.log("success");
+    // (formRef.current as any).submit();
   }
 
   return (
     <div className="flex-1 flex align-center justify-center">
       <div className="flex-1 flex flex-col w-full px-8 sm:max-w-lg justify-center gap-2">
-        <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="w-full text-center">
-              <TypographyH2>Let's get started!</TypographyH2>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <Form {...form}>
-              <form
-                ref={formRef}
-                onSubmit={form.handleSubmit(onSubmit)}
-                action="/auth/sign-in"
-                method="post"
-                className="space-y-4"
-              >
-                <FormField
+        <Form {...form}>
+          <form
+            ref={formRef}
+            onSubmit={form.handleSubmit(onSubmit)}
+            action="/auth/sign-in"
+            method="post"
+          >
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="w-full text-center">
+                  <TypographyH2>Let's get started!</TypographyH2>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-4">
+                {/* <FormField
                   control={form.control}
                   name="position"
-                  render={({ field }) => (
+                  render={({ field }) => ( */}
                     <FormItem>
                       <FormLabel>Desired Position</FormLabel>
                       <FormControl>
                         <Select>
                           <SelectTrigger>
-                            <SelectValue placeholder="Software Engineer" defaultValue={"Software Engineer"} />
+                            <SelectValue
+                              placeholder="Software Engineer"
+                              defaultValue={"Software Engineer"}
+                            />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="light">Software Engineer</SelectItem>
+                            <SelectItem value="light">
+                              Software Engineer
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
+                  {/* )}
+                /> */}
+                <FormField
+                  control={form.control}
+                  name="company"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Desired Company</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Meta" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="currentYearsOfExperience"
@@ -120,47 +152,61 @@ export default function New() {
                     </FormItem>
                   )}
                 />
-                <FormItem>
-                  <FormLabel>Expected Monthly Income Range</FormLabel>
-                  <div className="flex items-center gap-2">
+                <div>
+                  <FormLabel className={cn((form.formState.errors.expectedMinMonthlySalary || form.formState.errors.expectedMaxMonthlySalary) ? "text-destructive" : null)}>Expected Monthly Income Range</FormLabel>
+                  <div className="pt-2 flex items-center gap-2">
                     <FormField
                       control={form.control}
                       name="expectedMinMonthlySalary"
                       render={({ field }) => (
-                        <FormControl className="flex-1">
-                          <Input
-                            type="number"
-                            min={0}
-                            placeholder="Minimum"
-                            {...field}
-                          />
-                        </FormControl>
+                        <FormItem>
+                          <FormControl className="flex-1">
+                            <Input
+                              type="number"
+                              min={0}
+                              placeholder="Minimum"
+                              {...field}
+                            />
+                          </FormControl>
+                        </FormItem>
                       )}
                     />
                     <span className="text-sm">To</span>
                     <FormField
                       control={form.control}
-                      name="expectedMinMonthlySalary"
+                      name="expectedMaxMonthlySalary"
                       render={({ field }) => (
-                        <FormControl className="flex-1">
-                          <Input
-                            type="number"
-                            min={0}
-                            placeholder="Maximum"
-                            {...field}
-                          />
-                        </FormControl>
+                        <FormItem>
+                          <FormControl className="flex-1">
+                            <Input
+                              type="number"
+                              min={0}
+                              placeholder="Maximum"
+                              {...field}
+                            />
+                          </FormControl>
+                        </FormItem>
                       )}
                     />
                   </div>
-                </FormItem>
-              </form>
-            </Form>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="font-semibold w-full border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80">Continue</Button>
-          </CardFooter>
-        </Card>
+                  {
+                    (form.formState.errors?.expectedMinMonthlySalary || form.formState.errors?.expectedMaxMonthlySalary) ? (
+                      <FormMessage className="pt-2">{form.formState.errors.expectedMinMonthlySalary?.message ?? form.formState.errors.expectedMaxMonthlySalary?.message ?? ""}</FormMessage>
+                    ) : null
+                  }
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  type="submit"
+                  className="font-semibold w-full border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
+                >
+                  Continue
+                </Button>
+              </CardFooter>
+            </Card>
+          </form>
+        </Form>
       </div>
     </div>
   );

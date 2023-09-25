@@ -21,8 +21,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input'
 import { TypographyH2, TypographySubtle } from '@/components/ui/typography'
 
+
 const formSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().min(1),
   password: z.string().min(6),
   inviteCode: z.string(),
 })
