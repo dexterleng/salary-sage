@@ -49,11 +49,9 @@ Please ask your first question.`;
     const stream = OpenAIStream(response);
 
     // Store prompt into Supabase
-    const { error } = await supabase
+    const { error: supabaseError } = await supabase
       .from('interview_transcript')
       .insert({ id: interviewId, transcript: prompt });
-
-    // console.log('error', error);
 
     return new StreamingTextResponse(stream);
   } catch (error: any) {

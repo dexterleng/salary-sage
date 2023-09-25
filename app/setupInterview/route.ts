@@ -8,12 +8,10 @@ export const dynamic = 'force-dynamic'
  * 
  * Expect POST request with JSON body:
  * {
- *   "interview": {
- *     "companyName": str,
- *     "role": str,
- *     "minExpectedComp": int
- *     "maxExpectedComp": int
- *   }
+ *   "companyName": str,
+ *   "role": str,
+ *   "minExpectedComp": int
+ *   "maxExpectedComp": int
  * } 
  */
 export async function POST(request: Request) {
@@ -23,15 +21,15 @@ export async function POST(request: Request) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    const { interview } = await request.json();
+    const interview = await request.json();
 
-    const { data, statusText } = await supabase
+    const { data, error: supabaseError } = await supabase
       .from('interview')
       .insert(interview)
       .select('id');
 
     const interviewId = data![0].id;
-    return NextResponse.json({ interviewId }, { status: 200 })
+    return NextResponse.json({ interviewId, supabaseError }, { status: 200 })
   } catch (error: any) {
     return NextResponse.json({ error }, { status: 500 });
   }
