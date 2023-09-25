@@ -15,6 +15,8 @@ export const metadata = {
   description: 'Practice your salary negotiation skills with AI',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({
   children,
 }: {
