@@ -25,9 +25,9 @@ export function TypographyH3({ children, className }: { children: React.ReactNod
 
 export function TypographyH4({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <h3 className={`scroll-m-20 text-xl font-semibold tracking-tight leading-normal lg:leading-normal ${className}`}>
+    <h4 className={`scroll-m-20 text-xl font-semibold tracking-tight leading-normal lg:leading-normal ${className}`}>
       {children}
-    </h3>
+    </h4>
   )
 }
 
@@ -57,9 +57,9 @@ export function TypographySmall({ children, className }: { children: React.React
 
 export function TypographySubtle({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <small className={`text-sm font-normal text-muted leading-tight ${className}`}>
+    <div className={`text-sm font-normal text-muted leading-tight ${className}`}>
       {children}
-    </small>
+    </div>
   )
 }
 

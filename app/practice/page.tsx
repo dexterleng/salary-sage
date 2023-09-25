@@ -26,6 +26,7 @@ import {
 export default function Practice() {
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [responseData, setResponseData] = useState<HTMLAudioElement | null>(null);
   const [hint, setHint] = useState('');
@@ -103,7 +104,7 @@ export default function Practice() {
                     {
                       isProcessing
                         ? 'Waiting for your interviewer to reply...'
-                        : <audio controls autoPlay={hasPracticeStarted}
+                        : <audio controls={!isRecording} autoPlay={hasPracticeStarted} 
                           id="interviewer-audio"
                           onPlay={() => { setIsInterviewerSpeaking(true); }}
                           onEnded={() => setIsInterviewerSpeaking(false)}
@@ -129,13 +130,13 @@ export default function Practice() {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder onSubmit={handleUserSubmitRequest} isProcessing={isProcessing || isInterviewerSpeaking} />
+                <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} onSubmit={handleUserSubmitRequest} isProcessing={isProcessing || isInterviewerSpeaking} />
               </div>
               <Popover>
-                <PopoverTrigger>
-                  <TypographySubtle className="absolute right-4 bottom-0">
+                <PopoverTrigger className="group" onClick={() => handleHintRequest()} disabled={isProcessing || isInterviewerSpeaking}>
+                  <TypographySubtle className="absolute right-6 bottom-0">
                     Stuck?
-                    <Button variant="link" className="text-primary hover:underline -ml-2" onClick={() => handleHintRequest()}>Get Hints</Button>
+                    <span className="text-primary underline-offset-4 group-hover:underline ml-1" >Get Hints</span>
                   </TypographySubtle>
                 </PopoverTrigger>
                 <PopoverContent className="bg-glass border-none" align="center">{hint}</PopoverContent>

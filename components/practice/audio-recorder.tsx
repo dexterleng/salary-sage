@@ -4,12 +4,13 @@ import { Mic, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type AudioRecorderProps = {
+  isRecording: boolean;
+  setIsRecording: (isRecording: boolean) => void;
   isProcessing: boolean;
   onSubmit: (audioData: Blob) => void;
 };
 
-export default function AudioRecorder({ isProcessing, onSubmit }: AudioRecorderProps) {
-  const [isRecording, setIsRecording] = useState(false);
+export default function AudioRecorder({ isRecording, setIsRecording, isProcessing, onSubmit }: AudioRecorderProps) {
   const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState('');
   const mediaRecorder = useRef<MediaRecorder | null>(null);
