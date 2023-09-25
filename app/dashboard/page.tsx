@@ -47,24 +47,7 @@ import {
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
 export default function Dashboard() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("success");
-  }
-
   return (
     <div className="w-full flex justify-center px-4 py-8 sm:p-12">
       <div className="flex-1 space-y-4 max-w-5xl">
