@@ -77,7 +77,7 @@ export default function Dashboard() {
               <CardTitle className="text-lg font-medium">
                 Your last negotiation
               </CardTitle>
-              <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground text-sm gap-1">
+              <Link href="/feedback" className="flex items-center text-muted-foreground hover:text-foreground text-sm gap-1">
                 <span>View more</span>
                 <ArrowRightIcon />
               </Link>
@@ -90,7 +90,7 @@ export default function Dashboard() {
                       <span className="text-base">{i}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-bold">30%</span>
-                        <Progress value={30}/>
+                        <Progress value={30} />
                       </div>
                     </div>
                   ))
@@ -137,7 +137,7 @@ export default function Dashboard() {
 
         <div className="grid gap-4 md:grid-cols-2">
           {
-            [1,2,3,4,5,6].map((i) => (
+            [1, 2, 3, 4, 5, 6].map((i) => (
               <Card key={i} className="group cursor-pointer flex flex-row justify-between hover:bg-slate-50/50">
                 <div>
                   <CardHeader className="space-y-0 px-6 pt-6 pb-2">

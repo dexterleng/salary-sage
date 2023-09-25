@@ -6,6 +6,8 @@ import ScoresCircular from "@/components/feedback/scores-circular";
 import MockNegotiation from "@/components/feedback/mock-nego";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Feedback() {
   const clarity = 78;
@@ -16,7 +18,10 @@ export default function Feedback() {
 
   return (
     <div className="px-32 py-12 justify-center flex flex-col items-center">
-      <TypographyH1 className="w-full">Your Feedback</TypographyH1>
+      <div className="flex w-full justify-between items-center">
+        <TypographyH1 className="w-fit">Your Feedback</TypographyH1>
+        <Link href="/dashboard"><Button className="w-fit" size="lg">Return to Dashboard</Button></Link>
+      </div>
       <div className="flex py-6 gap-12 flex-wrap">
         <div className="flex flex-col gap-12">
           <Card>
@@ -100,6 +105,10 @@ export default function Feedback() {
             </div>
           </CardContent>
         </Card>
+      </div>
+      <div className="flex gap-4 mt-12">
+        <Link href="/dashboard"><Button className="w-fit" size="lg">Return to Dashboard</Button></Link>
+        <Link href="/dashboard"><Button className="w-fit" variant="secondary" size="lg">Retry Negotiation</Button></Link>
       </div>
     </div>
   );
