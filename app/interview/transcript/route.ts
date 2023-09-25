@@ -8,6 +8,20 @@ import { NextResponse } from 'next/server';
  * {
  *   "interviewId": int
  * }
+ * 
+ * Returns JSON response:
+ * {
+ *   "interviewId": int,
+ *   "data": 
+ *     [
+ *       {
+ *         "isInterviewer": bool,
+ *         "transcript": str
+ *       }
+ *     ],
+ *   "supabaseError": str
+ * }  
+ * 
  */
 export async function GET(req: Request) {
   try {
@@ -21,13 +35,11 @@ export async function GET(req: Request) {
     );
     const { data, error: supabaseError } = await supabase
       .from('interview_transcript')
-      .select()
+      .select('isInterviewer, transcript')
       .eq('id', interviewId)
       .order('created_at', { ascending: true });
-    
-    const transcript_arr = data?.map((row) => row.transcript);
 
-    return NextResponse.json({ interviewId, transcript_arr, supabaseError }, { status: 200 });
+    return NextResponse.json({ interviewId, data, supabaseError }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error }, { status: 500 });
   }
@@ -38,13 +50,20 @@ export async function GET(req: Request) {
  * 
  * Expects POST request with JSON body:
  * {
- *   "interviewId": int
+ *   "interviewId": int,
+ *   "isInterviewer": bool,
  *   "transcript": str
+ * }
+ * 
+ * Returns JSON response:
+ * {
+ *   "interviewId": int,
+ *   "supabaseError": str
  * }
  */
 export async function POST(req: Request) {
   try {
-    const { interviewId, transcript } = await req.json();
+    const { interviewId, role, transcript } = await req.json();
 
     // Store transcript into Supabase
     const supabase = createClient(
@@ -53,7 +72,7 @@ export async function POST(req: Request) {
     );
     const { error: supabaseError } = await supabase
       .from('interview_transcript')
-      .insert({ id: interviewId, transcript: transcript });
+      .insert({ id: interviewId, isInterviewer: null, transcript: transcript });
 
     return NextResponse.json({ interviewId, supabaseError }, { status: 200 });
   } catch (error: any) {

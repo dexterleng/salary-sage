@@ -13,6 +13,13 @@ export const dynamic = 'force-dynamic'
  *   "minExpectedComp": int
  *   "maxExpectedComp": int
  * } 
+ * 
+ * Returns JSON response:
+ * {
+ *   "interviewId": int,
+ *   "supabaseError": str
+ * }
+ * 
  */
 export async function POST(request: Request) {
   try {

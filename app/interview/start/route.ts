@@ -17,6 +17,8 @@ export const runtime = 'edge';
  * {
  *   "interviewId": int
  * }
+ * 
+ * Returns a StreamingTextResponse
  */
 export async function POST(req: Request) {
   try {
