@@ -5,7 +5,7 @@ import { TypographyBody, TypographyH1, TypographyH2, TypographyLarge } from "@/c
 import ScoresCircular from "@/components/feedback/scores-circular";
 import MockNegotiation from "@/components/feedback/mock-nego";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion";
-import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -13,8 +13,8 @@ export default function Feedback() {
   const clarity = 78;
   const confidence = 42;
 
-  const positiveFeedback = ["You were very clear in your speech", "You were very confident in your speech"];
-  const negativeFeedback = ["You were not clear in your speech", "You were not confident in your speech"];
+  const positiveFeedback = ["You were very clear in your speech.", "You were very confident in your speech."];
+  const negativeFeedback = ["You were not clear in your speech.", "You were not confident in your speech."];
 
   return (
     <div className="px-32 py-12 justify-center flex flex-col items-center">
@@ -49,7 +49,7 @@ export default function Feedback() {
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
-                          <CheckCircledIcon className="h-6 w-6 stroke-primary" />
+                          <CheckCircle2 className="h-6 w-6 stroke-primary" />
                           <TypographyLarge>Title</TypographyLarge>
                         </div>
                       </AccordionTrigger>
@@ -77,7 +77,7 @@ export default function Feedback() {
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
-                          <CrossCircledIcon className="h-6 w-6 stroke-destructive" />
+                          <XCircle className="h-6 w-6 stroke-destructive" />
                           <TypographyLarge>Title</TypographyLarge>
                         </div>
                       </AccordionTrigger>
@@ -108,7 +108,7 @@ export default function Feedback() {
       </div>
       <div className="flex gap-4 mt-12">
         <Link href="/dashboard"><Button className="w-fit" size="lg">Return to Dashboard</Button></Link>
-        <Link href="/dashboard"><Button className="w-fit" variant="secondary" size="lg">Retry Negotiation</Button></Link>
+        <Link href="/dashboard"><Button className="w-fit" variant="secondary" size="lg">Practice Again</Button></Link>
       </div>
     </div>
   );

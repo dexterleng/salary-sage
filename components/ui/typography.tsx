@@ -31,9 +31,9 @@ export function TypographyH4({ children, className }: { children: React.ReactNod
   )
 }
 
-export function TypographyLarge({ children }: { children: React.ReactNode }) {
+export function TypographyLarge({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <p className="text-lg font-semibold leading-tight">
+    <p className={`text-lg font-semibold leading-tight ${className}`}>
       {children}
     </p>
   )
@@ -47,17 +47,17 @@ export function TypographyBody({ children, className }: { children: React.ReactN
   )
 }
 
-export function TypographySmall({ children }: { children: React.ReactNode }) {
+export function TypographySmall({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <small className="text-sm font-medium leading-tight">
+    <small className={`text-sm font-medium leading-tight ${className}`}>
       {children}
     </small>
   )
 }
 
-export function TypographySubtle({ children }: { children: React.ReactNode }) {
+export function TypographySubtle({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <small className="text-sm font-normal text-muted leading-tight">
+    <small className={`text-sm font-normal text-muted leading-tight ${className}`}>
       {children}
     </small>
   )

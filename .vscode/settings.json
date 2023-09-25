@@ -8,6 +8,7 @@
     "progressbar",
     "supabase",
     "tailwindcss",
-    "waitlist"
+    "waitlist",
+    "webm"
   ]
 }

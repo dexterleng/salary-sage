@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
-export default async function FeedbackLayout({
+export default async function PracticeLayout({
   children,
 }: {
   children: React.ReactNode
