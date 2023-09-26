@@ -10,48 +10,62 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const interviewId = params.id;
-  const supabase = createRouteHandlerClient({ cookies })
-  const { data } = await supabase.auth.getUser();
-  const { user } = data;
-  if (!user) {
-    return NextResponse.json({ success: false, error: "Request failed" });
-  }
-
-  const { data: interview } = await supabase
-    .from('interview')
-    .select()
-    .eq('id', interviewId)
-    .eq('userId', user.id)
-    .single()
-    .throwOnError()
-
-  console.log(interview)
-
-  const formData = await request.formData();
-  const file: File | null = formData.get('file') as any
-
-  if (!file) {
-    return NextResponse.json({ success: false })
-  }
-
-  // const bytes = await file.arrayBuffer();
-  // const buffer = Buffer.from(bytes);
-  // writeFileSync("/Users/macintosh/code/real/salary-sage/recording.wav", buffer);
-
   try {
+    const interviewId = params.id;
+    const supabase = createRouteHandlerClient({ cookies })
+    const { data } = await supabase.auth.getUser();
+    const { user } = data;
+    if (!user) {
+      return NextResponse.json({ success: false, error: "Request failed" });
+    }
+
+    const { data: interview } = await supabase
+      .from('interview')
+      .select()
+      .eq('id', interviewId)
+      .eq('userId', user.id)
+      .single()
+      .throwOnError()
+
+    const { data: messages } = await supabase
+      .from('interview_message')
+      .select()
+      .eq('interviewId', interviewId)
+      .order('createdAt', { ascending: true })
+      .throwOnError()
+
+
+    console.log("interview", interview)
+
+    const formData = await request.formData();
+    const file: File | null = formData.get('file') as any
+
+    if (!file) {
+      return NextResponse.json({ success: false })
+    }
+
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY as string });
     const { text: transcription } = await openai.audio.transcriptions.create({ file, model: 'whisper-1', language: 'en' })
+
+    const chatGPTMessages = messages!.map((m) => ({
+      role: m.isUser ? "user" : "assistant",
+      content: m.message
+    }))
+    chatGPTMessages.push({
+      role: 'user',
+      content: transcription
+    })
+    chatGPTMessages.push({
+      role: "system",
+      content: `You have been provided with the transcript of a negotiation. Please continue the conversation.`,
+    })
+
+    console.log(chatGPTMessages)
 
     const replyResponse = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       stream: false,
-      messages: [
-        {
-          role: 'user',
-          content: transcription
-        },
-      ]
+      messages: chatGPTMessages as any
     })
 
     const replyText = replyResponse.choices[0].message.content;
