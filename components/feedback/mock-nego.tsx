@@ -3,6 +3,8 @@ import { Input } from "../ui/input";
 import { TypographyBody, TypographyH4, TypographySubtle, TypographySmall } from "../ui/typography";
 import { Card, CardContent } from "../ui/card";
 import { PlayIcon } from "@radix-ui/react-icons"
+import Fuse from 'fuse.js'
+import { useEffect, useState } from "react";
 
 type MockNegotiationProps = {
   position: string;
@@ -13,6 +15,15 @@ type MockNegotiationProps = {
 }
 
 export default function MockNegotiation({ position, company, hintCount, interviewerStyles, transcript }: MockNegotiationProps) {
+  const [searchedTranscript, setSearchedTranscript] = useState<string>('');
+  const [foundResults, setFoundResults] = useState<number[]>([]);
+
+  const fuse = new Fuse(transcript);
+
+  useEffect(() => {
+    setFoundResults(fuse.search(searchedTranscript).map(result => result.refIndex).slice(0, 1));
+  }, [searchedTranscript]);
+
   return (
     <div>
       <div>
@@ -38,12 +49,12 @@ export default function MockNegotiation({ position, company, hintCount, intervie
           </CardContent>
         </Card>
         <div className="flex gap-2 mt-10">
-          <Input placeholder="Search transcript..." />
+          <Input placeholder="Search transcript..." onChange={(e) => setSearchedTranscript(e.target.value)} />
           <Button variant="outline">Search</Button>
         </div>
         <div className="flex flex-col gap-2 mt-10">
-          {transcript.map(line =>
-            <div className="mb-4" key={line}>
+          {transcript.map((line, index) =>
+            <div className={`p-2 rounded-md ${foundResults.includes(index) ? "bg-glass duration-150" : ""}`} key={line}>
               <TypographyBody className="text-accent">0:00 Interviewer (AI)</TypographyBody>
               <TypographySmall>{line}</TypographySmall>
             </div>

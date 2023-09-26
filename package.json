@@ -22,6 +22,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "file-loader": "^6.2.0",
+    "fuse.js": "^6.6.2",
     "lucide-react": "^0.279.0",
     "next": "latest",
     "postcss": "8.4.24",
