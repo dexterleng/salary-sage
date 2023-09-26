@@ -23,9 +23,9 @@ export async function POST(request: Request) {
   const { data: interview } = await supabase
     .from('interview')
     .insert({ companyName, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, userId: user.id })
-    .throwOnError()
     .select()
     .single()
+    .throwOnError()
 
   console.log(interview)
 

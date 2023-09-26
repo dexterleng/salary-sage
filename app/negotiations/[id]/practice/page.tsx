@@ -22,8 +22,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+export default function Practice({ params }: { params: { id: string } }) {
+  const interviewId = params.id;
 
-export default function Practice() {
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -49,7 +50,7 @@ export default function Practice() {
     try {
       const formData = new FormData();
       formData.append('file', audioData, 'audio.wav');
-      const response = await fetch('/api/negotiations/1/speak', {
+      const response = await fetch(`/api/negotiations/${interviewId}/speak`, {
           method: 'POST',
           body: formData,
       });

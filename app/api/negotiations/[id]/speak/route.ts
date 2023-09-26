@@ -1,7 +1,8 @@
-const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-
+const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
 const googleServiceAccount = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON as string);
 
@@ -9,7 +10,23 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = params.id;
+  const interviewId = params.id;
+  const supabase = createRouteHandlerClient({ cookies })
+  const { data } = await supabase.auth.getUser();
+  const { user } = data;
+  if (!user) {
+    return NextResponse.json({ success: false, error: "Request failed" });
+  }
+
+  const { data: interview } = await supabase
+    .from('interview')
+    .select()
+    .eq('id', interviewId)
+    .eq('userId', user.id)
+    .single()
+    .throwOnError()
+
+  console.log(interview)
 
   const formData = await request.formData();
   const file: File | null = formData.get('file') as any
@@ -51,6 +68,14 @@ export async function POST(
     input: ${transcription},
     output: ${replyText}
     `);
+
+    await supabase
+      .from('interview_message')
+      .insert([
+        { message: transcription, isUser: true, createdAt: new Date().toISOString(), interviewId: interviewId },
+        { message: replyText, isUser: false, createdAt: new Date((new Date()).getTime() + 10).toISOString(), interviewId: interviewId },
+      ])
+      .throwOnError()
 
     const response = new NextResponse(replyAudio)
     response.headers.set('Content-Type', 'audio/mpeg3');
