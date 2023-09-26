@@ -22,6 +22,7 @@ export async function POST(request: Request) {
   const { error } = await supabase.auth.signUp({ email, password })
 
   if (error) {
+    console.log(error)
     return NextResponse.redirect(
       `${requestUrl.origin}/sign-up?error=Could not authenticate user`,
       {
