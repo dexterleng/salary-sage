@@ -132,7 +132,7 @@ export default function Practice() {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} onSubmit={handleUserSubmitRequest} isProcessing={isProcessing || isInterviewerSpeaking} />
+                <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} onSubmit={handleUserSubmitRequest} isDisabled={isProcessing || isInterviewerSpeaking} />
               </div>
               <Popover>
                 <PopoverTrigger className="group" onClick={() => handleHintRequest()} disabled={isProcessing || isInterviewerSpeaking}>

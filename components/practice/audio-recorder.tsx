@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 type AudioRecorderProps = {
   isRecording: boolean;
   setIsRecording: (isRecording: boolean) => void;
-  isProcessing: boolean;
+  isDisabled: boolean;
   onSubmit: (audioData: Blob) => void;
 };
 
-export default function AudioRecorder({ isRecording, setIsRecording, isProcessing, onSubmit }: AudioRecorderProps) {
+export default function AudioRecorder({ isRecording, setIsRecording, isDisabled, onSubmit }: AudioRecorderProps) {
   const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState('');
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -58,12 +58,12 @@ export default function AudioRecorder({ isRecording, setIsRecording, isProcessin
             <TypographySmall className="mt-4 text-center text-destructive">Stop Recording</TypographySmall>
           </div>
           : <div className='flex flex-col items-center justify-center'>
-            <Button variant="secondary" className="group rounded-full w-24 h-24" disabled={isProcessing} onClick={handleRecordToggle}>
+            <Button variant="secondary" className="group rounded-full w-24 h-24" disabled={isDisabled} onClick={handleRecordToggle}>
               <Mic className="w-12 h-12 stroke-accent group-hover:stroke-primary" />
             </Button>
             <TypographySmall className="mt-4 text-center text-accent">
               {
-                isProcessing
+                isDisabled
                   ? 'Wait for your turn'
                   : audioURL
                     ? 'Re-record response'
@@ -75,11 +75,11 @@ export default function AudioRecorder({ isRecording, setIsRecording, isProcessin
 
       {audioURL && !isRecording && (
         <div>
-          <audio controls src={audioURL}></audio>
+          <audio controls src={audioURL} className={`${isDisabled ? 'pointer-events-none opacity-50' : ''}`}></audio>
         </div>
       )}
       {audioURL && !isRecording &&
-        <Button onClick={handleSubmit} disabled={isProcessing}>
+        <Button onClick={handleSubmit} disabled={isDisabled}>
           Confirm Response
         </Button>
       }
