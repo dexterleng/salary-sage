@@ -1,4 +1,3 @@
-import { NavigationBar } from "@/components/NavigationBar"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation"
 import { cookies } from 'next/headers'
@@ -21,7 +20,6 @@ export default async function FeedbackLayout({
 
   return (
     <div className="w-full">
-      <NavigationBar user={user} />
       {children}
     </div>
   )

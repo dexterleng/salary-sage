@@ -10,28 +10,33 @@ import { useState, useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useRouter } from 'next/navigation'
 
 export default function Practice({ params }: { params: { id: string } }) {
   const interviewId = params.id;
+  const router = useRouter()
 
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [responseUrl, setResponseUrl] = useState<string>('/audio/abstract.mp3');
-  const [hint, setHint] = useState('');
-  const [hintCount, setHintCount] = useState(0);
+  const [response, setResponse] = useState<string>('');
+  const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
+  // const [hintCount, setHintCount] = useState(0);
 
   useEffect(() => {
     if (hasPracticeStarted) {
@@ -46,27 +51,45 @@ export default function Practice({ params }: { params: { id: string } }) {
   }, [hasPracticeStarted]);
 
   const handleUserSubmitRequest = async (audioData: Blob) => {
+    setHint('');
     setIsProcessing(true);
     try {
       const formData = new FormData();
       formData.append('file', audioData, 'audio.wav');
       const response = await fetch(`/api/negotiations/${interviewId}/speak`, {
-          method: 'POST',
-          body: formData,
+        method: 'POST',
+        body: formData,
       });
       const audioBlob = await response.blob()
       const audioResponseURL = URL.createObjectURL(audioBlob);
       setResponseUrl(audioResponseURL);
+
+
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
 
     setIsProcessing(false);
+
+    try {
+      const response = await fetch(`/api/negotiations/${interviewId}/response`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+
+      if (data.hasEnded) {
+        router.push(`/negotiations/${interviewId}/feedback`);
+      } else {
+        setResponse(data.lastMessage);
+        setHint(data.hint);
+      }
+    } catch (error) {
+      console.error('Error uploading audio:', error);
+    }
   };
 
   const handleHintRequest = async () => {
-    setHint('Now is the time to talk about your other benefits such as annual bonus and health insurance.');
-    setHintCount(hintCount + 1);
+
   };
 
   return (
@@ -103,7 +126,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                           onPause={() => setIsInterviewerSpeaking(false)}
                           src={responseUrl}
                           className={`${isRecording ? 'pointer-events-none opacity-50' : ''}`}
-                          ></audio>
+                        ></audio>
                     }
                   </div>
                 </div>
@@ -129,12 +152,19 @@ export default function Practice({ params }: { params: { id: string } }) {
               </div>
               <Popover>
                 <PopoverTrigger className="group" onClick={() => handleHintRequest()} disabled={isProcessing || isInterviewerSpeaking}>
-                  <TypographySubtle className="absolute right-6 bottom-0">
+                  <TypographySubtle className="absolute right-6 bottom-0 p-2">
                     Stuck?
                     <span className="text-primary underline-offset-4 group-hover:underline ml-1" >Get Hints</span>
                   </TypographySubtle>
                 </PopoverTrigger>
-                <PopoverContent className="bg-glass border-none" align="center">{hint}</PopoverContent>
+                <PopoverContent className="bg-glass border-none" align="center">{
+                  hint
+                    ? hint
+                    : <div className="flex justify-center items-center">
+                      Loading hints...
+                      <div className="ml-4 animate-spin w-8 h-8 border-2 border-b-0 border-primary border-solid rounded-full"></div>
+                    </div>
+                }</PopoverContent>
               </Popover>
             </CardContent>
           </Card>
@@ -153,7 +183,21 @@ export default function Practice({ params }: { params: { id: string } }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Link href='/feedback'><Button className="mt-8" size="lg">End Practice</Button></Link>
+      <AlertDialog>
+        <AlertDialogTrigger><Button className="mt-8" size="lg">End Practice</Button></AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to end this practice?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Ending a practice session before it is complete might result in a lower score.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => router.push(`/negotiations/${interviewId}/feedback`)}>End Practice</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
