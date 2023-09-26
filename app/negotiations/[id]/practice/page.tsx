@@ -99,10 +99,6 @@ export default function Practice({ params }: { params: { id: string } }) {
     }
   };
 
-  const handleHintRequest = async () => {
-
-  };
-
   return (
     <div className="p-12 justify-center flex flex-col items-center">
       <div className="max-w-7xl w-full">
@@ -178,7 +174,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                 <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} onSubmit={handleUserSubmitRequest} isDisabled={isProcessing || isInterviewerSpeaking} />
               </div>
               <Popover>
-                <PopoverTrigger className="group" onClick={() => handleHintRequest()} disabled={isProcessing || isInterviewerSpeaking}>
+                <PopoverTrigger className="group" disabled={isProcessing || isInterviewerSpeaking}>
                   <TypographySubtle className="absolute right-6 bottom-0 p-2">
                     Stuck?
                     <span className="text-primary underline-offset-4 group-hover:underline ml-1" >Get Hints</span>
