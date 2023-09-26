@@ -31,7 +31,7 @@ export default function ScoresCircular({ clarityScore, confidenceScore }: Scores
                   strokeLinecap: 'round',
                   textSize: '16px',
                   pathTransitionDuration: 0.5,
-                  pathColor: '#007F5F',
+                  pathColor: getPathColor(metric.score),
                   textColor: '#06110D',
                   trailColor: '#F1F8F6',
                   backgroundColor: '#F1F8F6',
@@ -48,4 +48,14 @@ export default function ScoresCircular({ clarityScore, confidenceScore }: Scores
       )}
     </div>
   );
+}
+
+function getPathColor(score: number) {
+  if (score < 50) {
+    return '#C70039';
+  } else if (score < 75) {
+    return '#FFA135';
+  } else {
+    return '#007F5F';
+  }
 }
