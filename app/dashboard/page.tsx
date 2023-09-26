@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -47,26 +47,9 @@ import {
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
 export default function Dashboard() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("success");
-  }
-
   return (
-    <div className="flex justify-center px-4 py-8 sm:p-12">
+    <div className="w-full flex justify-center px-4 py-8 sm:p-12">
       <div className="flex-1 space-y-4 max-w-5xl">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
@@ -77,7 +60,7 @@ export default function Dashboard() {
               <CardTitle className="text-lg font-medium">
                 Your last negotiation
               </CardTitle>
-              <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground text-sm gap-1">
+              <Link href="/feedback" className="flex items-center text-muted-foreground hover:text-foreground text-sm gap-1">
                 <span>View more</span>
                 <ArrowRightIcon />
               </Link>
@@ -90,7 +73,7 @@ export default function Dashboard() {
                       <span className="text-base">{i}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-lg font-bold">30%</span>
-                        <Progress value={30}/>
+                        <Progress value={30} />
                       </div>
                     </div>
                   ))
@@ -131,13 +114,13 @@ export default function Dashboard() {
             Recent negotiations
           </h3>
           <div className="flex items-center space-x-2">
-            <Button size="sm" className="border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80">Practice Now</Button>
+            <Link href="/negotiations/new" className={buttonVariants({ size: "sm", className: "border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80" })} >Practice Now</Link>
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           {
-            [1,2,3,4,5,6].map((i) => (
+            [1, 2, 3, 4, 5, 6].map((i) => (
               <Card key={i} className="group cursor-pointer flex flex-row justify-between hover:bg-slate-50/50">
                 <div>
                   <CardHeader className="space-y-0 px-6 pt-6 pb-2">

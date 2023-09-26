@@ -1,11 +1,11 @@
-import { DashboardNavigationBar } from "@/components/DashboardNavigationBar"
+import { NavigationBar } from "@/components/NavigationBar"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation"
 import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
-export default async function DashboardLayout({
+export default async function FeedbackLayout({
   children,
 }: {
   children: React.ReactNode
@@ -21,7 +21,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="w-full">
-      <DashboardNavigationBar user={user} />
+      <NavigationBar user={user} />
       {children}
     </div>
   )

@@ -7,10 +7,10 @@ import { Metadata } from "next";
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "Negotiations",
 };
 
-export default async function DashboardLayout({
+export default async function NegotiationsLayout({
   children,
 }: {
   children: React.ReactNode

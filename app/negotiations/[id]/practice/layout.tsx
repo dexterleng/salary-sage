@@ -1,16 +1,11 @@
-import { NavigationBar } from "@/components/NavigationBar"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { redirect } from "next/navigation"
 import { cookies } from 'next/headers'
-import { Metadata } from "next";
+import { NavigationBar } from "@/components/NavigationBar";
 
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
-
-export default async function DashboardLayout({
+export default async function PracticeLayout({
   children,
 }: {
   children: React.ReactNode
@@ -25,6 +20,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <>{children}</>
+    <div className="w-full">
+      {children}
+    </div>
   )
 }
