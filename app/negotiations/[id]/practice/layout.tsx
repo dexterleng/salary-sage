@@ -21,7 +21,6 @@ export default async function PracticeLayout({
 
   return (
     <div className="w-full">
-      <NavigationBar user={user} />
       {children}
     </div>
   )
