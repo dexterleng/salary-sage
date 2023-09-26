@@ -28,7 +28,7 @@ export default function Practice() {
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [responseData, setResponseData] = useState<HTMLAudioElement | null>(null);
+  const [responseUrl, setResponseUrl] = useState<string>('/audio/abstract.mp3');
   const [hint, setHint] = useState('');
   const [hintCount, setHintCount] = useState(0);
 
@@ -44,30 +44,22 @@ export default function Practice() {
     }
   }, [hasPracticeStarted]);
 
-  // temp delay function to simulate API request
-  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
   const handleUserSubmitRequest = async (audioData: Blob) => {
     setIsProcessing(true);
     try {
       const formData = new FormData();
-      formData.append('audio', audioData, 'recording.webm');
-      await delay(5000);
-      // const response = await fetch('YOUR_API_ENDPOINT', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-
-      // const data = await response.json();
-      // setResponseData(data);
-
-      // let audioUrl = require('@/public/audio/abstract.mp3');
-      // let sound = new Audio(audioUrl);
-      // setResponseData(sound);
-      // sound.play();
+      formData.append('file', audioData, 'audio.wav');
+      const response = await fetch('/api/negotiations/1/speak', {
+          method: 'POST',
+          body: formData,
+      });
+      const audioBlob = await response.blob()
+      const audioResponseURL = URL.createObjectURL(audioBlob);
+      setResponseUrl(audioResponseURL);
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
+
     setIsProcessing(false);
   };
 
@@ -108,7 +100,7 @@ export default function Practice() {
                           id="interviewer-audio"
                           onPlay={() => { setIsInterviewerSpeaking(true); }}
                           onPause={() => setIsInterviewerSpeaking(false)}
-                          src='/audio/abstract.mp3'
+                          src={responseUrl}
                           className={`${isRecording ? 'pointer-events-none opacity-50' : ''}`}
                           ></audio>
                     }
