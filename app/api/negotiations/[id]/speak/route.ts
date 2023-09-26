@@ -55,10 +55,10 @@ export async function POST(
       role: 'user',
       content: transcription
     })
-    chatGPTMessages.push({
-      role: "system",
-      content: `You have been provided with the transcript of a negotiation. Please continue the conversation.`,
-    })
+    // chatGPTMessages.push({
+    //   role: "system",
+    //   content: `You have been provided with the transcript of a negotiation. Please continue the conversation.`,
+    // })
 
     console.log(chatGPTMessages)
 
