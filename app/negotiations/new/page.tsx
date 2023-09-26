@@ -73,7 +73,7 @@ export default function New() {
             <Card>
               <CardHeader className="space-y-1">
                 <CardTitle className="w-full text-center">
-                  <TypographyH2>Let's get started!</TypographyH2>
+                  <TypographyH2>Start a mock negotiation</TypographyH2>
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4">

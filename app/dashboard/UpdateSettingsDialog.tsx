@@ -94,10 +94,12 @@ export default function UpdateSettingsDialog({
               {isOnboarded ? "Update Profile" : "Let's get to know each other"}
             </TypographyH2>
           </AlertDialogTitle>
-          <AlertDialogDescription>
-            Providing these details will enhance the realism of your mock
-            negotiations.
-          </AlertDialogDescription>
+          {!isOnboarded ? (
+            <AlertDialogDescription>
+              Providing these details will enhance the realism of your mock
+              negotiations.
+            </AlertDialogDescription>
+          ) : null}
         </AlertDialogHeader>
         <Form {...form}>
           <form
@@ -218,7 +220,7 @@ export default function UpdateSettingsDialog({
               type="submit"
               className="font-semibold w-full border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
             >
-              { isOnboarded ? "Save Changes" : "Get Started" }
+              {isOnboarded ? "Save Changes" : "Get Started"}
             </Button>
           </form>
         </Form>
