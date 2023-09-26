@@ -37,15 +37,15 @@ import { cn } from "@/lib/utils";
 const formSchema = z
   .object({
     // position: z.string(),
-    company: z.string().min(0),
-    currentYearsOfExperience: z.coerce.number().int().min(0),
-    currentSalary: z.coerce.number().int().gt(0),
-    expectedMinMonthlySalary: z.coerce.number().int().gt(0).min(0),
-    expectedMaxMonthlySalary: z.coerce.number().int().gt(0).min(0),
+    companyName: z.string().min(0),
+    // currentYearsOfExperience: z.coerce.number().int().min(0),
+    // currentSalary: z.coerce.number().int().gt(0),
+    minExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
+    maxExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
   })
   .refine(
-    (obj) => obj.expectedMinMonthlySalary <= obj.expectedMaxMonthlySalary,
-    { message: "Invalid income range", path: ["expectedMaxMonthlySalary"] }
+    (obj) => obj.minExpectedMonthlyIncome <= obj.maxExpectedMonthlyIncome,
+    { message: "Invalid income range", path: ["maxExpectedMonthlyIncome"] }
   );
 
 export default function New() {
@@ -57,7 +57,7 @@ export default function New() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("success");
-    // (formRef.current as any).submit();
+    (formRef.current as any).submit();
   }
 
   return (
@@ -67,7 +67,7 @@ export default function New() {
           <form
             ref={formRef}
             onSubmit={form.handleSubmit(onSubmit)}
-            action="/auth/sign-in"
+            action="/negotiations/"
             method="post"
           >
             <Card>
@@ -104,7 +104,7 @@ export default function New() {
                 /> */}
                 <FormField
                   control={form.control}
-                  name="company"
+                  name="companyName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Desired Company</FormLabel>
@@ -116,7 +116,7 @@ export default function New() {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="currentYearsOfExperience"
                   render={({ field }) => (
@@ -133,8 +133,9 @@ export default function New() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
-                <FormField
+                /> */}
+
+                {/* <FormField
                   control={form.control}
                   name="currentSalary"
                   render={({ field }) => (
@@ -151,13 +152,14 @@ export default function New() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
+
                 <div>
-                  <FormLabel className={cn((form.formState.errors.expectedMinMonthlySalary || form.formState.errors.expectedMaxMonthlySalary) ? "text-destructive" : null)}>Expected Monthly Income Range</FormLabel>
+                  <FormLabel className={cn((form.formState.errors.minExpectedMonthlyIncome || form.formState.errors.maxExpectedMonthlyIncome) ? "text-destructive" : null)}>Expected Monthly Income</FormLabel>
                   <div className="pt-2 flex items-center gap-2">
                     <FormField
                       control={form.control}
-                      name="expectedMinMonthlySalary"
+                      name="minExpectedMonthlyIncome"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl className="flex-1">
@@ -174,7 +176,7 @@ export default function New() {
                     <span className="text-sm">To</span>
                     <FormField
                       control={form.control}
-                      name="expectedMaxMonthlySalary"
+                      name="maxExpectedMonthlyIncome"
                       render={({ field }) => (
                         <FormItem>
                           <FormControl className="flex-1">
@@ -190,8 +192,8 @@ export default function New() {
                     />
                   </div>
                   {
-                    (form.formState.errors?.expectedMinMonthlySalary || form.formState.errors?.expectedMaxMonthlySalary) ? (
-                      <FormMessage className="pt-2">{form.formState.errors.expectedMinMonthlySalary?.message ?? form.formState.errors.expectedMaxMonthlySalary?.message ?? ""}</FormMessage>
+                    (form.formState.errors?.minExpectedMonthlyIncome || form.formState.errors?.maxExpectedMonthlyIncome) ? (
+                      <FormMessage className="pt-2">{form.formState.errors.minExpectedMonthlyIncome?.message ?? form.formState.errors.maxExpectedMonthlyIncome?.message ?? ""}</FormMessage>
                     ) : null
                   }
                 </div>
