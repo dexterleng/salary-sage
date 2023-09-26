@@ -23,7 +23,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { TypeAnimation } from 'react-type-animation';
 
 export default function Practice({ params }: { params: { id: string } }) {
   const interviewId = params.id;
@@ -34,7 +35,7 @@ export default function Practice({ params }: { params: { id: string } }) {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [responseUrl, setResponseUrl] = useState<string>('/audio/abstract.mp3');
-  const [response, setResponse] = useState<string>('');
+  const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations. Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations. Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations. Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
   // const [hintCount, setHintCount] = useState(0);
 
@@ -116,17 +117,32 @@ export default function Practice({ params }: { params: { id: string } }) {
             <CardContent>
               <div className="px-2 pb-4">
                 <div className="bg-secondary w-full h-80">
-                  <div className="flex flex-col items-center justify-center h-full">
+                  <div className="flex flex-col items-center justify-center h-[calc(50vh-80px)]">
                     {
                       isProcessing
                         ? 'Waiting for your interviewer to reply...'
-                        : <audio controls autoPlay={hasPracticeStarted}
-                          id="interviewer-audio"
-                          onPlay={() => { setIsInterviewerSpeaking(true); }}
-                          onPause={() => setIsInterviewerSpeaking(false)}
-                          src={responseUrl}
-                          className={`${isRecording ? 'pointer-events-none opacity-50' : ''}`}
-                        ></audio>
+                        : <div className="flex flex-col gap-6 justify-evenly items-center h-full p-8">
+                          {response && <div className="flex justify-center items-center">
+                            {/* <TypographyBody>{response}</TypographyBody> */}
+                            <TypeAnimation
+                              sequence={[
+                                response
+                              ]}
+                              wrapper="span"
+                              cursor={true}
+                              repeat={1}
+                              style={{ fontSize: '1em', display: 'inline-block', height: '180px', overflowY: 'scroll', backgroundColor: 'bg-glass' }}
+                            />
+                          </div>}
+                          <audio
+                            controls autoPlay={hasPracticeStarted}
+                            id="interviewer-audio"
+                            onPlay={() => { setIsInterviewerSpeaking(true); }}
+                            onPause={() => setIsInterviewerSpeaking(false)}
+                            src={responseUrl}
+                            className={`${isRecording ? 'pointer-events-none opacity-50' : ''}`}
+                          ></audio>
+                        </div>
                     }
                   </div>
                 </div>

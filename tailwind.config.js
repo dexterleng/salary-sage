@@ -16,9 +16,6 @@ module.exports = {
       },
     },
     extend: {
-      animation: {
-        typing: 'typing 2s steps(6), blink 1s infinite',
-      },
       fontFamily: {
         sans: ['var(--font-mulish)'],
       },
