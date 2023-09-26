@@ -21,12 +21,14 @@ import { User } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import UpdateSettingsDialog from "@/app/dashboard/UpdateSettingsDialog";
 
 type NavigationBarProps = {
   user: User | null;
+  userData: any
 };
 
-export function NavigationBar({ user }: NavigationBarProps) {
+export function NavigationBar({ user, userData }: NavigationBarProps) {
   const pathname = usePathname();
 
   const unauthenticatedLandingPageMenu = () => (
@@ -78,14 +80,17 @@ export function NavigationBar({ user }: NavigationBarProps) {
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
+                  { `${userData?.firstName} ${userData?.lastName}` }
+                </p>
+                <p className="text-xs leading-none text-muted-foreground">
                   {user?.email}
                 </p>
-                {/* <p className="text-xs leading-none text-muted-foreground">
-                    m@example.com
-                  </p> */}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => { setIsUpdateSettingsDialogOpen(true) }}>
+              Update Profile
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <form
                 action="/auth/sign-out"
@@ -146,6 +151,20 @@ export function NavigationBar({ user }: NavigationBarProps) {
     return user ? authenticatedLandingPageMenu() : unauthenticatedLandingPageMenu()
   }
 
+  const {
+    yearsOfExperience,
+    currentMonthlyIncome,
+    minExpectedMonthlyIncome,
+    maxExpectedMonthlyIncome,
+  } = userData || {};
+
+  const isOnboarded =
+    yearsOfExperience !== null &&
+    currentMonthlyIncome !== null &&
+    minExpectedMonthlyIncome !== null &&
+    maxExpectedMonthlyIncome !== null;
+  const [isUpdateSettingsDialogOpen, setIsUpdateSettingsDialogOpen] = React.useState(!isOnboarded);
+
   return (
     <div className="flex items-center justify-between shadow-glass w-full sticky top-0 px-10 md:px-18 lg:px-24 z-50 h-14 supports-backdrop-blur:bg-card/60 bg-card/95">
       <NavigationMenu>
@@ -160,6 +179,8 @@ export function NavigationBar({ user }: NavigationBarProps) {
       </NavigationMenu>
 
       { rightMenu() }
+
+      <UpdateSettingsDialog open={isUpdateSettingsDialogOpen} userData={userData} />
     </div>
   );
 }
