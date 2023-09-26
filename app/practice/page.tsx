@@ -104,11 +104,13 @@ export default function Practice() {
                     {
                       isProcessing
                         ? 'Waiting for your interviewer to reply...'
-                        : <audio controls={!isRecording} autoPlay={hasPracticeStarted} 
+                        : <audio controls autoPlay={hasPracticeStarted}
                           id="interviewer-audio"
                           onPlay={() => { setIsInterviewerSpeaking(true); }}
                           onPause={() => setIsInterviewerSpeaking(false)}
-                          src='/audio/abstract.mp3'></audio>
+                          src='/audio/abstract.mp3'
+                          className={`${isRecording ? 'pointer-events-none opacity-50' : ''}`}
+                          ></audio>
                     }
                   </div>
                 </div>

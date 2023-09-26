@@ -79,7 +79,7 @@ export default function AudioRecorder({ isRecording, setIsRecording, isProcessin
         </div>
       )}
       {audioURL && !isRecording &&
-        <Button onClick={handleSubmit}>
+        <Button onClick={handleSubmit} disabled={isProcessing}>
           Confirm Response
         </Button>
       }
