@@ -16,8 +16,7 @@ export const dynamic = 'force-dynamic'
  * 
  * Returns JSON response:
  * {
- *   "interviewId": int,
- *   "supabaseError": str
+ *   "interviewId": int
  * }
  * 
  */
@@ -34,9 +33,15 @@ export async function POST(request: Request) {
       .from('interview')
       .insert(interview)
       .select('id');
+    
+    if (supabaseError !== null) {
+      throw supabaseError;
+    } else if (data === null) {
+      throw new Error("null id returned");
+    }
 
     const interviewId = data![0].id;
-    return NextResponse.json({ interviewId, supabaseError }, { status: 200 })
+    return NextResponse.json({ interviewId }, { status: 200 })
   } catch (error: any) {
     return NextResponse.json({ error }, { status: 500 });
   }

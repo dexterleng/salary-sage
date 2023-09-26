@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { NextResponse } from 'next/server';
+import { getFeedback } from '../feedback/route';
 
 const openai = new OpenAI({
   // requires OPENAI_API_KEY to be set in .env
@@ -39,27 +40,24 @@ export async function GET(req: Request) {
       .select('isInterviewer, transcript')
       .eq('id', interviewId)
       .order('created_at', { ascending: true });
+
+    if (transcriptFetchError !== null) {
+      throw transcriptFetchError;
+    }
     
     // Get interview feedback from Supabase
-    const { data: feedbackData, error: feedbackFetchError } = await supabase
+    let { data: feedbackData, error: feedbackFetchError } = await supabase
       .from('interview_feedback')
       .select('confidence, communication, goodPoints, badPoints')
       .eq('id', interviewId);
+    
+    if (feedbackFetchError !== null) {
+      throw feedbackFetchError;
+    }
 
     if (feedbackData?.length === 0) {
-      // Send a get request to interview/feedback route
-      // FIXME: doesn't work
-      /*
-      console.log("fetching");
-      fetch('/interview/feedback?interviewId=' + interviewId);
-      console.log("fetched");
-      // Get data again from supabase
-      const { data: feedbackData, error: feedbackFetchError } = await supabase
-        .from('interview_feedback')
-        .select('confidence, communication, goodPoints, badPoints')
-        .eq('id', interviewId);
-        */
-      console.log("no feedback found");
+      console.log("No feedback found, generating feedback...");
+      feedbackData = await getFeedback(interviewId ?? "");
     }
 
     // Send prompt to OpenAI

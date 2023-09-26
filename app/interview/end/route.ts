@@ -37,6 +37,10 @@ export async function POST(req: Request) {
       .select('isInterviewer, transcript')
       .eq('id', interviewId)
       .order('created_at', { ascending: true });
+    
+    if (transcriptFetchError !== null) {
+      throw transcriptFetchError;
+    }
 
     // Send prompt to OpenAI
     // TODO: insert real prompt here

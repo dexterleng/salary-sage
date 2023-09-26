@@ -1,5 +1,37 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+export async function getTranscript(interviewId: string) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+  const { data, error: supabaseError } = await supabase
+    .from('interview_transcript')
+    .select('isInterviewer, transcript')
+    .eq('id', interviewId)
+    .order('created_at', { ascending: true });
+
+  if (supabaseError !== null) {
+    throw supabaseError;
+  }
+  return data;
+}
+
+export async function storeTranscript(interviewId: string, isInterviewer: boolean, transcript: string) {
+  // Store transcript into Supabase
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+  const { error: supabaseError } = await supabase
+    .from('interview_transcript')
+    .insert({ id: interviewId, isInterviewer: isInterviewer, transcript: transcript });
+
+  if (supabaseError !== null) {
+    throw supabaseError;
+  }
+}
 
 /**
  * Given an interviewId, retrieves its entire transcript in chronological order.
@@ -15,8 +47,7 @@ import { NextResponse } from 'next/server';
  *         "isInterviewer": bool,
  *         "transcript": str
  *       }
- *     ],
- *   "supabaseError": str
+ *     ]
  * }  
  * 
  */
@@ -25,18 +56,9 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const interviewId = url.searchParams.get('interviewId');
 
-    // Get transcript from Supabase
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-    const { data, error: supabaseError } = await supabase
-      .from('interview_transcript')
-      .select('isInterviewer, transcript')
-      .eq('id', interviewId)
-      .order('created_at', { ascending: true });
+    const data = await getTranscript(interviewId ?? "");
 
-    return NextResponse.json({ interviewId, data, supabaseError }, { status: 200 });
+    return NextResponse.json({ interviewId, data }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error }, { status: 500 });
   }
@@ -54,24 +76,14 @@ export async function GET(req: Request) {
  * 
  * Returns JSON response:
  * {
- *   "interviewId": int,
- *   "supabaseError": str
+ *   "interviewId": int
  * }
  */
 export async function POST(req: Request) {
   try {
-    const { interviewId, role, transcript } = await req.json();
-
-    // Store transcript into Supabase
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-    const { error: supabaseError } = await supabase
-      .from('interview_transcript')
-      .insert({ id: interviewId, isInterviewer: null, transcript: transcript });
-
-    return NextResponse.json({ interviewId, supabaseError }, { status: 200 });
+    const { interviewId, isInterviewer, transcript } = await req.json();
+    await storeTranscript(interviewId, isInterviewer, transcript);
+    return NextResponse.json({ interviewId }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error }, { status: 500 });
   }
