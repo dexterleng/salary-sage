@@ -35,7 +35,7 @@ export default function Practice({ params }: { params: { id: string } }) {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [responseUrl, setResponseUrl] = useState<string>('/audio/abstract.mp3');
-  const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations. Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations. Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations. Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.Hi Charisma, I\'m your interviewer. I will be asking you a few questions about your salary expectations.');
+  const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role.');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
   // const [hintCount, setHintCount] = useState(0);
 
@@ -50,6 +50,16 @@ export default function Practice({ params }: { params: { id: string } }) {
       }, 1000);
     }
   }, [hasPracticeStarted]);
+
+  useEffect(() => {
+    const elem = document.getElementById("interviewer-response") as HTMLElement;
+    if (isInterviewerSpeaking && elem) {
+      const intervalId = setInterval(() => {
+        elem.scrollTop = elem.scrollHeight;
+      }, 500);
+      return () => clearInterval(intervalId);
+    }
+  }, [isInterviewerSpeaking]);
 
   const handleUserSubmitRequest = async (audioData: Blob) => {
     setHint('');
@@ -122,16 +132,17 @@ export default function Practice({ params }: { params: { id: string } }) {
                       isProcessing
                         ? 'Waiting for your interviewer to reply...'
                         : <div className="flex flex-col gap-6 justify-evenly items-center h-full p-8">
-                          {response && <div className="flex justify-center items-center">
+                          {response && <div className="flex justify-center items-center overflow-y-scroll" id="interviewer-response">
                             {/* <TypographyBody>{response}</TypographyBody> */}
                             <TypeAnimation
                               sequence={[
-                                response
+                                response,
                               ]}
                               wrapper="span"
                               cursor={true}
                               repeat={1}
-                              style={{ fontSize: '1em', display: 'inline-block', height: '180px', overflowY: 'scroll', backgroundColor: 'bg-glass' }}
+                              style={{ fontSize: '1em', display: 'inline-block', height: '180px' }}
+                              speed={60}
                             />
                           </div>}
                           <audio
