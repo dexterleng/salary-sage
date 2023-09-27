@@ -1,62 +1,75 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { TypographyBody, TypographyH4, TypographySubtle, TypographySmall } from "../ui/typography";
-import { Card, CardContent } from "../ui/card";
-import { PlayIcon } from "@radix-ui/react-icons"
+import { TypographyBody, TypographyH4, TypographySmall } from "../ui/typography";
 import Fuse from 'fuse.js'
 import { useEffect, useState } from "react";
 
 type MockNegotiationProps = {
   position: string;
   company: string;
-  hintCount: number;
-  interviewerStyles: string[];
-  transcript: string[];
+  tags: string[];
+  transcript: TranscriptLine[];
 }
 
-export default function MockNegotiation({ position, company, hintCount, interviewerStyles, transcript }: MockNegotiationProps) {
-  const [searchedTranscript, setSearchedTranscript] = useState<string>('');
-  const [foundResults, setFoundResults] = useState<number[]>([]);
+type TranscriptLine = {
+  isUser: boolean;
+  message: string;
+  createdAt: string;
+  timestamp?: string;
+}
 
-  const fuse = new Fuse(transcript);
+export default function MockNegotiation({ position, company, tags, transcript }: MockNegotiationProps) {
+  const [searchedLine, setSearchedLine] = useState<string>('');
+  const [foundResults, setFoundResults] = useState<string>('');
+
+  const fuse = new Fuse(transcript, { keys: ['message'], ignoreLocation: true, threshold: 0.0, shouldSort: false });
 
   useEffect(() => {
-    setFoundResults(fuse.search(searchedTranscript).map(result => result.refIndex).slice(0, 1));
-  }, [searchedTranscript]);
+    setFoundResults(fuse.search(searchedLine).map(result => result.item.message).slice(0, 1)[0]);
+  }, [searchedLine]);
+
+  useEffect(() => {
+    if (transcript.length <= 0) {
+      return;
+    }
+    // get first createdAt
+    const firstCreatedAt = new Date(transcript[0].createdAt);
+    // create speaker timestamps for each line based on createdAt
+    transcript.forEach((line) => {
+      const createdAt = new Date(line.createdAt);
+      const timeElapsed = createdAt.getTime() - firstCreatedAt.getTime();
+
+      // convert milliseconds to minutes and seconds
+      const minutes = Math.floor(timeElapsed / 60000);
+      const seconds = ((timeElapsed % 60000) / 1000).toFixed(0);
+      const speaker = line.isUser ? "You" : "Interviewer";
+      line.timestamp = `${minutes}:${seconds} ${speaker}`;
+    })
+  }, [transcript]);
 
   return (
     <div>
       <div>
         <TypographyH4>{position}</TypographyH4>
         <TypographyBody>{company}</TypographyBody>
-        <TypographySubtle>{hintCount} Hints Used</TypographySubtle>
       </div>
       <div className="flex gap-2 py-4">
-        {interviewerStyles.map(style =>
+        {tags.map(style =>
           <Button variant={"secondary"} className="pointer-events-none shadow-none" key={style}>
             {style}
           </Button>
         )}
       </div>
       <div>
-        <Card className="shadow-none bg-glass my-6">
-          <CardContent className="flex pt-6 justify-between items-center">
-            <Button variant="secondary" size="icon" className="h-12 w-12 rounded-full">
-              <PlayIcon className="h-6 w-6" />
-            </Button>
-            <div style={{ width: 300 }}></div>
-            <TypographySubtle>1:25/2:00</TypographySubtle>
-          </CardContent>
-        </Card>
         <div className="flex gap-2 mt-10">
-          <Input placeholder="Search transcript..." onChange={(e) => setSearchedTranscript(e.target.value)} />
+          <Input placeholder="Search transcript..." onChange={(e) => setSearchedLine(e.target.value)} />
           <Button variant="outline">Search</Button>
         </div>
         <div className="flex flex-col gap-2 mt-10">
           {transcript.map((line, index) =>
-            <div className={`p-2 rounded-md ${foundResults.includes(index) ? "bg-glass duration-150" : ""}`} key={line}>
-              <TypographyBody className="text-accent">0:00 Interviewer (AI)</TypographyBody>
-              <TypographySmall>{line}</TypographySmall>
+            <div className={`p-2 rounded-md ${foundResults == line.message ? "bg-secondary/50 duration-150" : ""}`} key={line.message}>
+              <TypographyBody className="text-accent">{line.timestamp}</TypographyBody>
+              <TypographySmall>{line.message}</TypographySmall>
             </div>
           )}
         </div>

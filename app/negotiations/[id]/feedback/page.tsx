@@ -8,7 +8,28 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@
 import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
+interface TranscriptLine {
+  isUser: boolean;
+  message: string;
+  createdAt: string;
+}
+
+interface QualitativeFeedback {
+  title: string,
+  evaluation: string,
+  citation: string,
+  suggestion: string | null,
+  is_positive: boolean,
+  score: number,
+}
+
+interface QuantitativeFeedback {
+  metric: string,
+  evaluation: string,
+  score: number
+}
 
 export default function Feedback({ params }: { params: { id: string } }) {
   const clarity = 78;
@@ -19,14 +40,47 @@ export default function Feedback({ params }: { params: { id: string } }) {
 
   const interviewId = params.id;
 
+  const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
+  const [positiveFeedbacks, setPositiveFeedbacks] = useState<QualitativeFeedback[]>([]);
+  const [negativeFeedbacks, setNegativeFeedbacks] = useState<QualitativeFeedback[]>([]);
+  const [quantitativeFeedbacks, setQuantitativeFeedbacks] = useState<QuantitativeFeedback[]>([]);
+
+  useEffect(() => {
+    fetchResponse();
+  }, [])
+
+  const fetchResponse = async () => {
+    try {
+      const response = await fetch(`/api/negotiations/${interviewId}/transcript`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      setTranscript(data);
+    } catch (error) {
+      console.error('Error getting transcript:', error);
+    }
+
+    try {
+      const response = await fetch(`/api/negotiations/${interviewId}/feedback`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      setPositiveFeedbacks(data.qualitativeFeedbacks?.filter((feedback: QualitativeFeedback) => feedback.is_positive));
+      setNegativeFeedbacks(data.qualitativeFeedbacks?.filter((feedback: QualitativeFeedback) => !feedback.is_positive));
+      setQuantitativeFeedbacks(data.quantitativeFeedbacks);
+    } catch (error) {
+      console.error('Error getting transcript:', error);
+    }
+  };
+
   return (
     <div className="px-32 py-12 justify-center flex flex-col items-center">
       <div className="flex w-full justify-between items-center">
         <TypographyH1 className="w-fit">Your Feedback</TypographyH1>
         <Link href="/dashboard"><Button className="w-fit" size="lg">Return to Dashboard</Button></Link>
       </div>
-      <div className="flex py-6 gap-12 flex-wrap">
-        <div className="flex flex-col gap-12">
+      <div className="flex py-6 gap-12 flex-wrap w-full">
+        <div className="flex flex-1 grow flex-col gap-12">
           <Card>
             <CardHeader>
               <CardTitle>
@@ -102,7 +156,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardContent>
           </Card>
         </div>
-        <Card>
+        <Card className="flex-1">
           <CardHeader>
             <CardTitle>
               <TypographyH2 className="ml-2">Mock Negotiation</TypographyH2>
@@ -110,7 +164,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
           </CardHeader>
           <CardContent>
             <div className="px-2 pb-6">
-              <MockNegotiation position="Software Engineer" company="Open Government Products" hintCount={3} interviewerStyles={["Arrogant", "Difficult"]} transcript={["Hi", "Hello"]} />
+              <MockNegotiation position="Software Engineer" company="Open Government Products" tags={["Arrogant", "Difficult"]} transcript={transcript} />
             </div>
           </CardContent>
         </Card>

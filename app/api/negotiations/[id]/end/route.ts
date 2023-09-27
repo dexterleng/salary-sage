@@ -20,6 +20,13 @@ export async function POST(
             .order('id', { ascending: true })
             .throwOnError()
 
+        // set has ended to true
+        await supabase
+            .from("interview")
+            .update({ hasEnded: true })
+            .eq("id", interviewId)
+            .throwOnError();
+
         // get out interview data
         const { data: interview } = await supabase
             .from('interview')

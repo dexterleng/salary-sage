@@ -29,7 +29,7 @@ import { TypeAnimation } from 'react-type-animation';
 export default function Practice({ params }: { params: { id: string } }) {
   const interviewId = params.id;
   const router = useRouter()
-  
+
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
   const [hasPracticeEnded, setHasPracticeEnded] = useState(false);
   const [showPracticeEndedAlert, setShowPracticeEndedAlert] = useState(false);
@@ -43,9 +43,11 @@ export default function Practice({ params }: { params: { id: string } }) {
   const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. ');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
   // const [hintCount, setHintCount] = useState(0);
+
   useEffect(() => {
     fetchResponse(new FormData())
   }, [])
+
   useEffect(() => {
     if (hasPracticeStarted) {
       setIsInterviewerSpeaking(true);
@@ -85,8 +87,6 @@ export default function Practice({ params }: { params: { id: string } }) {
       const audioBlob = await response.blob()
       const audioResponseURL = URL.createObjectURL(audioBlob);
       setResponseUrl(audioResponseURL);
-
-
     } catch (error) {
       console.error('Error uploading audio:', error);
     }

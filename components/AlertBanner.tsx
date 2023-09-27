@@ -11,8 +11,6 @@ export default function AlertBanner() {
   const error = searchParams.get("error");
   const message = searchParams.get("message");
 
-  console.log(message);
-
   if (error) {
     return (
       <Alert variant="destructive">

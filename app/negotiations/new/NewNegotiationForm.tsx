@@ -61,7 +61,6 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
   const formRef = useRef(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("success");
     (formRef.current as any).submit();
   }
 
