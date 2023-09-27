@@ -179,7 +179,7 @@ export default async function Index() {
                   </li>
                 </ul>
                 <Link
-                  href="#pricing"
+                  href="/waitlist"
                   className="inline-block mt-8 sm:mt-12 w-full text-center border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80 text-white font-semibold text-md py-3 px-6 rounded-lg"
                 >
                   Subscribe
