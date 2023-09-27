@@ -31,9 +31,13 @@ export default function Practice({ params }: { params: { id: string } }) {
   const router = useRouter()
 
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
+  const [hasPracticeEnded, setHasPracticeEnded] = useState(false);
+
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUserAudioPlaying, setIsUserAudioPlaying] = useState(false);
+
   const [responseUrl, setResponseUrl] = useState<string>('/audio/abstract.mp3');
   const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. ');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
@@ -144,10 +148,10 @@ export default function Practice({ params }: { params: { id: string } }) {
                           <audio
                             controls autoPlay={hasPracticeStarted}
                             id="interviewer-audio"
-                            onPlay={() => { setIsInterviewerSpeaking(true); }}
+                            onPlay={() => setIsInterviewerSpeaking(true)}
                             onPause={() => setIsInterviewerSpeaking(false)}
                             src={responseUrl}
-                            className={`${isRecording ? 'pointer-events-none opacity-50' : ''}`}
+                            className={`${isRecording || isUserAudioPlaying ? 'pointer-events-none opacity-50' : ''}`}
                           ></audio>
                         </div>
                     }
@@ -171,7 +175,7 @@ export default function Practice({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} onSubmit={handleUserSubmitRequest} isDisabled={isProcessing || isInterviewerSpeaking} />
+                <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} isDisabled={isProcessing || isInterviewerSpeaking} setIsUserAudioPlaying={setIsUserAudioPlaying} onSubmit={handleUserSubmitRequest} />
               </div>
               <Popover>
                 <PopoverTrigger className="group" disabled={isProcessing || isInterviewerSpeaking}>
@@ -207,7 +211,7 @@ export default function Practice({ params }: { params: { id: string } }) {
         </AlertDialogContent>
       </AlertDialog>
       <AlertDialog>
-        <AlertDialogTrigger><Button className="mt-8" size="lg">End Practice</Button></AlertDialogTrigger>
+        <AlertDialogTrigger><Button className="mt-8" variant="link" size="lg">End Practice</Button></AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to end this practice?</AlertDialogTitle>

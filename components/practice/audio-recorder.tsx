@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { TypographySmall } from "@/components/ui/typography";
+import { TypographySmall, TypographySubtle } from "@/components/ui/typography";
 import { Mic, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -7,10 +7,11 @@ type AudioRecorderProps = {
   isRecording: boolean;
   setIsRecording: (isRecording: boolean) => void;
   isDisabled: boolean;
+  setIsUserAudioPlaying: (isPlaying: boolean) => void;
   onSubmit: (audioData: Blob) => void;
 };
 
-export default function AudioRecorder({ isRecording, setIsRecording, isDisabled, onSubmit }: AudioRecorderProps) {
+export default function AudioRecorder({ isRecording, setIsRecording, isDisabled, setIsUserAudioPlaying, onSubmit }: AudioRecorderProps) {
   const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState('');
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -67,15 +68,22 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
                   ? 'Wait for your turn'
                   : audioURL
                     ? 'Re-record response'
-                    : 'Start Speaking'
+                    : 'Press to Start Speaking'
               }
             </TypographySmall>
           </div>
       }
 
       {audioURL && !isRecording && (
-        <div>
-          <audio controls src={audioURL} className={`${isDisabled ? 'pointer-events-none opacity-50' : ''}`}></audio>
+        <div className='flex flex-col justify-center items-center'>
+          <TypographySubtle className='text-xs'>Preview</TypographySubtle>
+          <audio
+            controls
+            src={audioURL}
+            onPlay={() => setIsUserAudioPlaying(true)}
+            onPause={() => setIsUserAudioPlaying(false)}
+            className={`mt-1 ${isDisabled ? 'pointer-events-none opacity-50' : ''}`}>
+          </audio>
         </div>
       )}
       {audioURL && !isRecording &&
