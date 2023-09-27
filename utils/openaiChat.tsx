@@ -1,8 +1,7 @@
-import {Role} from './promptGeneration'
 import OpenAI from "openai";
 
 export interface ChatMessage {
-    role: Role;
+    role: string;
     content: string;
 }
 
@@ -13,7 +12,7 @@ export async function getChatCompletionMessage(
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY as string });
 
     const formattedMessages = messages.map( msg => ({
-        role: msg.role.toString(),
+        role: msg.role,
         content: msg.content.replace(/ +/g, ' ').trim()
     })
 

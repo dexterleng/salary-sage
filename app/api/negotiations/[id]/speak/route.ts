@@ -2,6 +2,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getChatCompletionMessage } from '@/utils/openaiChat'
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
 const googleServiceAccount = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON as string);
@@ -19,6 +20,8 @@ export async function POST(
       return NextResponse.json({ success: false, error: "Request failed" });
     }
 
+    const receivedDatetime = new Date();
+
     const { data: interview } = await supabase
       .from('interview')
       .select()
@@ -27,13 +30,21 @@ export async function POST(
       .single()
       .throwOnError()
 
-    const { data: messages } = await supabase
+    const { data: messagesOrNull } = await supabase
       .from('interview_message')
       .select()
       .eq('interviewId', interviewId)
       .order('createdAt', { ascending: true })
       .throwOnError()
+    
+    const messages = messagesOrNull ?? [];
 
+    const orderedMessages = [...messages?.filter((m) => m.role == "system"), ...messages?.filter((m) => m.role != "system")]
+
+    const chatGPTMessages = orderedMessages!.map((m) => ({
+      role: m.role,
+      content: m.message
+    }))
 
     console.log("interview", interview)
 
@@ -45,31 +56,16 @@ export async function POST(
     }
 
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY as string });
-    const { text: transcription } = await openai.audio.transcriptions.create({ file, model: 'whisper-1', language: 'en' })
+    const { text: transcription } = await openai.audio.transcriptions.create({ file, model: 'whisper-1', language: 'en'})
 
-    const chatGPTMessages = messages!.map((m) => ({
-      role: m.isUser ? "user" : "assistant",
-      content: m.message
-    }))
     chatGPTMessages.push({
       role: 'user',
       content: transcription
     })
-    // chatGPTMessages.push({
-    //   role: "system",
-    //   content: `You have been provided with the transcript of a negotiation. Please continue the conversation.`,
-    // })
 
     console.log(chatGPTMessages)
 
-    const replyResponse = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      stream: false,
-      messages: chatGPTMessages as any
-    })
-
-    const replyText = replyResponse.choices[0].message.content;
-
+    const replyText = await getChatCompletionMessage(chatGPTMessages, "gpt-4")
     const tts = new TextToSpeechClient({ credentials: googleServiceAccount })
     const [replyAudioResponse] = await tts.synthesizeSpeech({
       input: { text: replyText },
@@ -86,8 +82,8 @@ export async function POST(
     await supabase
       .from('interview_message')
       .insert([
-        { message: transcription, isUser: true, createdAt: new Date().toISOString(), interviewId: interviewId },
-        { message: replyText, isUser: false, createdAt: new Date((new Date()).getTime() + 10).toISOString(), interviewId: interviewId },
+        { message: transcription, role: "user", createdAt: receivedDatetime.toISOString(), interviewId: interviewId },
+        { message: replyText, role: "assistant", createdAt: new Date().toISOString(), interviewId: interviewId },
       ])
       .throwOnError()
 

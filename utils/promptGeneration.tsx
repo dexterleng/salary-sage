@@ -1,9 +1,4 @@
 import { ChatMessage } from './openaiChat'
-export enum Role {
-    system = 'system',
-    user = 'user',
-    assistant = 'assistant'
-}
 
 export function getFeedbackPrompts(
     company: string,
@@ -13,7 +8,7 @@ export function getFeedbackPrompts(
 ): ChatMessage[][] {
     const qualitativeFeedbackPrompt: ChatMessage[] = [
         {
-            role: Role.system,
+            role: "system",
             content: `You are a professional salary negotiator. You have been given a transcript of a salary negotiation for a specific role between your client, the candidate, and the recruiter of the company. You are also provided with a suitability analysis of the candidate for the role. You are to give constructive criticism for only the candidate of the following transcript. You can utilise information from the suitability analysis in constructing feedback. The goal is for the client to get feedback that enables him to better negotiate his salary in future.
             1) Highlight the positives and negatives in the form of constructive criticism
             2) For each feedback, provide an insightful evaluation and use the most prominent citation in the transcript, word for word, as evidence.
@@ -30,7 +25,7 @@ export function getFeedbackPrompts(
             }]`
         },
         {
-            role: Role.user,
+            role: "user",
             content:
                 `Company and Role:
         ${company}, ${jobTitle}
@@ -45,7 +40,7 @@ export function getFeedbackPrompts(
 
     const quantitativeFeedbackPrompt: ChatMessage[] = [
         {
-            role: Role.system,
+            role: "system",
             content:
                 `1) Step by step, evaluate how well the candidate performed in this salary negotiation for each of the metrics below. Provide evaluation and evidence for them if there exists, otherwise simply say that there is no evidence.
         2) Then, account for the evaluation and evidence to come up with a score from 0-100 for each of the metrics. If there is no evidence or evaluation relevant, return 50.
@@ -56,7 +51,7 @@ export function getFeedbackPrompts(
         "score": <score>,
         },...]`},
         {
-            role: Role.user,
+            role: "user",
             content:
                 `Metrics:
         1. Preparation Score: A candidate's success often hinges on how well they're prepared. This metric evaluates their research on market salaries, company benefits, industry trends, and their own worth.
@@ -82,7 +77,7 @@ export function getRecruiterNegotiationPrompt(
 ): ChatMessage[] {
     return [
         {
-            role: Role.system,
+            role: "system",
             content:
                 `You are a professional salary negotiator. You have been given a transcript of a salary negotiation for a specific role between your client, the candidate, and the recruiter of the company. You are also provided with a suitability analysis of the candidate for the role. You are to give constructive criticism for only the candidate of the following transcript. You can utilise information from the suitability analysis in constructing feedback. The goal is for the client to get feedback that enables him to better negotiate his salary in future.
         1) Highlight the positives and negatives in the form of constructive criticism
@@ -152,7 +147,7 @@ export function getRecruiterMetaInstructionsPrompt(
 ): ChatMessage[] {
     return [
         {
-            role: Role.system,
+            role: "system",
             content:
                 `
                 Draft a instruction prompt that is meant to act as a set of instructions for a chatgpt application that roleplays as a recruiter for a company and negotiates salary with users which roleplay as the candidate. You are provided with a base set of instructions. Alter or replace entirely the existing instructions to account for a difficulty level from 1-10 representing the difficulty the candidate would face in negotiating the salary he/she wants against this chatgpt recruiter. 
@@ -185,7 +180,7 @@ export function getSuitabilityPrompt(
 ): ChatMessage[] {
     return [
         {
-            role: Role.user,
+            role: "user",
             content:
                 `
                 You are a recruiter. You are provided with the following job description and resume of a candidate. 
@@ -219,7 +214,7 @@ export function getHintsPrompt(
 ): ChatMessage[] {
     return [
         {
-            role: Role.system,
+            role: "system",
             content:
                 `
                 You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with 3 concrete hints, each hint should be specific and not generic and fits in a single succinct sentence.
@@ -266,7 +261,7 @@ export function getHiringManagerGuidelinesPrompt(
 ): ChatMessage[] {
     return [
         {
-            role: Role.system,
+            role: "system",
             content:
                 `
                 You are a hiring manager for a company. 
