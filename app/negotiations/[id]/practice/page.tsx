@@ -80,8 +80,6 @@ export default function Practice({ params }: { params: { id: string } }) {
       console.error('Error uploading audio:', error);
     }
 
-    setIsProcessing(false);
-
     try {
       const response = await fetch(`/api/negotiations/${interviewId}/response`, {
         method: 'GET',
@@ -97,6 +95,8 @@ export default function Practice({ params }: { params: { id: string } }) {
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
+
+    setIsProcessing(false);
   };
 
   return (
