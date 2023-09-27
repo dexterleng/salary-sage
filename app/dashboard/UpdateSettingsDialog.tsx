@@ -87,7 +87,7 @@ export default function UpdateSettingsDialog({
 
   return (
     <AlertDialog open={open}>
-      <AlertDialogContent>
+      <AlertDialogContent className="max-w-sm sm:max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle className="w-fill text-center">
             <TypographyH2>
@@ -171,7 +171,7 @@ export default function UpdateSettingsDialog({
               >
                 Desired Monthly Income
               </FormLabel>
-              <div className="pt-2 flex items-center gap-2 w-full">
+              <div className="pt-2 flex justify-between items-center gap-2 w-full">
                 <FormField
                   control={form.control}
                   name="minExpectedMonthlyIncome"
