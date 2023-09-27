@@ -52,9 +52,7 @@ export async function POST(
 
     let replyText = "";
 
-    console.log("test");
-    if (messages!.length === 0) {
-
+    if (messages!.length === 0) { // new negotiation
       // get hiring manager guidelines
       const hiringManagerGuidelinesPrompt = getHiringManagerGuidelinesPrompt(interview.companyName, 
                                                                              interview.jobTitle,
@@ -62,7 +60,13 @@ export async function POST(
                                                                              "", // location
                                                                              interview.yearsOfExperience,
                                                                              ""); // market analysis
-      const hiringManagerGuidelines = await getChatGPTResponse(openai, hiringManagerGuidelinesPrompt);
+      const hiringManagerGuidelines = replyText = await getChatCompletionMessage(hiringManagerGuidelinesPrompt, "gpt-3.5-turbo") as string
+
+      await supabase
+        .from('interview')
+        .update({ hm_guidelines: hiringManagerGuidelines })
+        .eq('id', interviewId)
+        .throwOnError()
 
       // get suitability
       /*
@@ -70,14 +74,25 @@ export async function POST(
                                                      interview.companyName,
                                                      interview.jobTitle,
                                                      interview.jobTitle); // supposed to be job description, but not available for now
-      const suitability = await getChatGPTResponse(openai, suitabilityPrompt);
+      const suitability = replyText = await getChatCompletionMessage(suitabilityPrompt, "gpt-3.5-turbo") as string
+      await supabase
+        .from('interview')
+        .update({ suitability_analysis: suitability })
+        .eq('id', interviewId)
+        .throwOnError()
       */
       // for now suitability is an empty string because we don't have a resume and job description.
       const suitability = "";
 
       // get recruiter meta instructions
       const recruiterMetaInstructionsPrompt = getRecruiterMetaInstructionsPrompt(interview.difficulty ?? "3");
-      const recruiterMetaInstructions = await getChatGPTResponse(openai, recruiterMetaInstructionsPrompt);
+      const recruiterMetaInstructions = replyText = await getChatCompletionMessage(recruiterMetaInstructionsPrompt, "gpt-3.5-turbo") as string
+
+      await supabase
+        .from('interview')
+        .update({ meta_instructions: recruiterMetaInstructions })
+        .eq('id', interviewId)
+        .throwOnError()
 
       // get recruiter negotiations
       const recruiterNegotiationPrompt = getRecruiterNegotiationPrompt(recruiterMetaInstructions as string, 
@@ -85,8 +100,8 @@ export async function POST(
                                                                        interview.jobTitle,
                                                                        hiringManagerGuidelines as string,
                                                                        suitability as string);
-      replyText = await getChatGPTResponse(openai, recruiterNegotiationPrompt) as string;
-    } else {
+      replyText = await getChatCompletionMessage(recruiterNegotiationPrompt, "gpt-3.5-turbo") as string
+    } else { // continuing an existing negotiation
       const chatGPTMessages = messages!.map((m) => ({
         role: m.isUser ? "user" : "assistant",
         content: m.message
@@ -97,8 +112,10 @@ export async function POST(
       })
 
       console.log(chatGPTMessages)
+      replyText = await getChatCompletionMessage(chatGPTMessages, "gpt-3.5-turbo") as string
+    }
+    console.log("replyText", replyText);
 
-    const replyText = await getChatCompletionMessage(chatGPTMessages, "gpt3.5-turbo")
     const tts = new TextToSpeechClient({ credentials: googleServiceAccount })
     const [replyAudioResponse] = await tts.synthesizeSpeech({
       input: { text: replyText },
@@ -115,8 +132,8 @@ export async function POST(
     await supabase
       .from('interview_message')
       .insert([
-        { message: transcription, isUser: true, createdAt: new Date().toISOString(), interviewId: interviewId },
-        { message: replyText, isUser: false, createdAt: new Date((new Date()).getTime() + 10).toISOString(), interviewId: interviewId },
+        { message: transcription, role: "user", createdAt: new Date().toISOString(), interviewId: interviewId },
+        { message: replyText, role: "assistant", createdAt: new Date((new Date()).getTime() + 10).toISOString(), interviewId: interviewId },
       ])
       .throwOnError()
 
@@ -128,15 +145,4 @@ export async function POST(
     // Handle errors such as network issues
     return NextResponse.json({ success: false, error: "Request failed" });
   }
-}
-
-async function getChatGPTResponse(openai: OpenAI , messages: any) {
-  const replyResponse = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    stream: false,
-    messages: messages as any
-  })
-
-  const replyText = replyResponse.choices[0].message.content;
-  return replyText;
 }
