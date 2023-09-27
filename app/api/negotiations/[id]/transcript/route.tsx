@@ -9,20 +9,24 @@ export async function GET(
     try {
         const interviewId = params.id;
         const supabase = createRouteHandlerClient({ cookies })
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-        return NextResponse.json({ success: false, error: "Request failed" });
-        } 
 
-        const data = [
-            {
-                isUser: true,
-                message: "Hi there I am Robert. Nice to meet you.",
-                createdAt: new Date().toISOString(),
-            }
-        ]
+        const { data: chatMessages } = await supabase
+        .from('interview_message')
+        .select()
+        .eq('interviewId', interviewId)
+        .neq('role', 'system')
+        .order('createdAt', { ascending: true })
+        .limit(100)
+        .throwOnError()
+    
+        
+        const transcript = chatMessages!.map(m => ({
+            isUser: m.role == "user",
+            message: m.content,
+            createdAt: m.createdAt
+        }))
 
-        return NextResponse.json(data, { status: 200 });
+        return NextResponse.json(transcript, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ error }, { status: 500 });
     }

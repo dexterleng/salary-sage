@@ -55,6 +55,17 @@ export async function POST(request: Request) {
     .single()
     .throwOnError()
 
+    await supabase
+    .from('interview_message')
+    .insert({ 
+      interviewId: interview.id, 
+      content: interviewData.recruiterPrompt![0].content,
+      role: "system",
+    })
+    .select()
+    .single()
+    .throwOnError()
+
   console.log(interview)
 
   return NextResponse.redirect(`${requestUrl.origin}/negotiations/${interview.id}/practice/`, { status: 301 })
@@ -67,7 +78,7 @@ async function setupInterview(parsed_resume: string, company: string, job_title:
   const suitabilityPrompt = getSuitabilityPrompt(parsed_resume, company, job_title, job_description)
 
   const allRes = [hmGuidelinePrompt, metaInstructionsPrompt, suitabilityPrompt].map((prompt) => {
-    return getChatCompletionMessage(prompt, "gpt-4")
+    return getChatCompletionMessage(prompt, "gpt-3.5-turbo")
   })
 
   const [hmGuidelines, metaInstructions, suitabilityAnalysis] = await Promise.all(allRes)
@@ -78,7 +89,8 @@ async function setupInterview(parsed_resume: string, company: string, job_title:
     marketAnalysis: marketAnalysis ?? "",
     hmGuidelines: hmGuidelines ?? "",
     metaInstructions: metaInstructions ?? "",
-    suitabilityAnalysis: suitabilityAnalysis ?? ""
+    suitabilityAnalysis: suitabilityAnalysis ?? "",
+    recruiterPrompt: recruiterPrompt
   }
 }
 
