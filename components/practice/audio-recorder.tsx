@@ -8,10 +8,11 @@ type AudioRecorderProps = {
   setIsRecording: (isRecording: boolean) => void;
   isDisabled: boolean;
   setIsUserAudioPlaying: (isPlaying: boolean) => void;
+  hasPracticeEnded: boolean;
   onSubmit: (audioData: Blob) => void;
 };
 
-export default function AudioRecorder({ isRecording, setIsRecording, isDisabled, setIsUserAudioPlaying, onSubmit }: AudioRecorderProps) {
+export default function AudioRecorder({ isRecording, setIsRecording, isDisabled, setIsUserAudioPlaying, hasPracticeEnded, onSubmit }: AudioRecorderProps) {
   const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState('');
   const mediaRecorder = useRef<MediaRecorder | null>(null);
@@ -64,7 +65,9 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
             </Button>
             <TypographySmall className="mt-4 text-center text-accent">
               {
-                isDisabled
+                hasPracticeEnded
+                ? 'This is the end of the practice'
+                : isDisabled
                   ? 'Wait for your turn'
                   : audioURL
                     ? 'Re-record response'

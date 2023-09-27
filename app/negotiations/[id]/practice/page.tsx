@@ -32,6 +32,7 @@ export default function Practice({ params }: { params: { id: string } }) {
 
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
   const [hasPracticeEnded, setHasPracticeEnded] = useState(false);
+  const [showPracticeEndedAlert, setShowPracticeEndedAlert] = useState(false);
 
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -89,11 +90,12 @@ export default function Practice({ params }: { params: { id: string } }) {
         method: 'GET',
       });
       const data = await response.json();
+      setResponse(data.lastMessage);
 
       if (data.hasEnded) {
-        router.push(`/negotiations/${interviewId}/feedback`);
+        setHasPracticeEnded(true);
+        setHint('Your practice session has ended. You can see your feedback soon');
       } else {
-        setResponse(data.lastMessage);
         setHint(data.hint);
       }
     } catch (error) {
@@ -102,6 +104,14 @@ export default function Practice({ params }: { params: { id: string } }) {
 
     setIsProcessing(false);
   };
+
+  const getFeedbackIfPracticeEnded = () => {
+    if (hasPracticeEnded) {
+      setTimeout(() => {
+        setShowPracticeEndedAlert(true);
+      }, 2000);
+    }
+  }
 
   return (
     <div className="p-12 justify-center flex flex-col items-center">
@@ -150,6 +160,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                             id="interviewer-audio"
                             onPlay={() => setIsInterviewerSpeaking(true)}
                             onPause={() => setIsInterviewerSpeaking(false)}
+                            onEnded={() => getFeedbackIfPracticeEnded()}
                             src={responseUrl}
                             className={`${isRecording || isUserAudioPlaying ? 'pointer-events-none opacity-50' : ''}`}
                           ></audio>
@@ -175,7 +186,13 @@ export default function Practice({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
               <div className="px-2 pb-6">
-                <AudioRecorder isRecording={isRecording} setIsRecording={setIsRecording} isDisabled={isProcessing || isInterviewerSpeaking} setIsUserAudioPlaying={setIsUserAudioPlaying} onSubmit={handleUserSubmitRequest} />
+                <AudioRecorder
+                  isRecording={isRecording}
+                  setIsRecording={setIsRecording}
+                  isDisabled={isProcessing || isInterviewerSpeaking || hasPracticeEnded}
+                  setIsUserAudioPlaying={setIsUserAudioPlaying}
+                  hasPracticeEnded={hasPracticeEnded}
+                  onSubmit={handleUserSubmitRequest} />
               </div>
               <Popover>
                 <PopoverTrigger className="group" disabled={isProcessing || isInterviewerSpeaking}>
@@ -211,17 +228,30 @@ export default function Practice({ params }: { params: { id: string } }) {
         </AlertDialogContent>
       </AlertDialog>
       <AlertDialog>
-        <AlertDialogTrigger><Button className="mt-8" variant="link" size="lg">End Practice</Button></AlertDialogTrigger>
+        <AlertDialogTrigger><Button className="mt-8" variant={`${hasPracticeEnded ? "default" : "link"}`} size="lg">End Practice</Button></AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure you want to end this practice?</AlertDialogTitle>
+            <AlertDialogTitle>{hasPracticeEnded ? 'End Practice' : 'Are you sure you want to end this practice?'}</AlertDialogTitle>
             <AlertDialogDescription>
-              Ending a practice session before it is complete might result in a lower score.
+              {hasPracticeEnded ? 'You can now view your feedback.' : 'Ending a practice session before it is complete might result in a lower score.'}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={() => router.push(`/negotiations/${interviewId}/feedback`)}>End Practice</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog open={showPracticeEndedAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Your practice session has ended</AlertDialogTitle>
+            <AlertDialogDescription>
+              Great job! You can now view your feedback.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => router.push(`/negotiations/${interviewId}/feedback`)}>View Feedback</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
