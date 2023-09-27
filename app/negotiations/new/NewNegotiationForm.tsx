@@ -164,7 +164,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
                     : null
                 )}
               >
-                Expected Monthly Income
+                Expected Monthly Salary
               </FormLabel>
               <div className="pt-2 flex items-center gap-2">
                 <FormField
