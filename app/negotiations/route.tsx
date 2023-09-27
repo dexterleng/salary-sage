@@ -55,6 +55,17 @@ export async function POST(request: Request) {
     .single()
     .throwOnError()
 
+    await supabase
+    .from('interview_message')
+    .insert({ 
+      interviewId: interview.id, 
+      message: interviewData.recruiterPrompt![0].content,
+      role: "system",
+    })
+    .select()
+    .single()
+    .throwOnError()
+
   console.log(interview)
 
   return NextResponse.redirect(`${requestUrl.origin}/negotiations/${interview.id}/practice/`, { status: 301 })
@@ -78,7 +89,8 @@ async function setupInterview(parsed_resume: string, company: string, job_title:
     marketAnalysis: marketAnalysis ?? "",
     hmGuidelines: hmGuidelines ?? "",
     metaInstructions: metaInstructions ?? "",
-    suitabilityAnalysis: suitabilityAnalysis ?? ""
+    suitabilityAnalysis: suitabilityAnalysis ?? "",
+    recruiterPrompt: recruiterPrompt
   }
 }
 
