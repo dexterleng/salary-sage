@@ -36,9 +36,6 @@ export default function Transcript({ position, company, tags, transcript, citati
   }, [searchedLine]);
 
   useEffect(() => {
-    if (inputRef.current != null) {
-      inputRef.current.value = citation;
-    }
     findResults(citation);
   }, [citation]);
 

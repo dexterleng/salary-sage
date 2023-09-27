@@ -26,10 +26,17 @@ interface QualitativeFeedback {
 }
 
 interface QuantitativeFeedback {
-  metric: string,
+  title: string,
   evaluation: string,
   score: number
 }
+
+type QuantitativeFeedbacks = {
+  preparation: QuantitativeFeedback;
+  value_proposition: QuantitativeFeedback;
+  relationship_building: QuantitativeFeedback;
+  assertiveness: QuantitativeFeedback;
+};
 
 export default function Feedback({ params }: { params: { id: string } }) {
   const clarity = 78;
@@ -43,7 +50,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
   const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
   const [positiveFeedbacks, setPositiveFeedbacks] = useState<QualitativeFeedback[]>([]);
   const [negativeFeedbacks, setNegativeFeedbacks] = useState<QualitativeFeedback[]>([]);
-  const [quantitativeFeedbacks, setQuantitativeFeedbacks] = useState<QuantitativeFeedback[]>([]);
+  const [quantitativeFeedbacks, setQuantitativeFeedbacks] = useState<QuantitativeFeedbacks | null>(null);
 
   const [searchedCitation, setSearchedCitation] = useState<string>('');
 
@@ -67,9 +74,10 @@ export default function Feedback({ params }: { params: { id: string } }) {
         method: 'GET',
       });
       const data = await response.json();
-      setPositiveFeedbacks(data.qualitativeFeedbacks?.filter((feedback: QualitativeFeedback) => feedback.is_positive));
-      setNegativeFeedbacks(data.qualitativeFeedbacks?.filter((feedback: QualitativeFeedback) => !feedback.is_positive));
-      setQuantitativeFeedbacks(data.quantitativeFeedbacks);
+      setPositiveFeedbacks(data.qualitative?.filter((feedback: QualitativeFeedback) => feedback.is_positive));
+      setNegativeFeedbacks(data.qualitative?.filter((feedback: QualitativeFeedback) => !feedback.is_positive));
+      setQuantitativeFeedbacks(data.quantitative);
+      console.log(data);
     } catch (error) {
       console.error('Error getting transcript:', error);
     }
@@ -90,8 +98,8 @@ export default function Feedback({ params }: { params: { id: string } }) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="px-12 pb-6">
-                <ScoresCircular clarityScore={clarity} confidenceScore={confidence} />
+              <div className="px-6 pb-6">
+                <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={true} />
               </div>
             </CardContent>
           </Card>

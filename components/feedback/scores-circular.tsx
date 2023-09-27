@@ -1,37 +1,58 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { TypographyBody } from '../ui/typography';
+import { useEffect, useState } from 'react';
 
-type ScoresCircularProps = {
-  clarityScore: number;
-  confidenceScore: number;
+interface QuantitativeFeedback {
+  title: string,
+  evaluation: string,
+  score: number
+}
+
+
+type QuantitativeFeedbacks = {
+  preparation: QuantitativeFeedback;
+  value_proposition: QuantitativeFeedback;
+  relationship_building: QuantitativeFeedback;
+  assertiveness: QuantitativeFeedback;
+  overall?: QuantitativeFeedback;
 };
 
-export default function ScoresCircular({ clarityScore, confidenceScore }: ScoresCircularProps) {
-  const overallScore = Math.round((clarityScore + confidenceScore) / 2);
+type ScoresCircularProps = {
+  metrics: QuantitativeFeedbacks | null;
+  isEvaluationShown: boolean;
+};
 
-  let metrics = [
-    { score: clarityScore, title: "Clarity" },
-    { score: confidenceScore, title: "Confidence" },
-    { score: overallScore, title: "Overall" }
-  ];
+export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCircularProps) {
+  if (!metrics) return <></>;
+  const overallScore = (metrics?.preparation?.score + metrics?.value_proposition?.score + metrics?.relationship_building?.score + metrics?.assertiveness?.score) / 4;
+
+  const [flatMetrics, setFlatMetrics] = useState<QuantitativeFeedback[]>([]);
+
+  useEffect(() => {
+    if (metrics) {
+      let newMetrics = Object.values(metrics);
+      newMetrics.push({ title: "Overall", evaluation: "", score: overallScore });
+      setFlatMetrics(newMetrics);
+    }
+  }, [metrics])
 
   return (
-    <div className="flex gap-12">
-      {metrics.map(
-        metric =>
+    <div className="flex gap-8">
+      {flatMetrics?.map(
+        (flatMetric) =>
         (
-          <div key={metric.title}>
-            <div style={{ width: 126, height: 126 }}>
+          <div key={flatMetric.title}>
+            <div style={{ width: 100, height: 100 }}>
               <CircularProgressbar
-                value={metric.score}
-                text={`${metric.score}%`}
+                value={flatMetric.score}
+                text={`${flatMetric.score}%`}
                 styles={buildStyles({
                   rotation: 0,
                   strokeLinecap: 'round',
                   textSize: '16px',
                   pathTransitionDuration: 0.5,
-                  pathColor: getPathColor(metric.score),
+                  pathColor: getPathColor(flatMetric.score),
                   textColor: '#06110D',
                   trailColor: '#F1F8F6',
                   backgroundColor: '#F1F8F6',
@@ -41,7 +62,7 @@ export default function ScoresCircular({ clarityScore, confidenceScore }: Scores
               />
             </div>
             <TypographyBody className="mt-2 text-center">
-              {metric.title}
+              {flatMetric.title}
             </TypographyBody>
           </div>
         )
