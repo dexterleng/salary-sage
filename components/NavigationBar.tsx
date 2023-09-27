@@ -181,7 +181,7 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
     React.useState(!isOnboarded);
 
   return (
-    <div className="flex items-center justify-between shadow-glass w-full sticky top-0 px-10 md:px-18 lg:px-24 z-40 h-14 supports-backdrop-blur:bg-card/60 bg-card/95">
+    <div className="flex items-center justify-between shadow-glass w-full sticky top-0 px-4 md:px-18 lg:px-24 z-40 h-14 supports-backdrop-blur:bg-card/60 bg-card/95">
       <NavigationMenu>
         <NavigationMenuList className="gap-6">
           <NavigationMenuItem>
