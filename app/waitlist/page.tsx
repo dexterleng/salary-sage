@@ -26,11 +26,9 @@ const formSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email().min(1),
-  password: z.string().min(6),
-  inviteCode: z.string(),
 })
 
-export default function SignUp() {
+export default function Page() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
@@ -43,16 +41,19 @@ export default function SignUp() {
   }
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+    <div className="flex-1 flex flex-col w-full p-8 sm:max-w-md justify-center gap-2">
       <AlertDialog />
 
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="w-full text-center"><TypographyH2>Create an account</TypographyH2></CardTitle>
+          <CardTitle className="w-full text-center"><TypographyH2>Join the waitlist</TypographyH2></CardTitle>
+          <CardDescription className="w-full text-center">
+            Salary Sage is currently invite-only. Sign up for access to the early beta now!
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form {...form} >
-            <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} action="/auth/sign-up" method="post" className="space-y-4">
+            <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} action="/api/waitlist/" method="post" className="space-y-4">
               <div className="pt-2 flex items-center gap-2">
                 <FormField
                     control={form.control}
@@ -98,46 +99,10 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type='password' placeholder="•••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="inviteCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Invite Code</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    <FormDescription>
-                      Salary Sage is currently invite-only. You can join the waitlist <Link href="/waitlist" className='text-primary hover:underline'>here</Link>.
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" size='lg'>Sign Up</Button>
+              <Button type="submit" className="w-full" size='lg'>Join the waitlist</Button>
             </form>
           </Form>
         </CardContent>
-        <CardFooter>
-          <CardDescription className='w-full text-center'>
-            <TypographySubtle>
-            Already have an account? <Link href="/login/" className='text-primary hover:underline'>Log in</Link>
-            </TypographySubtle>
-          </CardDescription>
-        </CardFooter>
       </Card>
     </div>
   )

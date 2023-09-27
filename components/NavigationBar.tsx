@@ -22,6 +22,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import UpdateSettingsDialog from "@/app/dashboard/UpdateSettingsDialog";
+import Image from "next/image";
 
 type NavigationBarProps = {
   user: User | null;
@@ -180,12 +181,21 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
     React.useState(!isOnboarded);
 
   return (
-    <div className="flex items-center justify-between shadow-glass w-full sticky top-0 px-10 md:px-18 lg:px-24 z-40 h-14 supports-backdrop-blur:bg-card/60 bg-card/95">
+    <div className="flex items-center justify-between shadow-glass w-full sticky top-0 px-4 md:px-18 lg:px-24 z-40 h-14 supports-backdrop-blur:bg-card/60 bg-card/95">
       <NavigationMenu>
         <NavigationMenuList className="gap-6">
           <NavigationMenuItem>
             <Link href={user ? "/dashboard/" : "/"} className="font-bold">
+              <div className="flex gap-2">
+              <Image
+                  className="inline"
+                  src="/app-icon.svg"
+                  alt="Salary Sage icon"
+                  width="24"
+                  height="24"
+                />
               Salary Sage
+              </div>
             </Link>
           </NavigationMenuItem>
           {leftMenu()}
