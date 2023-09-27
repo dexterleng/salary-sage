@@ -38,7 +38,8 @@ import { User } from "@supabase/supabase-js";
 
 const formSchema = z
   .object({
-    // desiredPosition: z.string(),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
     yearsOfExperience: z.coerce.number().gt(-1).min(0),
     currentMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     minExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
@@ -57,6 +58,8 @@ export default function UpdateSettingsDialog({
   userData: any;
 }) {
   const {
+    firstName,
+    lastName,
     yearsOfExperience,
     currentMonthlyIncome,
     minExpectedMonthlyIncome,
@@ -72,6 +75,8 @@ export default function UpdateSettingsDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: firstName,
+      lastName: lastName,
       yearsOfExperience: yearsOfExperience,
       currentMonthlyIncome: currentMonthlyIncome,
       minExpectedMonthlyIncome: minExpectedMonthlyIncome,
@@ -109,6 +114,33 @@ export default function UpdateSettingsDialog({
             method="post"
             className="space-y-4"
           >
+            <div className="pt-2 flex justify-between items-center gap-2">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Smith" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <FormItem>
               <FormLabel>Desired Position</FormLabel>
               <FormControl>
@@ -176,8 +208,8 @@ export default function UpdateSettingsDialog({
                   control={form.control}
                   name="minExpectedMonthlyIncome"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormControl className="flex-1">
+                    <FormItem className="flex-1">
+                      <FormControl>
                         <Input
                           type="number"
                           min={0}
@@ -193,8 +225,8 @@ export default function UpdateSettingsDialog({
                   control={form.control}
                   name="maxExpectedMonthlyIncome"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormControl className="flex-1">
+                    <FormItem className="flex-1">
+                      <FormControl>
                         <Input
                           type="number"
                           min={0}
