@@ -39,11 +39,14 @@ export async function GET(
         const hints = await getChatCompletionMessage(hintsPrompt, "gpt-3.5-turbo") as string;
         const hintsArr = JSON.parse(hints);
 
+        const lastMessage = messages![messages!.length - 1].message;
+        const hasEnded = lastMessage.includes("<<END>>");
+
         const outputData = {
             interviewId: interviewId,
             hint: hintsArr[0],
-            hasEnded: false,
-            lastMessage: messages![messages!.length - 1].message,
+            hasEnded: hasEnded,
+            lastMessage: lastMessage,
         }
 
         return NextResponse.json(outputData, { status: 200 });
