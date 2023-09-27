@@ -3,12 +3,10 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { getChatCompletionMessage } from '@/utils/openaiChat'
-import { getHiringManagerGuidelinesPrompt, getSuitabilityPrompt, getRecruiterMetaInstructionsPrompt, getRecruiterNegotiationPrompt } from '@/utils/promptGeneration';
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 // const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
 const { OPENAI_API_KEY } = process.env;
 // const googleServiceAccount = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON as string);
-const spawn = require('child_process').spawn;
 
 export async function POST(
   request: NextRequest,
@@ -37,8 +35,6 @@ export async function POST(
       .eq('interviewId', interviewId)
       .order('createdAt', { ascending: true })
       .throwOnError()
-
-    console.log("interview", interview)
 
     const formData = await request.formData();
     const file: File | null = formData.get('file') as any

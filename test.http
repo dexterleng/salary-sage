@@ -1,1 +1,1 @@
-POST http://localhost:3000/api/negotiations/1/speak
+GET http://localhost:3000/api/negotiations/1/response
