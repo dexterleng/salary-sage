@@ -5,7 +5,6 @@ import OpenAI from "openai";
 import { getChatCompletionMessage } from '@/utils/openaiChat'
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
-const { OPENAI_API_KEY } = process.env;
 const googleServiceAccount = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON as string);
 
 export async function POST(
