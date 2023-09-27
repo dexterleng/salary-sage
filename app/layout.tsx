@@ -1,30 +1,31 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import './globals.css'
-import { Mulish } from 'next/font/google'
-import { cookies } from 'next/headers'
-import { NavigationBar } from '@/components/NavigationBar'
-import UpdateSettingsDialog from './dashboard/UpdateSettingsDialog'
-import { useState } from 'react'
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import "./globals.css";
+import { Mulish } from "next/font/google";
+import { cookies } from "next/headers";
+import { NavigationBar } from "@/components/NavigationBar";
+import UpdateSettingsDialog from "./dashboard/UpdateSettingsDialog";
+import { useState } from "react";
+import Script from "next/script";
 
 const mulish = Mulish({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-mulish',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mulish",
+});
 
 export const metadata = {
-  title: 'SalarySage',
-  description: 'Practice your salary negotiation skills with AI',
-}
+  title: "SalarySage",
+  description: "Practice your salary negotiation skills with AI",
+};
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies });
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -39,8 +40,28 @@ export default async function RootLayout({
     userData = data;
   }
 
+  const domain = "https://salary-sage.vercel.app/";
+
   return (
     <html lang="en" className={`${mulish.variable}`}>
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={domain} />
+      <meta property="og:image" content={`${domain}og-main.png`} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content={`${domain}og-twitter.png`} />
+
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-01Z86204LT"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-01Z86204LT');
+          `}
+      </Script>
       <body>
         <main className="min-h-screen bg-background flex flex-col items-center">
           <NavigationBar user={user} userData={userData} />
@@ -48,5 +69,5 @@ export default async function RootLayout({
         </main>
       </body>
     </html>
-  )
+  );
 }

@@ -2,6 +2,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getChatCompletionMessage } from '@/utils/openaiChat'
 import { getHiringManagerGuidelinesPrompt, getSuitabilityPrompt, getRecruiterMetaInstructionsPrompt, getRecruiterNegotiationPrompt } from '@/utils/promptGeneration';
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 // const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
@@ -97,16 +98,7 @@ export async function POST(
 
       console.log(chatGPTMessages)
 
-      const replyResponse = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        stream: false,
-        messages: chatGPTMessages as any
-      })
-
-      replyText = replyResponse.choices[0].message.content as string;
-    }
-    console.log("replyText: " + replyText);
-
+    const replyText = await getChatCompletionMessage(chatGPTMessages, "gpt3.5-turbo")
     const tts = new TextToSpeechClient({ credentials: googleServiceAccount })
     const [replyAudioResponse] = await tts.synthesizeSpeech({
       input: { text: replyText },
