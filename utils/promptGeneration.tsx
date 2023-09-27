@@ -1,5 +1,5 @@
 import { ChatMessage } from './openaiChat'
-
+export const ENDSUFFIX = "<<END>>"
 export function getFeedbackPrompts(
     company: string,
     jobTitle: string,
@@ -49,7 +49,10 @@ export function getFeedbackPrompts(
         "metric": <metric>,
         "evaluation": <evaluation>,
         "score": <score>,
-        },...]`},
+        },...]
+        `
+    },
+        
         {
             role: "user",
             content:
@@ -66,7 +69,8 @@ export function getFeedbackPrompts(
         4. Assertiveness Level: Negotiating a salary requires a delicate balance of assertiveness. This metric evaluates a candidate's ability to confidently present their case, stand their ground, and advocate for their worth, without coming off as overly aggressive or too passive.
             0: Too passive or overly aggressive
             100: Perfect balance of assertiveness, advocating for oneself while maintaining respect and understanding for the other party.
-        `}
+        Output them as "preparation", "value_proposition", "relationship_building" and "assertiveness" respectively in the output json's metric field.
+            `}
     ];
 
     return [qualitativeFeedbackPrompt, quantitativeFeedbackPrompt];
@@ -122,7 +126,7 @@ export function getRecruiterNegotiationPrompt(
         3. Keep your responses conversational and succinct, only respond with the most important factors to negotiate your point.
         4. In the case where the user is uncooperative and is adamant against coming to a middle ground, inform the user of this scenario along with justifications. If the user is still uncooperative, be prepared to rescind the offer respectfully and amicably.
         5. Only entertain questions that are related to the job or the salary negotiation. When dealt with an unrelated response from the user, redirect the user back to the negotiation politely.
-        6. At the end of the negotiation, respond with a message that has a suffix of <<END>>.
+        6. At the end of the negotiation, respond with a message that has a suffix of ${ENDSUFFIX}.
         """
 
         Format:
@@ -208,7 +212,7 @@ export function getHintsPrompt(
             role: "system",
             content:
                 `
-                You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with 3 concrete hints, each hint should be specific and not generic and fits in a single succinct sentence.
+                You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with the best concrete hint, the hint should be specific and not generic and fits in a single succinct sentence.
 
                 You are provided with:
                 1) A transcript of the negotiation thus far, ending with a response from the recruiter
@@ -216,10 +220,14 @@ export function getHintsPrompt(
                 3) Suitability analysis of the candidate, me, and the role
                 4) Market analysis data of similar jobs and their compensations
 
-                Don't assume that I have access to the same market analysis and suitability analysis, provide specfic evidence from those resources in the hints to substantiate them, but keep it succint.
+
+                Rule:
+                1. Do not use the suitability score in your hint no matter what.
+                2. Don't assume that I have access to the same market analysis and suitability analysis, provide specfic evidence from those resources in the hint to substantiate them, but keep it succint.
+                3. Be succinct, keep it within 20 words.
 
                 Format:
-                [<hint 1>, <hint 2>, <hint 3>]
+                Return only the hint itself in plain text.
 
                 Example output:
                 ["You should highlight your past internship experience at Apple gave you expertise in dealing with large distributed systems that is highly relevant to this role."]

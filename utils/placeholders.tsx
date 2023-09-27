@@ -79,3 +79,5 @@ Bonus: Median = 9510.0, 25th Percentile = 0.0, 75h Percentile = 17224.7, Data po
 export const jobTitle = 'Software Engineer'
 
 export const difficulty = 10
+
+export const recruiterName = "Justin"

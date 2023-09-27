@@ -47,7 +47,7 @@ export async function POST(
 
     const chatGPTMessages = messages!.map((m) => ({
       role: m.role,
-      content: m.message
+      content: m.content
     }))
     chatGPTMessages.push({
       role: 'user',

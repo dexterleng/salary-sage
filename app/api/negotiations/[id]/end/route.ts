@@ -35,7 +35,7 @@ export async function POST(
 
         let transcript = "";
         messages!.forEach((m) => (
-            transcript += m.role + ": " + m.message + "\n"
+            transcript += m.role + ": " + m.content + "\n"
         ));
 
         // TODO: call getFeedback with the necessary params

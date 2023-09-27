@@ -29,7 +29,7 @@ import { TypeAnimation } from 'react-type-animation';
 export default function Practice({ params }: { params: { id: string } }) {
   const interviewId = params.id;
   const router = useRouter()
-
+  
   const [hasPracticeStarted, setHasPracticeStarted] = useState(false);
   const [isInterviewerSpeaking, setIsInterviewerSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -38,7 +38,9 @@ export default function Practice({ params }: { params: { id: string } }) {
   const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role.');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
   // const [hintCount, setHintCount] = useState(0);
-
+  useEffect(() => {
+    fetchResponse(new FormData())
+  }, [])
   useEffect(() => {
     if (hasPracticeStarted) {
       setIsInterviewerSpeaking(true);
@@ -62,11 +64,15 @@ export default function Practice({ params }: { params: { id: string } }) {
   }, [isInterviewerSpeaking]);
 
   const handleUserSubmitRequest = async (audioData: Blob) => {
+    const formData = new FormData();
+    formData.append('file', audioData, 'audio.wav');
+    fetchResponse(formData);
+  };
+
+  const fetchResponse = async (formData: FormData) => {
     setHint('');
     setIsProcessing(true);
     try {
-      const formData = new FormData();
-      formData.append('file', audioData, 'audio.wav');
       const response = await fetch(`/api/negotiations/${interviewId}/speak`, {
         method: 'POST',
         body: formData,
@@ -89,7 +95,8 @@ export default function Practice({ params }: { params: { id: string } }) {
       const data = await response.json();
 
       if (data.hasEnded) {
-        router.push(`/negotiations/${interviewId}/feedback`);
+        // TODO: Disable user from recording any more messages
+        // router.push(`/negotiations/${interviewId}/feedback`);
       } else {
         setResponse(data.lastMessage);
         setHint(data.hint);
@@ -97,7 +104,7 @@ export default function Practice({ params }: { params: { id: string } }) {
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
-  };
+  }
 
   return (
     <div className="p-12 justify-center flex flex-col items-center">

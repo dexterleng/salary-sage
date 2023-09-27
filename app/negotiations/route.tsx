@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     .from('interview_message')
     .insert({ 
       interviewId: interview.id, 
-      message: interviewData.recruiterPrompt![0].content,
+      content: interviewData.recruiterPrompt![0].content,
       role: "system",
     })
     .select()
@@ -78,7 +78,7 @@ async function setupInterview(parsed_resume: string, company: string, job_title:
   const suitabilityPrompt = getSuitabilityPrompt(parsed_resume, company, job_title, job_description)
 
   const allRes = [hmGuidelinePrompt, metaInstructionsPrompt, suitabilityPrompt].map((prompt) => {
-    return getChatCompletionMessage(prompt, "gpt-4")
+    return getChatCompletionMessage(prompt, "gpt-3.5-turbo")
   })
 
   const [hmGuidelines, metaInstructions, suitabilityAnalysis] = await Promise.all(allRes)

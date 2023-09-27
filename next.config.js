@@ -5,6 +5,7 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  reactStrictMode: false,
 
   webpack(config, options) {
     if (!config.resolve.plugins) {

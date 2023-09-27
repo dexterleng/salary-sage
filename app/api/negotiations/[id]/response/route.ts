@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getHintsPrompt } from "@/utils/promptGeneration";
+import { getHintsPrompt, ENDSUFFIX } from "@/utils/promptGeneration";
 import { createClient } from "@supabase/supabase-js";
-import { getChatCompletionMessage } from '@/utils/openaiChat'
+import { getChatCompletionMessage, prependRoles } from '@/utils/openaiChat'
 
 export async function GET(
     request: NextRequest,
@@ -14,40 +14,44 @@ export async function GET(
         );
         const interviewId = params.id;
 
-        const { data: messages } = await supabase
-            .from('interview_message')
-            .select()
-            .eq('interviewId', "1")
-            .order('id', { ascending: true })
-            .throwOnError()
-
-        let transcript = "";
-        messages!.forEach((m) => (
-            transcript += m.role + ": " + m.message
-        ));
-
-        const { data: interviewData } = await supabase
+        const { data: interview } = await supabase
             .from('interview')
             .select()
             .eq('id', interviewId)
+            .single()
             .throwOnError();
 
-        const interview = interviewData![0];
+        const { data: chatMessages } = await supabase
+            .from('interview_message')
+            .select()
+            .eq('interviewId', interviewId)
+            .neq('role', 'system')
+            .order('createdAt', { ascending: true })
+            .limit(100)
+            .throwOnError()
 
-        const hintsPrompt = getHintsPrompt(transcript, interview.company, interview.job_title, interview.suitability_analysis, interview.market_analysis);
+        console.log(chatMessages)
 
-        const hints = await getChatCompletionMessage(hintsPrompt, "gpt-3.5-turbo") as string;
-        const hintsArr = JSON.parse(hints);
 
-        const lastMessage = messages![messages!.length - 1].message;
-        const hasEnded = lastMessage.includes("<<END>>");
+        let transcript = "";
+        prependRoles(chatMessages!).forEach((m) => {
+            transcript += m.content + "\n"
+        });
+        const hintsPrompt = getHintsPrompt(transcript, interview.companyName, interview.job_title, interview.suitability_analysis, interview.market_analysis);
+
+        const hint = await getChatCompletionMessage(hintsPrompt, "gpt-4") as string;
+        
+        const lastMessage = chatMessages![chatMessages!.length - 1].content;
+        const hasEnded = lastMessage.includes(ENDSUFFIX);
 
         const outputData = {
             interviewId: interviewId,
-            hint: hintsArr[0],
+            hint: hint.replaceAll("\"", ""),
             hasEnded: hasEnded,
-            lastMessage: lastMessage,
+            lastMessage: lastMessage.split(ENDSUFFIX)[0],
         }
+        console.log("hint: ", outputData.hint)
+        console.log("lastMessage: ", lastMessage)
 
         return NextResponse.json(outputData, { status: 200 });
     } catch (error: any) {
