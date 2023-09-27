@@ -178,7 +178,7 @@ export default function UpdateSettingsDialog({
               name="currentMonthlyIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Monthly Income</FormLabel>
+                  <FormLabel>Current Monthly Salary</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -201,7 +201,7 @@ export default function UpdateSettingsDialog({
                     : null
                 )}
               >
-                Desired Monthly Income
+                Desired Monthly Salary
               </FormLabel>
               <div className="pt-2 flex justify-between items-center gap-2 w-full">
                 <FormField
