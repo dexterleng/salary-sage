@@ -6,7 +6,6 @@ import { getChatCompletionMessage } from '@/utils/openaiChat'
 import { getHiringManagerGuidelinesPrompt, getSuitabilityPrompt, getRecruiterMetaInstructionsPrompt, getRecruiterNegotiationPrompt } from '@/utils/promptGeneration';
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
-const { OPENAI_API_KEY } = process.env;
 const googleServiceAccount = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON as string);
 const spawn = require('child_process').spawn;
 
