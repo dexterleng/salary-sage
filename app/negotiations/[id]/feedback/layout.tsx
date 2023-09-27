@@ -18,6 +18,8 @@ export default async function FeedbackLayout({
     return redirect('/login/')
   }
 
+  // TODO: check if selected practice session has ended else end it and redirect to feedback
+
   return (
     <div className="w-full">
       {children}

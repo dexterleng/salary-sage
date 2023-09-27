@@ -9,12 +9,28 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function Feedback() {
+export default function Feedback({ params }: { params: { id: string } }) {
   const clarity = 78;
   const confidence = 42;
 
   const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Clear speech."}];
   const negativeFeedback = [{ title: "Clarity", line: "You were not clear in your speech.", citation: "Unclear speech."}]
+
+  const interviewId = params.id;
+
+  const handleFeedbackRequest = async (audioData: Blob) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', audioData, 'audio.wav');
+      const response = await fetch(`api/negotiations/${interviewId}/feedback`, {
+        method: 'POST',
+        body: formData,
+      });
+    } catch (error) {
+      console.error('Error uploading audio:', error);
+    }
+
+  };
 
   return (
     <div className="px-32 py-12 justify-center flex flex-col items-center">

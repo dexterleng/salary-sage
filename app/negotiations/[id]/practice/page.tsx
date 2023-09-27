@@ -99,18 +99,31 @@ export default function Practice({ params }: { params: { id: string } }) {
         setHint(data.hint);
       }
     } catch (error) {
-      console.error('Error uploading audio:', error);
+      console.error('Error getting response:', error);
     }
 
     setIsProcessing(false);
   };
 
-  const getFeedbackIfPracticeEnded = () => {
+  const showAlertIfPracticeEnded = () => {
     if (hasPracticeEnded) {
       setTimeout(() => {
         setShowPracticeEndedAlert(true);
       }, 2000);
     }
+  }
+
+  const navigateToFeedback = async () => {
+    if (!hasPracticeEnded) {
+      try {
+        const response = await fetch(`/api/negotiations/${interviewId}/end`, {
+          method: 'POST',
+        });
+      } catch (error) {
+        console.error('Error ending practice session:', error);
+      }
+    }
+    router.push(`/negotiations/${interviewId}/feedback`);
   }
 
   return (
@@ -160,7 +173,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                             id="interviewer-audio"
                             onPlay={() => setIsInterviewerSpeaking(true)}
                             onPause={() => setIsInterviewerSpeaking(false)}
-                            onEnded={() => getFeedbackIfPracticeEnded()}
+                            onEnded={() => showAlertIfPracticeEnded()}
                             src={responseUrl}
                             className={`${isRecording || isUserAudioPlaying ? 'pointer-events-none opacity-50' : ''}`}
                           ></audio>
@@ -238,7 +251,7 @@ export default function Practice({ params }: { params: { id: string } }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => router.push(`/negotiations/${interviewId}/feedback`)}>End Practice</AlertDialogAction>
+            <AlertDialogAction onClick={navigateToFeedback}>End Practice</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -251,7 +264,7 @@ export default function Practice({ params }: { params: { id: string } }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => router.push(`/negotiations/${interviewId}/feedback`)}>View Feedback</AlertDialogAction>
+            <AlertDialogAction onClick={navigateToFeedback}>View Feedback</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
