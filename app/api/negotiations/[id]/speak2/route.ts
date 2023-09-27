@@ -50,37 +50,17 @@ export async function POST(
     const openai = new OpenAI({ apiKey: OPENAI_API_KEY as string });
     const { text: transcription } = await openai.audio.transcriptions.create({ file, model: 'whisper-1', language: 'en' })
 
-    let replyText = "";
-
-    const { data: recruiterMetaInstructionsData } = await supabase
-      .from('interview')
-      .select('meta_instructions')
-      .eq('id', interviewId)
-      .throwOnError()
-    const recruiterMetaInstructions = recruiterMetaInstructionsData![0].meta_instructions;
-    
-    const { data: hiringManagerGuidelinesData } = await supabase
-      .from('interview')
-      .select('hm_guidelines')
-      .eq('id', interviewId)
-      .throwOnError()
-    const hiringManagerGuidelines = hiringManagerGuidelinesData![0].hm_guidelines;
-
-    const { data: suitabilityData } = await supabase
-      .from('interview')
-      .select('suitability_analysis')
-      .eq('id', interviewId)
-      .throwOnError()
-    const suitability = suitabilityData![0].suitability_analysis;
-
-    // get recruiter negotiations
-    const recruiterNegotiationPrompt = getRecruiterNegotiationPrompt(recruiterMetaInstructions as string, 
-                                                                     interview.companyName,
-                                                                     interview.jobTitle,
-                                                                     hiringManagerGuidelines as string,
-                                                                     suitability as string);
-
-    replyText = await getChatCompletionMessage(recruiterNegotiationPrompt, "gpt-3.5-turbo") as string
+    const chatGPTMessages = messages!.map((m) => ({
+      role: m.role,
+      content: m.message
+    }))
+    chatGPTMessages.push({
+      role: 'user',
+      content: transcription
+    })
+    console.log(chatGPTMessages)
+    // TODO: take initial system prompt and add it to the top of the chatGPTMessages array
+    const replyText = await getChatCompletionMessage(chatGPTMessages, "gpt-3.5-turbo") as string
 
     console.log("replyText", replyText);
 

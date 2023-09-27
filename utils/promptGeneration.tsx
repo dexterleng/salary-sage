@@ -126,9 +126,9 @@ export function getRecruiterNegotiationPrompt(
         """
 
         Format:
-        <Response>
+        Recruiter: <Response>
 
-        You, the recruiter, will ask ONE question to start the conversation.
+        You, the recruiter, will start the conversation and wait for me, the candidate, to respond.
         `},
     ]
 }
