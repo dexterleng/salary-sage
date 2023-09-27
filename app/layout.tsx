@@ -40,8 +40,16 @@ export default async function RootLayout({
     userData = data;
   }
 
+  const domain = "https://salary-sage.vercel.app/";
+
   return (
     <html lang="en" className={`${mulish.variable}`}>
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content={domain} />
+      <meta property="og:image" content={`${domain}og-main.png`} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content={`${domain}og-main.png`} />
+
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-01Z86204LT"
         strategy="afterInteractive"
