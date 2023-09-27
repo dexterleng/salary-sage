@@ -48,7 +48,7 @@ export default async function RootLayout({
       <meta property="og:url" content={domain} />
       <meta property="og:image" content={`${domain}og-main.png`} />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image" content={`${domain}og-main.png`} />
+      <meta name="twitter:image" content={`${domain}og-twitter.png`} />
 
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-01Z86204LT"
