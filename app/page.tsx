@@ -60,24 +60,26 @@ export default async function Index() {
   ];
 
   return (
-    <div className="w-full flex flex-col justify-center text-center items-center bg-emerald-50 bg-[url('/images/hero-bg.png')]">
-      <div className="my-36 w-full px-4 max-w-6xl">
-        <h1 className="mt-8 font-bold text-4xl sm:text-6xl lg:text-7xl text-neutral-900">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0E8365] via-[#15B57B] to-[#0C7C76]">
-            Salary Negotiation
-          </span>
-          <br></br>made easier with AI
-        </h1>
-        <p className="mt-6 font-normal text-lg sm:text-2xl text-neutral-600">
-          Personalized coaching from remarkably realistic AI hiring managers
-        </p>
-        <div className="w-full mt-8 flex flex-col items-center gap-2 sm:gap-6">
-          <Link
-            href="#pricing"
-            className="max-w-xs border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80 rounded-xl text-white font-semibold text-lg py-3 px-8 shadow-2xl"
-          >
-            Get Started
-          </Link>
+    <div className="w-full flex flex-col justify-center text-center items-center ">
+      <div className="py-32 w-full bg-[url('/images/hero-bg.png')] flex justify-center">
+        <div className="max-w-6xl px-4">
+          <h1 className="mt-8 font-bold text-4xl sm:text-6xl lg:text-7xl text-neutral-900">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0E8365] via-[#15B57B] to-[#0C7C76]">
+              Salary Negotiation
+            </span>
+            <br></br>made easier with AI
+          </h1>
+          <p className="mt-6 font-normal text-lg sm:text-2xl text-neutral-600">
+            Personalized coaching from remarkably realistic AI hiring managers
+          </p>
+          <div className="w-full mt-8 flex flex-col items-center gap-2 sm:gap-6">
+            <Link
+              href="#pricing"
+              className="max-w-xs border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80 rounded-xl text-white font-semibold text-lg py-3 px-8 shadow-2xl"
+            >
+              Get Started
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -190,7 +192,8 @@ export default async function Index() {
         </div>
       </div>
 
-      <div className="my-28 w-full px-4 max-w-6xl">
+      <div className="py-32 w-full bg-[url('/images/hero-bg.png')] flex justify-center">
+        <div className="max-w-6xl px-4">
         <h1 className="font-bold text-3xl sm:text-4xl lg:text-6xl text-neutral-900">
           Start improving your salary negotiating skills now
         </h1>
@@ -201,6 +204,7 @@ export default async function Index() {
           >
             Get Started
           </Link>
+        </div>
         </div>
       </div>
     </div>

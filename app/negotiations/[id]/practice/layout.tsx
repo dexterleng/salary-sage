@@ -18,6 +18,10 @@ export default async function PracticeLayout({
     return redirect('/login/')
   }
 
+  // TODO: check if selected practice session has ended and redirect to dashboard if so
+
+  // TODO: check if selected practice session has already started before and resume if so
+
   return (
     <div className="w-full">
       {children}

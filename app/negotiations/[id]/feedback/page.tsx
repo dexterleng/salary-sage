@@ -8,13 +8,16 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@
 import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
-export default function Feedback() {
+export default function Feedback({ params }: { params: { id: string } }) {
   const clarity = 78;
   const confidence = 42;
 
-  const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Clear speech."}];
-  const negativeFeedback = [{ title: "Clarity", line: "You were not clear in your speech.", citation: "Unclear speech."}]
+  const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Clear speech." }];
+  const negativeFeedback = [{ title: "Clarity", line: "You were not clear in your speech.", citation: "Unclear speech." }]
+
+  const interviewId = params.id;
 
   return (
     <div className="px-32 py-12 justify-center flex flex-col items-center">
