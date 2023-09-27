@@ -131,19 +131,10 @@ export function getRecruiterNegotiationPrompt(
         """
 
         Format:
-        Recruiter: <Response>
+        <Response>
 
-        You, the recruiter, will start the conversation and wait for me, the candidate, to respond.
-        atives and positives that can be improved non-marginally, Provide an improved version of the citation, incorporating your advice, else it will be null.
-        5) Return in a JSON format, and absolutely nothing else:
-        [{
-        "title": <feedback title>,
-        "evaluation": <feedback description and evaluation>,
-        "citation": <citations>,
-        "is_positive": <boolean for whether the feedback if positive>,
-        "suggestion": <improved version of the citation for negative feedbacks, null if not applicable>,
-        "score": <score>
-        }]`},
+        You, the recruiter, will ask ONE question to start the conversation.
+        `},
     ]
 }
 
