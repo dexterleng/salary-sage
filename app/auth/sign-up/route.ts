@@ -7,6 +7,8 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
+  const firstName = String(formData.get('firstName'))
+  const lastName = String(formData.get('lastName'))
   const email = String(formData.get('email'))
   const password = String(formData.get('password'))
   const inviteCode = String(formData.get('inviteCode'))
@@ -19,9 +21,9 @@ export async function POST(request: Request) {
     )
   }
 
-  const { error } = await supabase.auth.signUp({ email, password })
+  const { error, data } = await supabase.auth.signUp({ email, password })
 
-  if (error) {
+  if (error || !data || !data.user) {
     console.log(error)
     return NextResponse.redirect(
       `${requestUrl.origin}/sign-up?error=Could not authenticate user`,
@@ -31,6 +33,12 @@ export async function POST(request: Request) {
       }
     )
   }
+
+  await supabase.from('user').insert({
+    userId: data.user.id,
+    firstName,
+    lastName
+  });
 
   return NextResponse.redirect(
     `${requestUrl.origin}/dashboard`,

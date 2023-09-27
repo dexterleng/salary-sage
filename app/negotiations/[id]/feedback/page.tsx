@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { TypographyBody, TypographyH1, TypographyH2, TypographyLarge } from "@/components/ui/typography";
+import { TypographyBody, TypographyH1, TypographyH2, TypographyLarge, TypographySubtle } from "@/components/ui/typography";
 import ScoresCircular from "@/components/feedback/scores-circular";
 import MockNegotiation from "@/components/feedback/mock-nego";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion";
@@ -13,8 +13,8 @@ export default function Feedback() {
   const clarity = 78;
   const confidence = 42;
 
-  const positiveFeedback = ["You were very clear in your speech.", "You were very confident in your speech."];
-  const negativeFeedback = ["You were not clear in your speech.", "You were not confident in your speech."];
+  const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Clear speech."}];
+  const negativeFeedback = [{ title: "Clarity", line: "You were not clear in your speech.", citation: "Unclear speech."}]
 
   return (
     <div className="px-32 py-12 justify-center flex flex-col items-center">
@@ -44,19 +44,22 @@ export default function Feedback() {
             </CardHeader>
             <CardContent>
               <div className="pb-6 px-2">
-                {positiveFeedback.map(line =>
-                  <Accordion type="single" collapsible key={line}>
+                {positiveFeedback.map(feedback =>
+                  <Accordion type="single" collapsible key={feedback.line}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
                           <CheckCircle2 className="h-6 w-6 stroke-primary" />
-                          <TypographyLarge>Title</TypographyLarge>
+                          <TypographyLarge>{feedback.title}</TypographyLarge>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent>
                         <TypographyBody>
-                          {line}
+                          {feedback.line}
                         </TypographyBody>
+                        <TypographySubtle className="italic">
+                          You said: <Button variant="link" className="-ml-2">"{feedback.citation}"</Button>
+                        </TypographySubtle>
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -72,19 +75,22 @@ export default function Feedback() {
             </CardHeader>
             <CardContent>
               <div className="pb-6 px-2">
-                {negativeFeedback.map(line =>
-                  <Accordion type="single" collapsible key={line}>
+                {negativeFeedback.map(feedback =>
+                  <Accordion type="single" collapsible key={feedback.line}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
                           <XCircle className="h-6 w-6 stroke-destructive" />
-                          <TypographyLarge>Title</TypographyLarge>
+                          <TypographyLarge>{feedback.title}</TypographyLarge>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent>
                         <TypographyBody>
-                          {line}
+                          {feedback.line}
                         </TypographyBody>
+                        <TypographySubtle className="italic">
+                          You said: <Button variant="link" className="-ml-2">"{feedback.citation}"</Button>
+                        </TypographySubtle>
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

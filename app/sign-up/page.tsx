@@ -23,6 +23,8 @@ import { TypographyH2, TypographySubtle } from '@/components/ui/typography'
 
 
 const formSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
   email: z.string().email().min(1),
   password: z.string().min(6),
   inviteCode: z.string(),
@@ -31,11 +33,7 @@ const formSchema = z.object({
 export default function SignUp() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      inviteCode: "",
-    },
+    defaultValues: {},
   })
 
   const formRef = useRef(null);
@@ -55,6 +53,38 @@ export default function SignUp() {
         <CardContent className="grid gap-4">
           <Form {...form} >
             <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} action="/auth/sign-up" method="post" className="space-y-4">
+              <div className="pt-2 flex items-center gap-2">
+                <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>First Name</FormLabel>
+                        <FormControl className="flex-1">
+                          <Input
+                            placeholder="John"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last Name</FormLabel>
+                        <FormControl className="flex-1">
+                          <Input
+                            placeholder="Smith"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+              </div>
               <FormField
                 control={form.control}
                 name="email"
