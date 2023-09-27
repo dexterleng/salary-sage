@@ -2,13 +2,14 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { TypographyBody, TypographyH4, TypographySmall } from "../ui/typography";
 import Fuse from 'fuse.js'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-type MockNegotiationProps = {
+type TranscriptProps = {
   position: string;
   company: string;
   tags: string[];
   transcript: TranscriptLine[];
+  citation: string;
 }
 
 type TranscriptLine = {
@@ -18,15 +19,35 @@ type TranscriptLine = {
   timestamp?: string;
 }
 
-export default function MockNegotiation({ position, company, tags, transcript }: MockNegotiationProps) {
-  const [searchedLine, setSearchedLine] = useState<string>('');
-  const [foundResults, setFoundResults] = useState<string>('');
-
+export default function Transcript({ position, company, tags, transcript, citation }: TranscriptProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const selectedElementRef = useRef<HTMLDivElement>(null);
   const fuse = new Fuse(transcript, { keys: ['message'], ignoreLocation: true, threshold: 0.0, shouldSort: false });
 
+  const [searchedLine, setSearchedLine] = useState<string>('');
+  const [foundResult, setFoundResult] = useState<string>('');
+
+  const findResults = (searchedLine: string) => {
+    setFoundResult(fuse.search(searchedLine).map(result => result.item.message).slice(0, 1)[0]);
+  }
+
   useEffect(() => {
-    setFoundResults(fuse.search(searchedLine).map(result => result.item.message).slice(0, 1)[0]);
+    findResults(searchedLine);
   }, [searchedLine]);
+
+  useEffect(() => {
+    if (inputRef.current != null) {
+      inputRef.current.value = citation;
+    }
+    findResults(citation);
+  }, [citation]);
+
+  useEffect(() => {
+    if (selectedElementRef.current && foundResult) {
+      console.log(selectedElementRef.current);
+      selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [foundResult]);
 
   useEffect(() => {
     if (transcript.length <= 0) {
@@ -61,13 +82,14 @@ export default function MockNegotiation({ position, company, tags, transcript }:
         )}
       </div>
       <div>
-        <div className="flex gap-2 mt-10">
-          <Input placeholder="Search transcript..." onChange={(e) => setSearchedLine(e.target.value)} />
+        <div className="flex gap-2 mt-6">
+          <Input placeholder="Search transcript..." onChange={(e) => setSearchedLine(e.target.value)} ref={inputRef} />
           <Button variant="outline">Search</Button>
         </div>
-        <div className="flex flex-col gap-2 mt-10">
-          {transcript.map((line, index) =>
-            <div className={`p-2 rounded-md ${foundResults == line.message ? "bg-secondary/50 duration-150" : ""}`} key={line.message}>
+        <div className="flex flex-col gap-2 mt-4 overflow-y-auto max-h-[200vh]">
+          {transcript.map((line) =>
+            <div className={`p-2 rounded-md ${foundResult == line.message ? "bg-secondary/50 duration-150" : ""}`}
+              key={line.message} ref={foundResult === line.message ? selectedElementRef : null}>
               <TypographyBody className="text-accent">{line.timestamp}</TypographyBody>
               <TypographySmall>{line.message}</TypographySmall>
             </div>

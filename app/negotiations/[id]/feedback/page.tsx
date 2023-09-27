@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { TypographyBody, TypographyH1, TypographyH2, TypographyLarge, TypographySubtle } from "@/components/ui/typography";
 import ScoresCircular from "@/components/feedback/scores-circular";
-import MockNegotiation from "@/components/feedback/mock-nego";
+import Transcript from "@/components/feedback/transcript";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, } from "@/components/ui/accordion";
 import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
@@ -35,7 +35,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
   const clarity = 78;
   const confidence = 42;
 
-  const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Clear speech." }];
+  const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Sounds great. I'm happy to be with you today as well." }];
   const negativeFeedback = [{ title: "Clarity", line: "You were not clear in your speech.", citation: "Unclear speech." }]
 
   const interviewId = params.id;
@@ -44,6 +44,8 @@ export default function Feedback({ params }: { params: { id: string } }) {
   const [positiveFeedbacks, setPositiveFeedbacks] = useState<QualitativeFeedback[]>([]);
   const [negativeFeedbacks, setNegativeFeedbacks] = useState<QualitativeFeedback[]>([]);
   const [quantitativeFeedbacks, setQuantitativeFeedbacks] = useState<QuantitativeFeedback[]>([]);
+
+  const [searchedCitation, setSearchedCitation] = useState<string>('');
 
   useEffect(() => {
     fetchResponse();
@@ -115,7 +117,10 @@ export default function Feedback({ params }: { params: { id: string } }) {
                           {feedback.line}
                         </TypographyBody>
                         <TypographySubtle className="italic">
-                          You said: <Button variant="link" className="-ml-2">"{feedback.citation}"</Button>
+                          You said:
+                          <Button variant="link" className="-ml-2" onClick={() => setSearchedCitation(feedback.citation)}>
+                            "{feedback.citation}"
+                          </Button>
                         </TypographySubtle>
                       </AccordionContent>
                     </AccordionItem>
@@ -146,7 +151,10 @@ export default function Feedback({ params }: { params: { id: string } }) {
                           {feedback.line}
                         </TypographyBody>
                         <TypographySubtle className="italic">
-                          You said: <Button variant="link" className="-ml-2">"{feedback.citation}"</Button>
+                          You said: 
+                          <Button variant="link" className="-ml-2" onClick={() => setSearchedCitation(feedback.citation)}>
+                            "{feedback.citation}"
+                          </Button>
                         </TypographySubtle>
                       </AccordionContent>
                     </AccordionItem>
@@ -159,12 +167,13 @@ export default function Feedback({ params }: { params: { id: string } }) {
         <Card className="flex-1">
           <CardHeader>
             <CardTitle>
-              <TypographyH2 className="ml-2">Mock Negotiation</TypographyH2>
+              <TypographyH2 className="ml-2">Transcript</TypographyH2>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="px-2 pb-6">
-              <MockNegotiation position="Software Engineer" company="Open Government Products" tags={["Arrogant", "Difficult"]} transcript={transcript} />
+              <Transcript position="Software Engineer" company="Open Government Products" tags={["Arrogant", "Difficult"]}
+                transcript={transcript} citation={searchedCitation} />
             </div>
           </CardContent>
         </Card>
