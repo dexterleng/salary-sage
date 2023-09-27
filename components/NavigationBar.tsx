@@ -22,6 +22,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import UpdateSettingsDialog from "@/app/dashboard/UpdateSettingsDialog";
+import Image from "next/image";
 
 type NavigationBarProps = {
   user: User | null;
@@ -185,7 +186,16 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
         <NavigationMenuList className="gap-6">
           <NavigationMenuItem>
             <Link href={user ? "/dashboard/" : "/"} className="font-bold">
+              <div className="flex gap-2">
+              <Image
+                  className="inline"
+                  src="/app-icon.svg"
+                  alt="Salary Sage icon"
+                  width="24"
+                  height="24"
+                />
               Salary Sage
+              </div>
             </Link>
           </NavigationMenuItem>
           {leftMenu()}

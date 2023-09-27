@@ -6,6 +6,8 @@ import { NavigationBar } from "@/components/NavigationBar";
 import UpdateSettingsDialog from "./dashboard/UpdateSettingsDialog";
 import { useState } from "react";
 import Script from "next/script";
+import Image from "next/image";
+import Link from "next/link";
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -66,6 +68,28 @@ export default async function RootLayout({
         <main className="min-h-screen bg-background flex flex-col items-center">
           <NavigationBar user={user} userData={userData} />
           {children}
+
+
+          <div className="w-full px-12 pt-10 pb-10 flex flex-col gap-y-1 items-center">
+              <div className="flex-grow flex flex-row items-center gap-x-2">
+                <Image
+                  className="inline"
+                  src="/app-icon.svg"
+                  alt="Salary Sage icon"
+                  width="28"
+                  height="28"
+                />
+                <span className="font-semibold text-base text-neutral-900">
+                  Salary Sage
+                </span>
+              </div>
+              <div className="mt-4">
+                <p className="text-xs font-medium text-neutral-500">
+                  © 2023 Salary Sage. All rights reserved.
+                </p>
+              </div>
+            </div>
+
         </main>
       </body>
     </html>
