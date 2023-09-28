@@ -56,7 +56,7 @@ export default async function Dashboard() {
     .order("createdAt", { ascending: false })
     .throwOnError();
 
-  const lastNegotiationId = negotiations && negotiations[0].id;
+  const lastNegotiationId = negotiations && negotiations.length > 0 && negotiations[0]?.id;
 
   const { data: lastQuantitativeFeedbacks } = await supabase
     .from("quantitative_feedback")
@@ -73,23 +73,23 @@ export default async function Dashboard() {
   const quantitativeFeedbacks: QuantitativeFeedbacks = {
     preparation: {
       title: "Preparation",
-      evaluation: preparationMetric!.evaluation,
-      score: preparationMetric!.score
+      evaluation: preparationMetric?.evaluation,
+      score: preparationMetric?.score
     },
     value_proposition: {
       title: "Value Proposition",
-      evaluation: valueMetric!.evaluation,
-      score: valueMetric!.score
+      evaluation: valueMetric?.evaluation,
+      score: valueMetric?.score
     },
     relationship_building: {
       title: "Relationship Building",
-      evaluation: relationshipMetric!.evaluation,
-      score: relationshipMetric!.score
+      evaluation: relationshipMetric?.evaluation,
+      score: relationshipMetric?.score
     },
     assertiveness: {
       title: "Assertiveness",
-      evaluation: assertivenessMetric!.evaluation,
-      score: assertivenessMetric!.score
+      evaluation: assertivenessMetric?.evaluation,
+      score: assertivenessMetric?.score
     }
   }
 
@@ -314,7 +314,7 @@ export default async function Dashboard() {
         ) : (
           <div>
             <Card className="p-20 w-full flex flex-col items-center">
-              <p className="text-xl text-center text-muted">
+              <p className="text-center text-muted">
                 You haven't completed any practices yet
               </p>
             </Card>

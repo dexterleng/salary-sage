@@ -38,6 +38,12 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
   const flatMetrics = Object.values(metrics)
   flatMetrics.push({ title: "Overall", evaluation: "", score: overallScore });
 
+  if (Number.isNaN(overallScore)) {
+    return <p className="text-center text-muted h-24 flex justify-center items-center">
+      You haven't completed any practices yet
+    </p>
+  }
+
   return (
     <div className={`flex gap-8`}>
       {flatMetrics?.map(
@@ -45,7 +51,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
         (
           <div key={flatMetric.title} className='flex flex-col items-center'>
             <div style={{ width: size, height: size }}>
-              <CircularProgressbar
+              {flatMetric.score && <CircularProgressbar
                 value={flatMetric.score}
                 text={`${flatMetric.score}%`}
                 styles={buildStyles({
@@ -60,7 +66,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
                 })
                 }
                 background={true}
-              />
+              />}
             </div>
             <TypographyBody className="mt-2 text-center h-full flex items-center">
               {flatMetric.title}
@@ -69,7 +75,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
                   <HoverCardTrigger><Info className="inline ml-1 hover:stroke-primary" size={14} /></HoverCardTrigger>
                   <HoverCardContent>
                     <TypographySmall className="text-center">
-                      <b>Why this score? </b><br/>{flatMetric.evaluation}
+                      <b>Why this score? </b><br />{flatMetric.evaluation}
                       <TypographySubtle className='italic mt-4'>These are comments from your AI interviewer</TypographySubtle>
                     </TypographySmall>
                   </HoverCardContent>
