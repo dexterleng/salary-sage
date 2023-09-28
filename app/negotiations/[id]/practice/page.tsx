@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { TypographyBody, TypographyH1, TypographySubtle } from "@/components/ui/typography";
+import { TypographyBody, TypographyH1, TypographySmall, TypographySubtle } from "@/components/ui/typography";
 import Link from "next/link";
 import { BotIcon, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/popover"
 import { useRouter } from 'next/navigation';
 import { TypeAnimation } from 'react-type-animation';
+import Image from 'next/image';
 
 export default function Practice({ params }: { params: { id: string } }) {
   const interviewId = params.id;
@@ -39,7 +40,7 @@ export default function Practice({ params }: { params: { id: string } }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isUserAudioPlaying, setIsUserAudioPlaying] = useState(false);
 
-  const [responseUrl, setResponseUrl] = useState<string>('/audio/abstract.mp3');
+  const [responseUrl, setResponseUrl] = useState<string>();
   const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. ');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
   // const [hintCount, setHintCount] = useState(0);
@@ -49,7 +50,7 @@ export default function Practice({ params }: { params: { id: string } }) {
   }, [])
 
   useEffect(() => {
-    if (hasPracticeStarted) {
+    if (hasPracticeStarted && responseUrl) {
       setIsInterviewerSpeaking(true);
       setTimeout(() => {
         const audioElement = document.getElementById('interviewer-audio') as HTMLAudioElement;
@@ -222,7 +223,10 @@ export default function Practice({ params }: { params: { id: string } }) {
                 </PopoverTrigger>
                 <PopoverContent className="bg-glass border-none" align="center">{
                   hint
-                    ? hint
+                    ? <div className="flex items-center justify-center">            
+                      <TypographySmall>{hint}</TypographySmall>
+                      <Image src="/images/salary-sage-mascot.png" width={65} height={120} alt="Salary sage mascot" className="hue-rotate-30 w-full" />
+                      </div>
                     : <div className="flex justify-center items-center">
                       Loading hints...
                       <div className="ml-4 animate-spin w-8 h-8 border-2 border-b-0 border-primary border-solid rounded-full"></div>

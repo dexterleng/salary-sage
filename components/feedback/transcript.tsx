@@ -85,7 +85,7 @@ export default function Transcript({ position, company, tags, transcript, citati
           <Input placeholder="Search transcript..." onChange={(e) => setSearchedLine(e.target.value)} ref={inputRef} />
           <Button variant="outline">Search</Button>
         </div>
-        <div className="flex flex-col gap-2 mt-4 overflow-y-auto max-h-[200vh]">
+        <div className="flex flex-col gap-2 mt-4 overflow-y-auto max-h-[80vh]">
           {transcript?.length > 0
             ? transcript.map((line) =>
               <div className={`p-2 rounded-md ${foundResult == line.message ? "bg-secondary/50 duration-150" : ""}`}
