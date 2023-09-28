@@ -1,66 +1,22 @@
-"use client"
+"use client";
+
 import React from 'react';
-import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, Tooltip, XAxis, YAxis } from 'recharts';
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-  
-];
-
-export default function OverallScores() {
+export default function OverallScores({ scores }: { scores: number[] }) {
+  const data = scores.map((score, index) => ({ "Score": score, "Practice": getLabelForIndex(index, scores.length) }));
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart width={300} height={100} data={data}>
-        <Tooltip />
-        <Line type="monotone" dataKey="pv" stroke="#007F5F" strokeWidth={2} />
-      </LineChart>
-    </ResponsiveContainer>
+    <LineChart width={360} height={140} data={data} >
+      <XAxis dataKey="Practice" hide={true} />
+      <YAxis dataKey="Score" domain={[0, 100]} hide={true} />
+      <Tooltip />
+      <Line type="monotone" dataKey="Score" stroke="#007F5F" strokeWidth={2} />
+    </LineChart>
   );
+}
+
+function getLabelForIndex(index: number, length: number): string {
+  const count = length - index - 1;
+  const labels = ["Last practice", "2 practices back", "3 practices back", "4 practices back", "5 practices back"];
+  return labels[count];
 }

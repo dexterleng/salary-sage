@@ -61,6 +61,7 @@ export default async function Dashboard() {
   const { data: lastQuantitativeFeedbacks } = await supabase
     .from("quantitative_feedback")
     .select()
+    .in("interviewId", negotiations?.map(n => n.id) ?? [])
     .order("interviewId", { ascending: false })
     .throwOnError();
 
@@ -90,6 +91,35 @@ export default async function Dashboard() {
       evaluation: assertivenessMetric!.evaluation,
       score: assertivenessMetric!.score
     }
+  }
+
+  const last5NegotiationIds: string[] = negotiations?.slice(0, 5).map(n => n.id) ?? [];
+
+  const { data } = await supabase
+    .from('quantitative_feedback')
+    .select('interviewId, score')
+    .in('interviewId', last5NegotiationIds);
+
+  // Initialize an object to store the sum and count for each interviewId
+  const avgScores: Record<string, { sum: number; count: number }> = {};
+
+  // Calculate the sum and count for each interviewId
+  data?.forEach(row => {
+    if (avgScores[row.interviewId]) {
+      avgScores[row.interviewId].sum += row.score;
+      avgScores[row.interviewId].count++;
+    } else {
+      avgScores[row.interviewId] = { sum: row.score, count: 1 };
+    }
+  });
+
+  // Calculate the average score for each interviewId and store in an array
+  const avgScoresPerInterview: number[] = [];
+
+  for (const interviewId in avgScores) {
+    const { sum, count } = avgScores[interviewId];
+    const averageScore: number = sum / count;
+    avgScoresPerInterview.push(averageScore);
   }
 
   function formatRelativeDate(date: Date) {
@@ -190,12 +220,11 @@ export default async function Dashboard() {
                 </svg>
               </div>
             </CardHeader>
-            <CardContent>
-              <OverallScores />
+            <CardContent className="pb-0">
+              <OverallScores scores={avgScoresPerInterview} />
             </CardContent>
           </Card>
         </div>
-
         <div className="pt-8 flex items-center justify-between space-y-2">
           <h3 className="text-2xl font-semibold tracking-tight">
             Negotiations
