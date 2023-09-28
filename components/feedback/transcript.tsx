@@ -7,9 +7,6 @@ import Skeleton from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
 
 type TranscriptProps = {
-  position: string;
-  company: string;
-  tags: string[];
   transcript: TranscriptLine[];
   citation: string;
 }
@@ -21,10 +18,10 @@ type TranscriptLine = {
   timestamp?: string;
 }
 
-export default function Transcript({ position, company, tags, transcript, citation }: TranscriptProps) {
+export default function Transcript({ transcript, citation }: TranscriptProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectedElementRef = useRef<HTMLDivElement>(null);
-  const fuse = new Fuse(transcript, { keys: ['message'], ignoreLocation: true, threshold: 0.0, shouldSort: false });
+  const fuse = new Fuse(transcript, { keys: ['message'], ignoreLocation: true, ignoreFieldNorm: true, threshold: 0.0, shouldSort: false });
 
   const [searchedLine, setSearchedLine] = useState<string>('');
   const [foundResult, setFoundResult] = useState<string>('');

@@ -226,9 +226,7 @@ export default async function Dashboard() {
           </Card>
         </div>
         <div className="pt-8 flex items-center justify-between space-y-2">
-          <h3 className="text-2xl font-semibold tracking-tight">
-            Negotiations
-          </h3>
+          <TypographyH3>Negotiations</TypographyH3>
           <div className="flex items-center space-x-2">
             <Link
               href="/negotiations/new"
@@ -260,54 +258,56 @@ export default async function Dashboard() {
               }
 
               return (
-                <Card
-                  key={negotiation.id}
-                  className="group cursor-pointer flex flex-row justify-between hover:bg-slate-50"
-                >
-                  <div>
-                    <CardHeader className="space-y-0 px-6 pt-6 pb-2">
-                      <div className="space-y-1">
-                        <CardTitle className="text-lg group-hover:underline">
-                          {negotiation.job_title}
-                        </CardTitle>
-                        <CardDescription>
-                          {negotiation.companyName}
-                        </CardDescription>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div
-                        className={`flex space-x-1 text-xs text-${difficultyColor}-700`}
-                      >
-                        <div
-                          className={`px-2 py-0.5 bg-${difficultyColor}-50 border-${difficultyColor}-400 border rounded-md`}
-                        >
-                          {difficulty}
+                <Link href={`/negotiations/${negotiation.id}/feedback`}>
+                  <Card
+                    key={negotiation.id}
+                    className="group flex flex-row justify-between"
+                  >
+                    <div>
+                      <CardHeader className="space-y-0 px-6 pt-6 pb-2">
+                        <div className="space-y-1">
+                          <CardTitle className="text-lg group-hover:underline">
+                            {negotiation.job_title}
+                          </CardTitle>
+                          <CardDescription>
+                            {negotiation.companyName}
+                          </CardDescription>
                         </div>
-                      </div>
-                      <div className="pt-4 text-xs text-muted-foreground">
-                        {/* {formatRelativeDate(new Date(negotiation.createdAt))} */}
-                        {formatRelativeDate(new Date())}
-                      </div>
-                    </CardContent>
-                  </div>
-                  <div className="p-6">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                      </CardHeader>
+                      <CardContent>
+                        <div
+                          className={`flex space-x-1 text-xs text-${difficultyColor}-700`}
                         >
-                          <DotsHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">Open menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-[160px]">
-                        <DropdownMenuItem>Practice again</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </Card>
+                          <div
+                            className={`px-2 py-0.5 bg-${difficultyColor}-50 border-${difficultyColor}-400 border rounded-md`}
+                          >
+                            {difficulty}
+                          </div>
+                        </div>
+                        <div className="pt-4 text-xs text-muted-foreground">
+                          {/* {formatRelativeDate(new Date(negotiation.createdAt))} */}
+                          {formatRelativeDate(new Date())}
+                        </div>
+                      </CardContent>
+                    </div>
+                    <div className="p-6">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                          >
+                            <DotsHorizontalIcon className="h-4 w-4" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-[160px]">
+                          <DropdownMenuItem>Practice again</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </Card>
+                </Link>
               );
             })}
           </div>
