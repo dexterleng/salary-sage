@@ -1,3 +1,5 @@
+'use client';
+
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { TypographyBody, TypographySmall, TypographySubtle } from '../ui/typography';
@@ -26,9 +28,10 @@ type QuantitativeFeedbacks = {
 type ScoresCircularProps = {
   metrics: QuantitativeFeedbacks | null;
   isEvaluationShown: boolean;
+  size?: number;
 };
 
-export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCircularProps) {
+export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 }: ScoresCircularProps) {
   if (!metrics) return <></>;
 
   const overallScore = (metrics?.preparation?.score + metrics?.value_proposition?.score + metrics?.relationship_building?.score + metrics?.assertiveness?.score) / 4;
@@ -41,7 +44,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCir
         (flatMetric) =>
         (
           <div key={flatMetric.title} className='flex flex-col items-center'>
-            <div style={{ width: 108, height: 108 }}>
+            <div style={{ width: size, height: size }}>
               <CircularProgressbar
                 value={flatMetric.score}
                 text={`${flatMetric.score}%`}

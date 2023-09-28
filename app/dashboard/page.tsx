@@ -36,7 +36,6 @@ type QuantitativeFeedbacks = {
   value_proposition: QuantitativeFeedback;
   relationship_building: QuantitativeFeedback;
   assertiveness: QuantitativeFeedback;
-  overall?: QuantitativeFeedback;
 };
 
 export default async function Dashboard() {
@@ -64,6 +63,34 @@ export default async function Dashboard() {
     .select()
     .order("interviewId", { ascending: false })
     .throwOnError();
+
+  const preparationMetric = lastQuantitativeFeedbacks?.find(f => f.metric === "preparation")
+  const valueMetric = lastQuantitativeFeedbacks?.find(f => f.metric === "value_proposition")
+  const relationshipMetric = lastQuantitativeFeedbacks?.find(f => f.metric === "relationship_building")
+  const assertivenessMetric = lastQuantitativeFeedbacks?.find(f => f.metric === "assertiveness")
+
+  const quantitativeFeedbacks: QuantitativeFeedbacks = {
+    preparation: {
+      title: "Preparation",
+      evaluation: preparationMetric!.evaluation,
+      score: preparationMetric!.score
+    },
+    value_proposition: {
+      title: "Value Proposition",
+      evaluation: valueMetric!.evaluation,
+      score: valueMetric!.score
+    },
+    relationship_building: {
+      title: "Relationship Building",
+      evaluation: relationshipMetric!.evaluation,
+      score: relationshipMetric!.score
+    },
+    assertiveness: {
+      title: "Assertiveness",
+      evaluation: assertivenessMetric!.evaluation,
+      score: assertivenessMetric!.score
+    }
+  }
 
   function formatRelativeDate(date: Date) {
     const now = new Date();
@@ -139,8 +166,8 @@ export default async function Dashboard() {
                 <ArrowRightIcon />
               </Link>
             </CardHeader>
-            <CardContent>
-              {/* <ScoresCircular metrics={lastQuantitativeFeedbacks} isEvaluationShown={false} /> */}
+            <CardContent className="mt-2 mx-2">
+              <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={false} size={84} />
             </CardContent>
           </Card>
           <Card className="flex-1">
