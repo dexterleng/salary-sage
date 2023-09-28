@@ -51,7 +51,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
         (
           <div key={flatMetric.title} className='flex flex-col items-center'>
             <div style={{ width: size, height: size }}>
-              {flatMetric.score && <CircularProgressbar
+              {flatMetric.score >= 0 && <CircularProgressbar
                 value={flatMetric.score}
                 text={`${flatMetric.score}%`}
                 styles={buildStyles({

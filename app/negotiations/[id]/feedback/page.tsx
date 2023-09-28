@@ -162,7 +162,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
                     <Accordion type="single" collapsible key={feedback.evaluation}>
                       <AccordionItem value="item-1">
                         <AccordionTrigger>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 text-left">
                             <CheckCircle2 className="h-6 w-6 stroke-primary" />
                             <TypographyLarge>{feedback.title}</TypographyLarge>
                           </div>
@@ -203,7 +203,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
                     <Accordion type="single" collapsible key={feedback.evaluation}>
                       <AccordionItem value="item-1">
                         <AccordionTrigger>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 text-left">
                             <XCircle className="h-6 w-6 stroke-destructive" />
                             <TypographyLarge>{feedback.title}</TypographyLarge>
                           </div>
