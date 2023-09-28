@@ -47,6 +47,13 @@ const formSchema = z
     currentMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     minExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     maxExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
+    resume: z.any().refine((obj) => {
+      if (!obj) {
+        return true;
+      } else {
+        return obj?.type === "application/pdf";
+      }
+    }, "Only PDF resumes are supported."),
   })
   .refine(
     (obj) => obj.minExpectedMonthlyIncome <= obj.maxExpectedMonthlyIncome,
@@ -55,9 +62,11 @@ const formSchema = z
 
 export default function UpdateSettingsDialog({
   open,
+  setIsOpen,
   userData,
 }: {
   open: boolean;
+  setIsOpen: (v: boolean) => void,
   userData: any;
 }) {
   const {
@@ -109,8 +118,8 @@ export default function UpdateSettingsDialog({
     });
 
     if (response.redirected) {
-      window.location.href = "/dashboard/"
-      console.log("Done")
+      window.location.href = "/dashboard/";
+      console.log("Done");
     } else if (!response.ok) {
       console.error("Failed to submit form:", response.statusText);
     }
@@ -308,21 +317,62 @@ export default function UpdateSettingsDialog({
                     ""}
                 </FormMessage>
               ) : null}
+
+              <FormField
+                control={form.control}
+                name="resume"
+                render={({ field }) => (
+                  <FormItem className="pt-4">
+                    <FormLabel>Resume (optional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="pdf/*"
+                        {...field}
+                        value={field.value?.fileName}
+                        onChange={(e) => {
+                          console.log(e.target.files);
+                          field.onChange(e.target.files![0]);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
-            <Button
-              type="submit"
-              className="font-semibold w-full border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <div className="flex gap-1 items-center">
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                </div>
-              ) : (
-                isOnboarded ? "Save Changes" : "Get Started"
-              )}
-            </Button>
+            <div className="pt-2 flex justify-end gap-2">
+              {isOnboarded ? (
+                <Button
+                  variant="outline"
+                  className="font-semibold"
+                  disabled={isLoading}
+                  type="reset"
+                  onClick={() => {
+                    window.location.href = window.location.href;
+                  }}
+                >
+                  Cancel
+                </Button>
+              ) : null}
+
+              <Button
+                type="submit"
+                className="font-semibold border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex gap-1 items-center">
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  </div>
+                ) : isOnboarded ? (
+                  "Save Changes"
+                ) : (
+                  "Get Started"
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </AlertDialogContent>

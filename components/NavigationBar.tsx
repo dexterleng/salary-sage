@@ -193,6 +193,7 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
 
       <UpdateSettingsDialog
         open={isUpdateSettingsDialogOpen}
+        setIsOpen={setIsUpdateSettingsDialogOpen}
         userData={userData}
       />
     </div>

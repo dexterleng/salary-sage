@@ -27,11 +27,11 @@ export async function POST(request: Request) {
   const currentMonthlyIncome = parseInt(formData.get('currentMonthlyIncome') as string);
   const minExpectedMonthlyIncome = parseInt(formData.get('minExpectedMonthlyIncome') as string);
   const maxExpectedMonthlyIncome = parseInt(formData.get('maxExpectedMonthlyIncome') as string);
+
   const resumeFile: File | null = formData.get('resume') as any
   const resumeFileBuffer = await resumeFile!.arrayBuffer();
   const resumeText: string = await readPdf(resumeFileBuffer!)
   
-  // console.log(uncleanedResumeText)
   
   console.log({ yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, resumeText })
 
