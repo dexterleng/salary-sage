@@ -95,13 +95,7 @@ export function getRecruiterNegotiationPrompt(
         {
             role: "system",
             content:
-                `You are a professional salary negotiator. You have been given a transcript of a salary negotiation for a specific role between your client, the candidate, and the recruiter of the company. You are also provided with a suitability analysis of the candidate for the role. You are to give constructive criticism for only the candidate of the following transcript. You can utilise information from the suitability analysis in constructing feedback. The goal is for the client to get feedback that enables him to better negotiate his salary in future.
-        1) Highlight the positives and negatives in the form of constructive criticism
-        2) For each feedback, provide an insightful evaluation and use the most prominent citation in the transcript, word for word, as evidence.
-        3) Provide a score from -100 to 100 for each feedback.  -100: Sabotaged the salary negotiation. 100: A perfect move by the candidate led to a key positive turning point in the negotiation.
-        4) Only for negRecruiter Roleplay: Salary Negotiation with Hiring Manager's Guidelines
-
-        Context:
+                `Context:
         In this interactive session, you will assume the role of a recruiter for a prestigious company. The user will approach you as a job candidate, and together you will role-play the salary negotiation process for a specific job position that is offered to the candidate.
 
         Inputs:
