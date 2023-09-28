@@ -24,6 +24,7 @@
     "@supabase/auth-helpers-nextjs": "latest",
     "@supabase/supabase-js": "latest",
     "autoprefixer": "10.4.14",
+    "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",

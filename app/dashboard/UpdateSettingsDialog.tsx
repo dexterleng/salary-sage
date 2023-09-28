@@ -42,7 +42,7 @@ const formSchema = z
     firstName: z.string().min(1),
     lastName: z.string().min(1),
     yearsOfExperience: z.coerce.number().gt(-1).min(0),
-    currentMonthlyIncome: z.coerce.number().int().gt(0).min(0),
+    currentMonthlyIncome: z.coerce.number().gt(-1).min(0),
     minExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     maxExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     resume: z.any().refine((obj) => {
@@ -357,7 +357,7 @@ export default function UpdateSettingsDialog({
 
               <Button
                 type="submit"
-                className="font-semibold border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80 w-[120px]"
+                className="font-semibold border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80 min-w-[120px]"
                 disabled={isLoading}
               >
                 {isLoading ? (
