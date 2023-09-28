@@ -47,6 +47,13 @@ const formSchema = z
     currentMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     minExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
     maxExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
+    resume: z.any().refine((obj) => {
+      if (!obj) {
+        return true;
+      } else {
+        return obj?.type === "application/pdf"
+      }
+    }, "Only PDF resumes are supported.")
   })
   .refine(
     (obj) => obj.minExpectedMonthlyIncome <= obj.maxExpectedMonthlyIncome,
@@ -308,6 +315,29 @@ export default function UpdateSettingsDialog({
                     ""}
                 </FormMessage>
               ) : null}
+
+            <FormField
+              control={form.control}
+              name="resume"
+              render={({ field }) => (
+                <FormItem className="pt-4">
+                  <FormLabel>Resume (optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="pdf/*"
+                      {...field}
+                      value={field.value?.fileName}
+                      onChange={(e) => {
+                        console.log(e.target.files)
+                        field.onChange(e.target.files![0]);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             </div>
 
             <Button

@@ -21,8 +21,16 @@ export async function POST(request: Request) {
   const currentMonthlyIncome = parseInt(formData.get('currentMonthlyIncome') as string);
   const minExpectedMonthlyIncome = parseInt(formData.get('minExpectedMonthlyIncome') as string);
   const maxExpectedMonthlyIncome = parseInt(formData.get('maxExpectedMonthlyIncome') as string);
+  const resume = formData.get('resume') as File | null
 
-  console.log({ yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome })
+  // do whatever you want with it
+  // if (resume) {
+    // const bytes = await resume.arrayBuffer()
+    // const buffer = Buffer.from(bytes)
+    // writeFileSync("/Users/macintosh/code/real/salary-sage/test.pdf", buffer);
+  // }
+
+  console.log({ resume, yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome })
 
   await supabase
     .from('user')
