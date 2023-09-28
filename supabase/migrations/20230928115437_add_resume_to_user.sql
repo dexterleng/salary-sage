@@ -1,2 +1,2 @@
 ALTER TABLE "user"
-ADD COLUMN "resume" TEXT NOT NULL;
+ADD COLUMN "resume" TEXT;
