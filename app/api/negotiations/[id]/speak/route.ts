@@ -15,6 +15,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.time("speak")
     const interviewId = params.id;
     const supabase = createRouteHandlerClient({ cookies })
     const { data } = await supabase.auth.getUser();
@@ -74,19 +75,26 @@ export async function POST(
       if (!file) {
         return NextResponse.json({ success: false })
       }
-
+      console.time("speech-to-text")
       transcription = await convertSpeechToText(file)
+      console.timeEnd("speech-to-text")
+
 
       chatGPTMessages.push({role: "user", content: transcription})
       const conversation = prependRoles(chatGPTMessages)
-      replyText = await getChatCompletionMessage(conversation, "gpt-4") as string
+      console.time("chatgpt")
+      replyText = await getChatCompletionMessage(conversation, "gpt-3.5-turbo") as string
+      console.timeEnd("chatgpt")
+
     }
       
 
     replyText = replyText.replace(recruiterPrefix, '')
     // console.log("replyText", replyText);
     const transcribeReplyText = replyText.split(ENDSUFFIX)[0]
+    console.time("text-to-speech")
     const replyAudio = await convertTextToSpeech(transcribeReplyText)
+    console.timeEnd("text-to-speech")
 
     console.log(`
     input: ${transcription},
@@ -105,6 +113,8 @@ export async function POST(
 
     const response = new NextResponse(replyAudio)
     response.headers.set('Content-Type', 'audio/mpeg3');
+    console.timeEnd("speak")
+
     return response;
   } catch (error) {
     console.log(error)

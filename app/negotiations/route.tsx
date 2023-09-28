@@ -37,8 +37,9 @@ export async function POST(request: Request) {
   const companyName = formData.get('companyName') as string;
   const difficulty = parseInt(formData.get('difficulty') as string);
   console.log({ jobTitle, jobDescription, companyName, difficulty })
-
+  console.time("interview setup")
   const interviewData = await setupInterview(profile.resume, companyName, jobTitle, profile.yearsOfExperience, jobDescription, location, difficulty)
+  console.timeEnd("interview setup")
 
   const { data: interview } = await supabase
     .from('interview')
