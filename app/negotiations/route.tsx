@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { getHiringManagerGuidelinesPrompt, getRecruiterNegotiationPrompt, getRecruiterMetaInstructionsPrompt, getSuitabilityPrompt } from '@/utils/promptGeneration'
 import { getChatCompletionMessage } from '@/utils/openaiChat'
-import { marketAnalysis, parsedResume, location, jobDescription, jobTitle, difficulty } from '@/utils/placeholders'
+import { marketAnalysis, parsedResume, location } from '@/utils/placeholders'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,19 +31,19 @@ export async function POST(request: Request) {
   .throwOnError()
 
   const formData = await request.formData();
+  const jobTitle = formData.get('jobTitle') as string;
+  const jobDescription = formData.get('jobDescription') as string;
   const companyName = formData.get('companyName') as string;
-  const minExpectedMonthlyIncome = parseInt(formData.get('minExpectedMonthlyIncome') as string);
-  const maxExpectedMonthlyIncome = parseInt(formData.get('maxExpectedMonthlyIncome') as string);
-  console.log({ companyName, minExpectedMonthlyIncome, maxExpectedMonthlyIncome })
+  const difficulty = parseInt(formData.get('difficulty') as string);
+  console.log({ jobTitle, jobDescription, companyName, difficulty })
 
   const interviewData = await setupInterview(parsedResume, companyName, jobTitle, profile.yearsOfExperience, jobDescription, location, difficulty)
 
   const { data: interview } = await supabase
     .from('interview')
-    .insert({ 
-      companyName, 
-      minExpectedMonthlyIncome,
-      maxExpectedMonthlyIncome,
+    .insert({
+      companyName,
+      difficulty,
       userId: user.id,
       job_title: jobTitle,
       market_analysis: interviewData.marketAnalysis,
