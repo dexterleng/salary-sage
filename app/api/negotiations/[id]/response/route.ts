@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getHintsPrompt, ENDSUFFIX } from "@/utils/promptGeneration";
 import { createClient } from "@supabase/supabase-js";
 import { getChatCompletionMessage, prependRoles } from '@/utils/openaiChat'
+export const revalidate = 0
 
 export async function GET(
     request: NextRequest,
@@ -27,7 +28,7 @@ export async function GET(
             .eq('interviewId', interviewId)
             .neq('role', 'system')
             .order('createdAt', { ascending: true })
-            .limit(100)
+            .limit(10000)
             .throwOnError()
 
         console.log(chatMessages)

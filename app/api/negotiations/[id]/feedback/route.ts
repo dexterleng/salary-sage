@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { getFeedbackPrompts } from '@/utils/promptGeneration';
 import { prependRoles, chainCompletionPrompts } from '@/utils/openaiChat'
 import { Models } from 'openai/resources';
+export const revalidate = 0
 
 interface QualitativeFeedback {
     title: string,

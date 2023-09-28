@@ -24,7 +24,7 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { TypographyH2 } from "@/components/ui/typography";
 import {
   Select,
@@ -35,9 +35,12 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
+import { Icons } from "@/components/icons";
 
 const formSchema = z
   .object({
+    jobTitle: z.string().min(1),
     firstName: z.string().min(1),
     lastName: z.string().min(1),
     yearsOfExperience: z.coerce.number().gt(-1).min(0),
@@ -58,6 +61,7 @@ export default function UpdateSettingsDialog({
   userData: any;
 }) {
   const {
+    jobTitle,
     firstName,
     lastName,
     yearsOfExperience,
@@ -75,6 +79,7 @@ export default function UpdateSettingsDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      jobTitle: jobTitle ?? "Software Engineer",
       firstName: firstName,
       lastName: lastName,
       yearsOfExperience: yearsOfExperience,
@@ -85,10 +90,54 @@ export default function UpdateSettingsDialog({
   });
 
   const formRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    (formRef.current as any).submit();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+
+    const formData = new FormData();
+    for (let key in values) {
+      if ((values as any)[key] === null || (values as any)[key] === undefined) {
+        continue;
+      }
+      formData.append(key, (values as any)[key]);
+    }
+
+    const response = await fetch("/update-user/", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.redirected) {
+      window.location.href = "/dashboard/"
+      console.log("Done")
+    } else if (!response.ok) {
+      console.error("Failed to submit form:", response.statusText);
+    }
   }
+
+  const jobTitles = [
+    { name: "AI Engineer", id: "ai engineer" },
+    { name: "Applications Engineer", id: "applications engineer" },
+    { name: "Back End Engineer", id: "back end engineer" },
+    { name: "Business Analyst", id: "business analyst" },
+    { name: "Data Analyst", id: "data analyst" },
+    { name: "Data Engineer", id: "data engineer" },
+    { name: "Data Scientist", id: "data scientist" },
+    { name: "DevOps Engineer", id: "devops engineer" },
+    { name: "Enterprise Engineer", id: "enterprise engineer" },
+    { name: "Full Stack Engineer", id: "full stack engineer" },
+    { name: "Infrastructure Engineer", id: "infrastructure engineer" },
+    { name: "Product Manager", id: "product manager" },
+    { name: "Research Engineer", id: "research engineer" },
+    { name: "Research Scientist", id: "research scientist" },
+    { name: "Security Engineer", id: "security engineer" },
+    { name: "Software Engineer", id: "software engineer" },
+    { name: "Systems Analyst", id: "systems analyst" },
+    { name: "Systems Engineer", id: "systems engineer" },
+    { name: "Technical Program Manager", id: "technical program manager" },
+    { name: "Test Engineer", id: "test engineer" },
+  ];
 
   return (
     <AlertDialog open={open}>
@@ -141,23 +190,36 @@ export default function UpdateSettingsDialog({
               />
             </div>
 
-            <FormItem>
-              <FormLabel>Desired Position</FormLabel>
-              <FormControl>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue
-                      placeholder="Software Engineer"
-                      defaultValue={"Software Engineer"}
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="light">Software Engineer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormField
+              control={form.control}
+              name="jobTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Desired Position</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a job title..." />
+                        </SelectTrigger>
+                      </FormControl>
+
+                      <SelectContent className="h-[300px] overflow-y-scroll">
+                        {jobTitles.map((jobTitle) => (
+                          <SelectItem key={jobTitle.name} value={jobTitle.name}>
+                            {jobTitle.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -251,8 +313,15 @@ export default function UpdateSettingsDialog({
             <Button
               type="submit"
               className="font-semibold w-full border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
+              disabled={isLoading}
             >
-              {isOnboarded ? "Save Changes" : "Get Started"}
+              {isLoading ? (
+                <div className="flex gap-1 items-center">
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                </div>
+              ) : (
+                isOnboarded ? "Save Changes" : "Get Started"
+              )}
             </Button>
           </form>
         </Form>

@@ -91,7 +91,6 @@ export default function Practice({ params }: { params: { id: string } }) {
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
-
     try {
       const response = await fetch(`/api/negotiations/${interviewId}/response`, {
         method: 'GET',

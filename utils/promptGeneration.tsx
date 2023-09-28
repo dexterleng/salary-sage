@@ -126,7 +126,7 @@ export function getRecruiterNegotiationPrompt(
         3. Keep your responses conversational and succinct, only respond with the most important factors to negotiate your point.
         4. In the case where the user is uncooperative and is adamant against coming to a middle ground, inform the user of this scenario along with justifications. If the user is still uncooperative, be prepared to rescind the offer respectfully and amicably.
         5. Only entertain questions that are related to the job or the salary negotiation. When dealt with an unrelated response from the user, redirect the user back to the negotiation politely.
-        6. At the end of the negotiation, respond with a message that has a suffix of ${ENDSUFFIX}.
+        6. At the end of the negotiation, respond with a message that has a suffix of ${ENDSUFFIX}, and nothing else. Do not provide any feedback.
         """
 
         Format:
