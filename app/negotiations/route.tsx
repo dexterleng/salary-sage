@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { getHiringManagerGuidelinesPrompt, getRecruiterNegotiationPrompt, getRecruiterMetaInstructionsPrompt, getSuitabilityPrompt } from '@/utils/promptGeneration'
 import { getChatCompletionMessage } from '@/utils/openaiChat'
-import { marketAnalysis, parsedResume, location, jobDescription as defaultJD } from '@/utils/placeholders'
+import { marketAnalysis, location, jobDescription as defaultJD } from '@/utils/placeholders'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   const difficulty = parseInt(formData.get('difficulty') as string);
   console.log({ jobTitle, jobDescription, companyName, difficulty })
 
-  const interviewData = await setupInterview(parsedResume, companyName, jobTitle, profile.yearsOfExperience, jobDescription, location, difficulty)
+  const interviewData = await setupInterview(profile.resume, companyName, jobTitle, profile.yearsOfExperience, jobDescription, location, difficulty)
 
   const { data: interview } = await supabase
     .from('interview')

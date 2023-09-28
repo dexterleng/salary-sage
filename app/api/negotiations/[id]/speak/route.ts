@@ -66,7 +66,7 @@ export async function POST(
     let replyText = ''
     const receiptDatetime = new Date()
     if (isFirstResponse) {
-      replyText = get_opening_statement(profile.firstName, recruiterName, interview.companyName, jobTitle)
+      replyText = get_opening_statement(profile.firstName, recruiterName, interview.companyName, interview.job_title)
     } else {
       const formData = await request.formData();
       const file: File | null = formData.get('file') as any
