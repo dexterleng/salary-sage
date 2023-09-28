@@ -218,20 +218,22 @@ export function getSuitabilityPrompt(
 }
 
 export function getHintsPrompt(
-    transcript: string, company: string, job_title: string, suitability_analysis: string, market_analysis: string
+    transcript: string, company: string, job_title: string, suitability_analysis: string, market_analysis: string, minExpectedMonthlyIncome: string
 ): ChatMessage[] {
     return [
         {
             role: "system",
             content:
                 `
-                You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with the best concrete hint, the hint should be specific and not generic and fits in a single succinct sentence.
+                You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. 
+                Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with the best concrete hint, the hint should be specific and not generic and fits in a single succinct sentence.
 
                 You are provided with:
                 1) A transcript of the negotiation thus far, ending with a response from the recruiter
                 2) Company and role for which salary is being negotiated for
                 3) Suitability analysis of the candidate, me, and the role
                 4) Market analysis data of similar jobs and their compensations
+                5) Minimum expected Income I desire from this role
 
 
                 Rule:
@@ -245,6 +247,9 @@ export function getHintsPrompt(
                 Example output:
                 ["You should highlight your past internship experience at Apple gave you expertise in dealing with large distributed systems that is highly relevant to this role."]
 
+                Minimum Expected Income:
+                ${minExpectedMonthlyIncome}
+                
                 Transcript:
                 """
                 ${transcript}

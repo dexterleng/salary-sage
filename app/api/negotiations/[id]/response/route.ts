@@ -14,6 +14,18 @@ export async function GET(
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
         const interviewId = params.id;
+        const { data } = await supabase.auth.getUser();
+        const { user } = data;
+        if (!user) {
+          return NextResponse.json({ error: "Unauthorised. "}, { status: 400 });
+        }
+
+        const { data: profile } = await supabase
+        .from('user')
+        .select()
+        .eq('userId', user.id)
+        .single()
+        .throwOnError()
 
         const { data: interview } = await supabase
             .from('interview')
@@ -38,7 +50,7 @@ export async function GET(
         prependRoles(chatMessages!).forEach((m) => {
             transcript += m.content + "\n"
         });
-        const hintsPrompt = getHintsPrompt(transcript, interview.companyName, interview.job_title, interview.suitability_analysis, interview.market_analysis);
+        const hintsPrompt = getHintsPrompt(transcript, interview.companyName, interview.job_title, interview.suitability_analysis, interview.market_analysis, String(profile.minExpectedMonthlyIncome));
 
         const hint = await getChatCompletionMessage(hintsPrompt, "gpt-4") as string;
         
