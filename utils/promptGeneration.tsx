@@ -18,7 +18,7 @@ export function getFeedbackPrompts(
             [{
             "title": <feedback title>,
             "evaluation": <feedback description and evaluation>,
-            "citation": <citations>,
+            "citation": <citation>,
             "is_positive": <boolean for whether the feedback if positive>,
             "suggestion": <improved version of the citation for negative feedbacks, null if not applicable>,
             "score": <score>
@@ -180,17 +180,18 @@ export function getSuitabilityPrompt(
                 `
                 You are a recruiter. You are provided with the following job description and resume of a candidate. 
                 Steps:
-                1) Step-by-step, detail positive and negative factors using specific citations of the job description and the candidate's resume on the suitability of the candidate for the job. Determine the strength of the factor in contributing to the suitability of the candidate for this role from -100 to 100. -100 being a major detriment and 100 being a major contributor to the suitability of the candidate for the role.
+                1) Step-by-step, detail only the most prominent positive and negative factors with the most prominent citation in the job description and the candidate's resume on the suitability of the candidate for the job. Determine the strength of the factor in contributing to the suitability of the candidate for this role from -100 to 100. -100 being a major detriment and 100 being a major contributor to the suitability of the candidate for the role.
 
                 2) Output in this Format for each factor:
                 <Sequence number>.
                 Description: <Factor description>
-                Job description citation(s): <job description citations>
-                Resume citation(s):<resume citations>
+                Resume citation:<resume citation>
                 Evaluation: <evaluation>
-                Strength of factor: <Strength of factor>
+                Score: <score>
 
                 3) Determine an overall suitability score from 0 to 100 of the candidate for this specific role.
+
+                Keep each factor succinct and concise.
 
                 Company and role:
                 ${company}, ${job_title}
@@ -267,11 +268,12 @@ export function getHiringManagerGuidelinesPrompt(
                 Your role is to generate out key metrics and restrictions necessary for your recruiters to conduct salary negotiation effectively. 
 
                 Steps:
-                1) For each of the  questions below, evaluate step-by-step what a fair estimation and range will be given the company, location, job description, market analysis and years of experience of the candidate. 
+                1) For each of the  questions below, evaluate succinctly step-by-step what a fair estimation and range will be given the company, location, job description, market analysis and years of experience of the candidate. 
                 2) Using the evaluation, provide an educated answer for each question, understanding the trade-off between attracting more quality candidates with higher compensations and keeping company expenses in check with lower compensations. 
                 3) Be reasonable with the compensation and do not overinflate. Base Salary range should not be too big, variance should be about 10% around the mean.
                 4) For currency, use Singapore Dollars.
-                5) Output the answers to the questions as a JSON format and absolutely nothing else.
+                5) Be succinct in your response.
+                6) Output the answers to the questions as a JSON format and absolutely nothing else.
                 {
                     "[category]": {
                         "[question]": {
@@ -293,32 +295,19 @@ export function getHiringManagerGuidelinesPrompt(
                 ${market_analysis}
 
                 Questions:
-                1. Budget for the position
-                - Base salary range?
-                - Bonus range, if any?
-                - Sign-on bonus range, if any?
-                - Is there any flexibility beyond the base, bonus and sign-on bonus?
+                1. Budget for the position as a range
+                - Base salary?
+                - Bonus range?
+                - Sign-on bonus?
+                - Is there any flexibility?
 
                 2. Competitors
-                - What is the general industry standard for this position in terms of monetary compensation?
-                - What Does the Benefits Package Include?
+                - What is the industry standard for monetary compensation for this position?
 
-                3. Other monetary compensations
-                - What is the health insurance coverage, retirement benefits, and any other additional perks?
-
-                4. Criticality of the role
-                - Is this a role we've had difficulty filling?
-
-                5. Alternative Compensation methods
-                - How many days off per year?
-                - Can we offer more vacation time, a signing bonus, or other non-standard benefits if we can't meet the base salary expectation?
-                - Are there opportunities for accelerated performance reviews or early promotions?
-
-                6. Career trajectory of this role.
-                - How quickly can the candidate expect promotions or raises based on performance?
-
-                7. External factors
-                - Are there economic factors, company performance issues, or hiring freezes that could affect the negotiation?
+                3. Alternative Compensation methods
+                - Number of annual days off?
+                - Can we offer more vacation time, or non-standard benefits if we can't meet the base salary expectation?
+                - Are there opportunities for accelerated performance reviews?
                 `}
     ]
 }
