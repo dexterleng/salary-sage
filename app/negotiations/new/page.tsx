@@ -21,7 +21,7 @@ export default async function New() {
     .throwOnError();
 
   return (
-    <div className="flex-1 flex align-center justify-center">
+    <div className="flex-1 flex align-center justify-center py-12">
       <div className="flex-1 flex flex-col w-full px-8 sm:max-w-lg justify-center gap-2">
         <NewNegotiationForm userData={userData} />
       </div>

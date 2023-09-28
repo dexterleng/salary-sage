@@ -1,7 +1,8 @@
+'use client';
+
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { TypographyBody, TypographySmall, TypographySubtle } from '../ui/typography';
-import { useEffect, useState } from 'react';
 import {
   HoverCard,
   HoverCardContent,
@@ -16,7 +17,6 @@ interface QuantitativeFeedback {
   score: number
 }
 
-
 type QuantitativeFeedbacks = {
   preparation: QuantitativeFeedback;
   value_proposition: QuantitativeFeedback;
@@ -28,30 +28,30 @@ type QuantitativeFeedbacks = {
 type ScoresCircularProps = {
   metrics: QuantitativeFeedbacks | null;
   isEvaluationShown: boolean;
+  size?: number;
 };
 
-export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCircularProps) {
+export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 }: ScoresCircularProps) {
   if (!metrics) return <></>;
+
   const overallScore = (metrics?.preparation?.score + metrics?.value_proposition?.score + metrics?.relationship_building?.score + metrics?.assertiveness?.score) / 4;
+  const flatMetrics = Object.values(metrics)
+  flatMetrics.push({ title: "Overall", evaluation: "", score: overallScore });
 
-  const [flatMetrics, setFlatMetrics] = useState<QuantitativeFeedback[]>([]);
-
-  useEffect(() => {
-    if (metrics) {
-      let newMetrics = Object.values(metrics);
-      newMetrics.push({ title: "Overall", evaluation: "", score: overallScore });
-      setFlatMetrics(newMetrics);
-    }
-  }, [metrics])
+  if (Number.isNaN(overallScore)) {
+    return <p className="text-center text-muted h-24 flex justify-center items-center">
+      You haven't completed any practices yet
+    </p>
+  }
 
   return (
-    <div className={`flex gap-8`}>
+    <div className={`flex gap-8 justify-evenly`}>
       {flatMetrics?.map(
         (flatMetric) =>
         (
-          <div key={flatMetric.title} className='flex flex-col items-center'>
-            <div style={{ width: 108, height: 108 }}>
-              <CircularProgressbar
+          <div key={flatMetric.title} className='flex flex-col items-center flex-1'>
+            <div style={{ width: size, height: size }}>
+              {flatMetric.score >= 0 && <CircularProgressbar
                 value={flatMetric.score}
                 text={`${flatMetric.score}%`}
                 styles={buildStyles({
@@ -66,7 +66,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCir
                 })
                 }
                 background={true}
-              />
+              />}
             </div>
             <TypographyBody className="mt-2 text-center h-full flex items-center">
               {flatMetric.title}
@@ -75,7 +75,7 @@ export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCir
                   <HoverCardTrigger><Info className="inline ml-1 hover:stroke-primary" size={14} /></HoverCardTrigger>
                   <HoverCardContent>
                     <TypographySmall className="text-center">
-                      <b>Why this score? </b><br/>{flatMetric.evaluation}
+                      <b>Why this score? </b><br />{flatMetric.evaluation}
                       <TypographySubtle className='italic mt-4'>These are comments from your AI interviewer</TypographySubtle>
                     </TypographySmall>
                   </HoverCardContent>
