@@ -22,24 +22,34 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
     if (!isRecording) {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
+          const chunks: Blob[] = [];
+
           mediaRecorder.current = new MediaRecorder(stream);
+  
           mediaRecorder.current.ondataavailable = e => {
-            setAudioData(e.data);
-            setAudioURL(URL.createObjectURL(e.data));
+            if (e.data.size > 0) {
+              chunks.push(e.data);
+            }
           };
-          mediaRecorder.current.start();
-          // start audio length timer
+  
+          mediaRecorder.current.start(0.1);
+
+          // Start audio length timer
           mediaRecorder.current.onstart = () => {
             setAudioLength(0);
             const timer = setInterval(() => {
               setAudioLength(prev => prev + 1);
             }, 1000);
-            if (mediaRecorder.current) {
-              mediaRecorder.current.onstop = () => {
-                clearInterval(timer);
-              };
-            }
+
+            mediaRecorder.current!.onstop = () => {
+              clearInterval(timer);
+              // Create a Blob from the recorded chunks
+              const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+              setAudioData(audioBlob);
+              setAudioURL(URL.createObjectURL(audioBlob));
+            };
           };
+  
           setIsRecording(true);
         })
         .catch(err => {
