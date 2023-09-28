@@ -73,7 +73,6 @@ export default function Feedback({ params }: { params: { id: string } }) {
       setPositiveFeedbacks(data.qualitative?.filter((feedback: QualitativeFeedback) => feedback.is_positive));
       setNegativeFeedbacks(data.qualitative?.filter((feedback: QualitativeFeedback) => !feedback.is_positive));
       setQuantitativeFeedbacks(data.quantitative);
-      console.log(data);
     } catch (error) {
       console.error('Error getting transcript:', error);
     }

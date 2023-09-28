@@ -17,12 +17,27 @@ import {
   ArrowRightIcon,
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons";
-import { Progress } from "@/components/ui/progress";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { TypographyH2 } from "@/components/ui/typography";
+import { TypographyH2, TypographyH3 } from "@/components/ui/typography";
 import Image from "next/image";
+import OverallScores from "@/components/dashboard/overall-scores";
+import ScoresCircular from "@/components/feedback/scores-circular";
+
+interface QuantitativeFeedback {
+  title: string,
+  evaluation: string,
+  score: number
+}
+
+type QuantitativeFeedbacks = {
+  preparation: QuantitativeFeedback;
+  value_proposition: QuantitativeFeedback;
+  relationship_building: QuantitativeFeedback;
+  assertiveness: QuantitativeFeedback;
+  overall?: QuantitativeFeedback;
+};
 
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies });
@@ -43,6 +58,12 @@ export default async function Dashboard() {
     .throwOnError();
 
   const lastNegotiationId = negotiations && negotiations[0].id;
+
+  const { data: lastQuantitativeFeedbacks } = await supabase
+    .from("quantitative_feedback")
+    .select()
+    .order("interviewId", { ascending: false })
+    .throwOnError();
 
   function formatRelativeDate(date: Date) {
     const now = new Date();
@@ -75,8 +96,6 @@ export default async function Dashboard() {
     }
   }
 
-  console.log(negotiations);
-
   return (
     <div className="w-full flex justify-center px-4 py-8 sm:p-12 relative">
       <div className="flex-1 space-y-4 max-w-5xl">
@@ -106,11 +125,11 @@ export default async function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
+        <div className="flex gap-4">
+          <Card className="flex-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg font-medium">
-                Your last negotiation
+              <CardTitle>
+                <TypographyH3>Your Last Negotiation</TypographyH3>
               </CardTitle>
               <Link
                 href={`/negotiations/${lastNegotiationId}/feedback`}
@@ -121,23 +140,13 @@ export default async function Dashboard() {
               </Link>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-2">
-                {["Clarity", "Confidence", "Overall"].map((i) => (
-                  <div key={i} className="flex flex-col gap-1">
-                    <span className="text-base">{i}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold">30%</span>
-                      <Progress value={30} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {/* <ScoresCircular metrics={lastQuantitativeFeedbacks} isEvaluationShown={false} /> */}
             </CardContent>
           </Card>
-          <Card>
+          <Card className="flex-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Overall Progress
+              <CardTitle>
+                <TypographyH3>Overall Progress</TypographyH3>
               </CardTitle>
               <div>
                 <svg
@@ -155,10 +164,7 @@ export default async function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-muted-foreground">
-                +201 since last hour
-              </p>
+              <OverallScores />
             </CardContent>
           </Card>
         </div>

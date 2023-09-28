@@ -1,7 +1,6 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { TypographyBody, TypographySmall, TypographySubtle } from '../ui/typography';
-import { useEffect, useState } from 'react';
 import {
   HoverCard,
   HoverCardContent,
@@ -15,7 +14,6 @@ interface QuantitativeFeedback {
   evaluation: string,
   score: number
 }
-
 
 type QuantitativeFeedbacks = {
   preparation: QuantitativeFeedback;
@@ -32,17 +30,10 @@ type ScoresCircularProps = {
 
 export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCircularProps) {
   if (!metrics) return <></>;
+
   const overallScore = (metrics?.preparation?.score + metrics?.value_proposition?.score + metrics?.relationship_building?.score + metrics?.assertiveness?.score) / 4;
-
-  const [flatMetrics, setFlatMetrics] = useState<QuantitativeFeedback[]>([]);
-
-  useEffect(() => {
-    if (metrics) {
-      let newMetrics = Object.values(metrics);
-      newMetrics.push({ title: "Overall", evaluation: "", score: overallScore });
-      setFlatMetrics(newMetrics);
-    }
-  }, [metrics])
+  const flatMetrics = Object.values(metrics)
+  flatMetrics.push({ title: "Overall", evaluation: "", score: overallScore });
 
   return (
     <div className={`flex gap-8`}>
