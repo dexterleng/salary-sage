@@ -129,7 +129,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <div className="px-6 pb-6">
-                  {quantitativeFeedbacks?.assertiveness
+                  {quantitativeFeedbacks?.assertiveness || !isLoading
                     ? <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={true} />
                     : <div>
                       <Skeleton
@@ -158,7 +158,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <div className="pb-6 px-2">
-                  {positiveFeedbacks?.length > 0
+                  {positiveFeedbacks?.length > 0 || !isLoading
                     ? positiveFeedbacks.map(feedback =>
                       <Accordion type="single" collapsible key={feedback.evaluation}>
                         <AccordionItem value="item-1">
@@ -199,7 +199,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <div className="pb-6 px-2">
-                  {negativeFeedbacks?.length > 0
+                  {negativeFeedbacks?.length > 0 || !isLoading
                     ? negativeFeedbacks.map(feedback =>
                       <Accordion type="single" collapsible key={feedback.evaluation}>
                         <AccordionItem value="item-1">

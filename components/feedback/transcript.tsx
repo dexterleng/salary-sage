@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { TypographyBody, TypographyH4, TypographySmall } from "../ui/typography";
+import { TypographyBody, TypographySmall } from "../ui/typography";
 import Fuse from 'fuse.js'
 import { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton"
