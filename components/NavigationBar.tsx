@@ -135,19 +135,6 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
               Dashboard
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link
-              href="/negotiations/"
-              className={cn(
-                "text-sm",
-                pathname.startsWith("/negotiations")
-                  ? "text-foreground font-semibold"
-                  : "text-foreground/60 hover:text-foreground/80"
-              )}
-            >
-              Negotiations
-            </Link>
-          </NavigationMenuItem>
         </>
       );
     }
