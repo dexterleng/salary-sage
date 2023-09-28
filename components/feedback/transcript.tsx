@@ -41,7 +41,6 @@ export default function Transcript({ position, company, tags, transcript, citati
 
   useEffect(() => {
     if (selectedElementRef.current && foundResult) {
-      console.log(selectedElementRef.current);
       selectedElementRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [foundResult]);

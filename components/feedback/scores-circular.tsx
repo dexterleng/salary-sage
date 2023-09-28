@@ -1,6 +1,6 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { TypographyBody, TypographySmall } from '../ui/typography';
+import { TypographyBody, TypographySmall, TypographySubtle } from '../ui/typography';
 import { useEffect, useState } from 'react';
 import {
   HoverCard,
@@ -75,7 +75,8 @@ export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCir
                   <HoverCardTrigger><Info className="inline ml-1 hover:stroke-primary" size={14} /></HoverCardTrigger>
                   <HoverCardContent>
                     <TypographySmall className="text-center">
-                      {flatMetric.evaluation}
+                      <b>Why this score? </b><br/>{flatMetric.evaluation}
+                      <TypographySubtle className='italic mt-4'>These are comments from your AI interviewer</TypographySubtle>
                     </TypographySmall>
                   </HoverCardContent>
                 </HoverCard>

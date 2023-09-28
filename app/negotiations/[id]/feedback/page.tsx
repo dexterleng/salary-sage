@@ -39,12 +39,6 @@ type QuantitativeFeedbacks = {
 };
 
 export default function Feedback({ params }: { params: { id: string } }) {
-  const clarity = 78;
-  const confidence = 42;
-
-  const positiveFeedback = [{ title: "Clarity", line: "You were very clear in your speech.", citation: "Sounds great. I'm happy to be with you today as well." }];
-  const negativeFeedback = [{ title: "Clarity", line: "You were not clear in your speech.", citation: "Unclear speech." }]
-
   const interviewId = params.id;
 
   const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
@@ -111,8 +105,8 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="pb-6 px-2">
-                {positiveFeedback.map(feedback =>
-                  <Accordion type="single" collapsible key={feedback.line}>
+                {positiveFeedbacks.map(feedback =>
+                  <Accordion type="single" collapsible key={feedback.evaluation}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
@@ -122,11 +116,11 @@ export default function Feedback({ params }: { params: { id: string } }) {
                       </AccordionTrigger>
                       <AccordionContent>
                         <TypographyBody>
-                          {feedback.line}
+                          {feedback.evaluation}
                         </TypographyBody>
-                        <TypographySubtle className="italic">
-                          You said:
-                          <Button variant="link" className="-ml-2" onClick={() => setSearchedCitation(feedback.citation)}>
+                        <TypographySubtle className="mt-2">
+                          <i>You said:</i>
+                          <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
                             "{feedback.citation}"
                           </Button>
                         </TypographySubtle>
@@ -145,8 +139,8 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="pb-6 px-2">
-                {negativeFeedback.map(feedback =>
-                  <Accordion type="single" collapsible key={feedback.line}>
+                {negativeFeedbacks.map(feedback =>
+                  <Accordion type="single" collapsible key={feedback.evaluation}>
                     <AccordionItem value="item-1">
                       <AccordionTrigger>
                         <div className="flex gap-2">
@@ -156,13 +150,18 @@ export default function Feedback({ params }: { params: { id: string } }) {
                       </AccordionTrigger>
                       <AccordionContent>
                         <TypographyBody>
-                          {feedback.line}
+                          {feedback.evaluation}
                         </TypographyBody>
-                        <TypographySubtle className="italic">
-                          You said: 
-                          <Button variant="link" className="-ml-2" onClick={() => setSearchedCitation(feedback.citation)}>
+                        <TypographySubtle className="mt-2">
+                          <i>You said:</i>
+                          <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
                             "{feedback.citation}"
                           </Button>
+                          <br/>
+                          <br/>
+                          <i>Suggestion:</i>
+                          <br/>
+                          <p>"{feedback.suggestion}"</p>
                         </TypographySubtle>
                       </AccordionContent>
                     </AccordionItem>
