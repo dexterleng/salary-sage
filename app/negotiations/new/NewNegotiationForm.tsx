@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { User } from "@supabase/supabase-js";
+import { Icons } from "@/components/icons";
 
 const formSchema = z
   .object({
@@ -55,15 +56,45 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
     defaultValues: {
       minExpectedMonthlyIncome: userData?.minExpectedMonthlyIncome,
       maxExpectedMonthlyIncome: userData?.maxExpectedMonthlyIncome,
-    }
+    },
   });
 
   const formRef = useRef(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("success");
-    (formRef.current as any).submit();
+    setIsLoading(true);
+    // (formRef.current as any).submit();
   }
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadingTexts = [
+    "Hang tight",
+    "We are setting up the negotiation",
+    "This might take a minute",
+  ];
+  const [loadingTextIndex, setLoadingTextIndex] = useState(0);
+
+  const [opacityClass, setOpacityClass] = useState("opacity-100");
+  useEffect(() => {
+    let timeout: any;
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setOpacityClass("opacity-0");
+        timeout = setTimeout(() => {
+          setLoadingTextIndex(
+            (prevIndex) => (prevIndex + 1) % loadingTexts.length
+          );
+          setOpacityClass("opacity-100");
+        }, 1000); // This delay matches the transition duration for fading out.
+      }, 5000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [isLoading]);
 
   return (
     <Form {...form}>
@@ -215,11 +246,25 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
             <Button
               type="submit"
               className="font-semibold w-full border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
+              disabled={isLoading}
             >
-              Continue
+              {isLoading ? (
+                <div className="flex gap-1 items-center">
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                </div>
+              ) : (
+                "Continue"
+              )}
             </Button>
           </CardFooter>
         </Card>
+        <div className="mt-4 w-full flex justify-center relative">
+          <p
+            className={`text-md text-slate-600 transition-opacity duration-1000 ${opacityClass} absolute`}
+          >
+            {isLoading ? loadingTexts[loadingTextIndex] : ""}
+          </p>
+        </div>
       </form>
     </Form>
   );
