@@ -9,6 +9,8 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 interface TranscriptLine {
   isUser: boolean;
@@ -93,7 +95,24 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="px-6 pb-6">
-                <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={true}/>
+                {quantitativeFeedbacks?.assertiveness
+                  ? <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={true} />
+                  : <div>
+                    <Skeleton
+                      count={5}
+                      circle
+                      height="108px"
+                      width="108px"
+                      containerClassName="avatar-skeleton flex gap-4"
+                      className="block flex-1"
+                    />
+                    <Skeleton
+                      count={5}
+                      containerClassName="skeleton flex gap-4"
+                      className="block flex-1 pt-2 mt-2"
+                    />
+                  </div>
+                }
               </div>
             </CardContent>
           </Card>
@@ -105,29 +124,36 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="pb-6 px-2">
-                {positiveFeedbacks.map(feedback =>
-                  <Accordion type="single" collapsible key={feedback.evaluation}>
-                    <AccordionItem value="item-1">
-                      <AccordionTrigger>
-                        <div className="flex gap-2">
-                          <CheckCircle2 className="h-6 w-6 stroke-primary" />
-                          <TypographyLarge>{feedback.title}</TypographyLarge>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <TypographyBody>
-                          {feedback.evaluation}
-                        </TypographyBody>
-                        <TypographySubtle className="mt-2">
-                          <i>You said:</i>
-                          <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
-                            "{feedback.citation}"
-                          </Button>
-                        </TypographySubtle>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                )}
+                {positiveFeedbacks?.length > 0
+                  ? positiveFeedbacks.map(feedback =>
+                    <Accordion type="single" collapsible key={feedback.evaluation}>
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger>
+                          <div className="flex gap-2">
+                            <CheckCircle2 className="h-6 w-6 stroke-primary" />
+                            <TypographyLarge>{feedback.title}</TypographyLarge>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <TypographyBody>
+                            {feedback.evaluation}
+                          </TypographyBody>
+                          <TypographySubtle className="mt-2">
+                            <i>You said:</i>
+                            <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
+                              "{feedback.citation}"
+                            </Button>
+                          </TypographySubtle>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  )
+                  : <Skeleton
+                    count={3}
+                    containerClassName="skeleton flex flex-col gap-4"
+                    className="block flex-1 pt-2 mt-2"
+                  />
+                }
               </div>
             </CardContent>
           </Card>
@@ -139,34 +165,41 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="pb-6 px-2">
-                {negativeFeedbacks.map(feedback =>
-                  <Accordion type="single" collapsible key={feedback.evaluation}>
-                    <AccordionItem value="item-1">
-                      <AccordionTrigger>
-                        <div className="flex gap-2">
-                          <XCircle className="h-6 w-6 stroke-destructive" />
-                          <TypographyLarge>{feedback.title}</TypographyLarge>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <TypographyBody>
-                          {feedback.evaluation}
-                        </TypographyBody>
-                        <TypographySubtle className="mt-2">
-                          <i>You said:</i>
-                          <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
-                            "{feedback.citation}"
-                          </Button>
-                          <br/>
-                          <br/>
-                          <i>Suggestion:</i>
-                          <br/>
-                          <p>"{feedback.suggestion}"</p>
-                        </TypographySubtle>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                )}
+                {negativeFeedbacks?.length > 0
+                  ? negativeFeedbacks.map(feedback =>
+                    <Accordion type="single" collapsible key={feedback.evaluation}>
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger>
+                          <div className="flex gap-2">
+                            <XCircle className="h-6 w-6 stroke-destructive" />
+                            <TypographyLarge>{feedback.title}</TypographyLarge>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <TypographyBody>
+                            {feedback.evaluation}
+                          </TypographyBody>
+                          <TypographySubtle className="mt-2">
+                            <i>You said:</i>
+                            <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
+                              "{feedback.citation}"
+                            </Button>
+                            <br />
+                            <br />
+                            <i>Suggestion:</i>
+                            <br />
+                            <p>"{feedback.suggestion}"</p>
+                          </TypographySubtle>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  )
+                  : <Skeleton
+                    count={3}
+                    containerClassName="skeleton flex flex-col gap-4"
+                    className="block flex-1 pt-2 mt-2"
+                  />
+                }
               </div>
             </CardContent>
           </Card>

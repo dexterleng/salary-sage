@@ -3,6 +3,8 @@ import { Input } from "../ui/input";
 import { TypographyBody, TypographyH4, TypographySmall } from "../ui/typography";
 import Fuse from 'fuse.js'
 import { useEffect, useState, useRef } from "react";
+import Skeleton from "react-loading-skeleton"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 type TranscriptProps = {
   position: string;
@@ -84,13 +86,19 @@ export default function Transcript({ position, company, tags, transcript, citati
           <Button variant="outline">Search</Button>
         </div>
         <div className="flex flex-col gap-2 mt-4 overflow-y-auto max-h-[200vh]">
-          {transcript.map((line) =>
-            <div className={`p-2 rounded-md ${foundResult == line.message ? "bg-secondary/50 duration-150" : ""}`}
-              key={line.message} ref={foundResult === line.message ? selectedElementRef : null}>
-              <TypographyBody className="text-accent">{line.timestamp}</TypographyBody>
-              <TypographySmall>{line.message}</TypographySmall>
-            </div>
-          )}
+          {transcript?.length > 0
+            ? transcript.map((line) =>
+              <div className={`p-2 rounded-md ${foundResult == line.message ? "bg-secondary/50 duration-150" : ""}`}
+                key={line.message} ref={foundResult === line.message ? selectedElementRef : null}>
+                <TypographyBody className="text-accent">{line.timestamp}</TypographyBody>
+                <TypographySmall>{line.message}</TypographySmall>
+              </div>
+            )
+            : <Skeleton
+              count={20}
+              containerClassName="skeleton flex flex-col mt-4"
+              className="block flex-1"
+            />}
         </div>
       </div>
     </div>
