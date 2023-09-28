@@ -29,10 +29,16 @@ export async function POST(request: Request) {
   const maxExpectedMonthlyIncome = parseInt(formData.get('maxExpectedMonthlyIncome') as string);
 
   const resumeFile: File | null = formData.get('resume') as any
-  const resumeFileBuffer = await resumeFile!.arrayBuffer();
-  const resumeText: string = await readPdf(resumeFileBuffer!)
-  
-  
+  let resumeText;
+  if (resumeFile) {
+    try {
+      const resumeFileBuffer = await resumeFile.arrayBuffer();
+      resumeText = await readPdf(resumeFileBuffer)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   console.log({ yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, resumeText })
 
   await supabase

@@ -100,7 +100,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadingTexts = ["Hang on", "We are setting up your negotiation", "This might take a minute"];
+  const loadingTexts = ["Quickly skimming 'Negotiations for Dummies'. Ready in a flash!", "Gathering data to give you the upper hand. Ready to negotiate?", "Analyzing current market salaries. Preparing your edge...", "Polishing our negotiation skills. Stand by!", "Laying out the negotiation tablecloth. Setting your seat...", "Brace yourself. We're about to elevate your negotiation game."];
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
 
   const [opacityClass, setOpacityClass] = useState("opacity-100");

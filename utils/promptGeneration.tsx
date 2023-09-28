@@ -42,34 +42,46 @@ export function getFeedbackPrompts(
         {
             role: "system",
             content:
-                `1) Step by step, evaluate how well the candidate performed in this salary negotiation for each of the metrics below. Provide evaluation and evidence for them if there exists, otherwise simply say that there is no evidence.
-        2) Then, account for the evaluation and evidence to come up with a score from 0-100 for each of the metrics. If there is no evidence or evaluation relevant, return 50.
-        3) Return in a json format as an array of metric dictionaries:
-        [{
-        "metric": <metric>,
-        "evaluation": <evaluation>,
-        "score": <score>,
-        },...]
-        `
-    },
+                `
+                You are a professional salary negotiator. You have been given a transcript of a salary negotiation for a specific role between your client, the candidate, and the recruiter of the company.
+                1) Step by step, evaluate how well the candidate performed in this salary negotiation for each of the metrics below. Provide evaluation and evidence for them if there exists, otherwise simply say that there is no evidence.
+                2) Then, account for the evaluation and evidence to come up with a score from 0-100 for each of the metrics. If there is no evidence or evaluation relevant, return 50.
+                3) Return in a json format as an array of metric dictionaries:
+                [{
+                "metric": <metric>,
+                "evaluation": <evaluation>,
+                "score": <score>,
+                },...]
+            `
+        },
         
         {
             role: "user",
             content:
-                `Metrics:
-        1. Preparation Score: A candidate's success often hinges on how well they're prepared. This metric evaluates their research on market salaries, company benefits, industry trends, and their own worth.
-            0: No preparation
-            100: Comprehensive and thorough preparation with all relevant data and benchmarks.
-        2. Value Proposition Score: How effectively the candidate presents their value can make or break a negotiation. This metric gauges their ability to justify their salary request by showcasing their skills, experiences, and potential contributions.
-            0: No clear value proposition
-            100: Exceptional demonstration of worth, aligning perfectly with the requested salary.
-        3. Relationship Building: Successful negotiations are built on trust and mutual respect. This metric assesses the candidate's ability to maintain or strengthen their rapport with the hiring manager or recruiter during the negotiation.
-            0: Severely damages relationship
-            100: Enhances the relationship through positive and constructive negotiation.
-        4. Assertiveness Level: Negotiating a salary requires a delicate balance of assertiveness. This metric evaluates a candidate's ability to confidently present their case, stand their ground, and advocate for their worth, without coming off as overly aggressive or too passive.
-            0: Too passive or overly aggressive
-            100: Perfect balance of assertiveness, advocating for oneself while maintaining respect and understanding for the other party.
-        Output them as "preparation", "value_proposition", "relationship_building" and "assertiveness" respectively in the output json's metric field.
+                `
+                Company and Role:
+                ${company}, ${jobTitle}
+
+                Suitability Analysis:
+                ${suitabilityAnalysis}
+
+                Transcript:
+                ${transcript}
+
+                Metrics:
+                1. Preparation Score: A candidate's success often hinges on how well they're prepared. This metric evaluates their research on market salaries, company benefits, industry trends, and their own worth.
+                    0: No preparation
+                    100: Comprehensive and thorough preparation with all relevant data and benchmarks.
+                2. Value Proposition Score: How effectively the candidate presents their value can make or break a negotiation. This metric gauges their ability to justify their salary request by showcasing their skills, experiences, and potential contributions.
+                    0: No clear value proposition
+                    100: Exceptional demonstration of worth, aligning perfectly with the requested salary.
+                3. Relationship Building: Successful negotiations are built on trust and mutual respect. This metric assesses the candidate's ability to maintain or strengthen their rapport with the hiring manager or recruiter during the negotiation.
+                    0: Severely damages relationship
+                    100: Enhances the relationship through positive and constructive negotiation.
+                4. Assertiveness Level: Negotiating a salary requires a delicate balance of assertiveness. This metric evaluates a candidate's ability to confidently present their case, stand their ground, and advocate for their worth, without coming off as overly aggressive or too passive.
+                    0: Too passive or overly aggressive
+                    100: Perfect balance of assertiveness, advocating for oneself while maintaining respect and understanding for the other party.
+                Output them as "preparation", "value_proposition", "relationship_building" and "assertiveness" respectively in the output json's metric field.
             `}
     ];
 
@@ -206,20 +218,22 @@ export function getSuitabilityPrompt(
 }
 
 export function getHintsPrompt(
-    transcript: string, company: string, job_title: string, suitability_analysis: string, market_analysis: string
+    transcript: string, company: string, job_title: string, suitability_analysis: string, market_analysis: string, minExpectedMonthlyIncome: string
 ): ChatMessage[] {
     return [
         {
             role: "system",
             content:
                 `
-                You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with the best concrete hint, the hint should be specific and not generic and fits in a single succinct sentence.
+                You are a professional salary negotiator. You will provide professional advice in the form of hints to me, your client, based on a transcript that I will share. 
+                Primarily, you will give a hint on how I should best respond to the recruiter so that I can get the compensation I desire. Provide me with the best concrete hint, the hint should be specific and not generic and fits in a single succinct sentence.
 
                 You are provided with:
                 1) A transcript of the negotiation thus far, ending with a response from the recruiter
                 2) Company and role for which salary is being negotiated for
                 3) Suitability analysis of the candidate, me, and the role
                 4) Market analysis data of similar jobs and their compensations
+                5) Minimum expected Income I desire from this role
 
 
                 Rule:
@@ -233,6 +247,9 @@ export function getHintsPrompt(
                 Example output:
                 ["You should highlight your past internship experience at Apple gave you expertise in dealing with large distributed systems that is highly relevant to this role."]
 
+                Minimum Expected Income:
+                ${minExpectedMonthlyIncome}
+                
                 Transcript:
                 """
                 ${transcript}
