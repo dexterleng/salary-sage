@@ -398,7 +398,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
         </Card>
         <div className="mt-4 w-full flex justify-center relative">
           <p
-            className={`text-md text-slate-600 transition-opacity duration-1000 ${opacityClass} absolute`}
+            className={`w-full text-center text-md text-slate-600 transition-opacity duration-1000 ${opacityClass} absolute`}
           >
             {isLoading ? loadingTexts[loadingTextIndex] : ""}
           </p>
