@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { getFeedbackPrompts } from '@/utils/promptGeneration';
-import { prependRoles, chainCompletionPrompts } from '@/utils/openaiChat'
+import { prependRoles, getChatCompletionMessage } from '@/utils/openaiChat'
 import { Models } from 'openai/resources';
 export const revalidate = 0
 
@@ -81,12 +81,11 @@ export async function GET(
                 transcript += m.content + "\n"
             });
             const feedbackPrompts = getFeedbackPrompts(interview.companyName, interview.job_title, interview.suitability_analysis, transcript)
-            
-            const [qualitativeFeedbackStr, quantitativeFeedbackStr] = await chainCompletionPrompts(feedbackPrompts, "gpt-4")
+            const [qualitativeFeedbackStr, quantitativeFeedbackStr] = await Promise.all(feedbackPrompts.map(p => getChatCompletionMessage(p, "gpt-4")))
             console.log("qualitativeFeedbackStr", qualitativeFeedbackStr)
             console.log("quantitativeFeedbackStr", quantitativeFeedbackStr)
-            qualitativeFeedbacks = JSON.parse(qualitativeFeedbackStr)
-            quantitativeFeedbacks = JSON.parse(quantitativeFeedbackStr)
+            qualitativeFeedbacks = JSON.parse(qualitativeFeedbackStr!)
+            quantitativeFeedbacks = JSON.parse(quantitativeFeedbackStr!)
             await supabase
             .from('qualitative_feedback')
             .insert(
