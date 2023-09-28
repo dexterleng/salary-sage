@@ -32,7 +32,8 @@ export async function POST(request: Request) {
 
   const formData = await request.formData();
   const jobTitle = formData.get('jobTitle') as string;
-  const jobDescription = (formData.get('jobDescription') as string) ?? defaultJD;
+  let jobDescription = (formData.get('jobDescription') as string) ?? defaultJD;
+  jobDescription = jobDescription == '' ? defaultJD : jobDescription
   const companyName = formData.get('companyName') as string;
   const difficulty = parseInt(formData.get('difficulty') as string);
   console.log({ jobTitle, jobDescription, companyName, difficulty })
