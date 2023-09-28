@@ -3,11 +3,12 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { getChatCompletionMessage, prependRoles, recruiterPrefix } from '@/utils/openaiChat'
-import { recruiterName } from '@/utils/placeholders'
+import { jobTitle, recruiterName } from '@/utils/placeholders'
 import { ENDSUFFIX } from '@/utils/promptGeneration';
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 const { GOOGLE_SERVICE_ACCOUNT_JSON, OPENAI_API_KEY } = process.env;
 const googleServiceAccount = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON as string);
+export const revalidate = 0
 
 export async function POST(
   request: NextRequest,
@@ -65,7 +66,7 @@ export async function POST(
     let replyText = ''
     const receiptDatetime = new Date()
     if (isFirstResponse) {
-      replyText = get_opening_statement(profile.firstName, recruiterName, interview.companyName, interview.jobTitle)
+      replyText = get_opening_statement(profile.firstName, recruiterName, interview.companyName, jobTitle)
     } else {
       const formData = await request.formData();
       const file: File | null = formData.get('file') as any
