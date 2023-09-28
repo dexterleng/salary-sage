@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { TypographySmall, TypographySubtle } from "@/components/ui/typography";
+import { TypographySmall, TypographySubtle, TypographyBody } from "@/components/ui/typography";
 import { Mic, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +15,7 @@ type AudioRecorderProps = {
 export default function AudioRecorder({ isRecording, setIsRecording, isDisabled, setIsUserAudioPlaying, hasPracticeEnded, onSubmit }: AudioRecorderProps) {
   const [audioData, setAudioData] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState('');
+  const [audioLength, setAudioLength] = useState(0); // in seconds
   const mediaRecorder = useRef<MediaRecorder | null>(null);
 
   const handleRecordToggle = () => {
@@ -27,6 +28,18 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
             setAudioURL(URL.createObjectURL(e.data));
           };
           mediaRecorder.current.start();
+          // start audio length timer
+          mediaRecorder.current.onstart = () => {
+            setAudioLength(0);
+            const timer = setInterval(() => {
+              setAudioLength(prev => prev + 1);
+            }, 1000);
+            if (mediaRecorder.current) {
+              mediaRecorder.current.onstop = () => {
+                clearInterval(timer);
+              };
+            }
+          };
           setIsRecording(true);
         })
         .catch(err => {
@@ -49,6 +62,12 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
     setAudioURL('');
   };
 
+  const getTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {
@@ -58,6 +77,7 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
               <Square className="w-12 h-12 stroke-destructive" />
             </Button>
             <TypographySmall className="mt-4 text-center text-destructive">Stop Recording</TypographySmall>
+            <TypographyBody className="mt-4 text-center">{getTime(audioLength)}</TypographyBody>
           </div>
           : <div className='flex flex-col items-center justify-center'>
             <Button variant="secondary" className="group rounded-full w-24 h-24" disabled={isDisabled} onClick={handleRecordToggle}>

@@ -24,6 +24,8 @@ import UpdateSettingsDialog from "./UpdateSettingsDialog";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation";
+import { TypographyH2 } from "@/components/ui/typography";
+import Image from "next/image";
 
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies })
@@ -43,11 +45,34 @@ export default async function Dashboard() {
     .throwOnError()
 
   return (
-    <div className="w-full flex justify-center px-4 py-8 sm:p-12">
+    <div className="w-full flex justify-center px-4 py-8 sm:p-12 relative">
       <div className="flex-1 space-y-4 max-w-5xl">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <TypographyH2>Dashboard</TypographyH2>
         </div>
+        <Link
+          href="/negotiations/new"
+          className="flex items-center group"
+        >
+          <Card className="bg-glass shadow-glass col-span-2 w-full my-8">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col justify-center relative h-36">
+              <div className="flex justify-center items-center gap-16 px-12 py-4">
+                <Image src="/images/interview-clip-art.png" width={180} height={200} alt="Interview clip art image" />
+                <div>
+                  <TypographyH2 className="group-hover:text-primary underline-offset-4 group-hover:underline">
+                    Practice an AI mock negotiation
+                  </TypographyH2>
+                  These mock sessions will help you prepare for the real thing to get the pay you deserve.
+                </div>
+              </div>
+              <ArrowRightIcon className="absolute bottom-8 right-8" width={24} height={24} />
+            </CardContent>
+          </Card>
+        </Link>
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

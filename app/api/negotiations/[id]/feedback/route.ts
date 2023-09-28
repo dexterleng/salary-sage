@@ -117,18 +117,22 @@ export async function GET(
             qualitative: qualitativeFeedbacks,
             quantitative: {
                 preparation: {
+                    title: "Preparation",
                     evaluation: preparationMetric!.evaluation,
                     score: preparationMetric!.score
                 },
                 value_proposition: {
+                    title: "Value Proposition",
                     evaluation: valueMetric!.evaluation,
                     score: valueMetric!.score
                 },
                 relationship_building: {
+                    title: "Relationship Building",
                     evaluation: relationshipMetric!.evaluation,
                     score: relationshipMetric!.score
                 },
                 assertiveness: {
+                    title: "Assertiveness",
                     evaluation: assertivenessMetric!.evaluation,
                     score: assertivenessMetric!.score
                 }
