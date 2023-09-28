@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { getHiringManagerGuidelinesPrompt, getRecruiterNegotiationPrompt, getRecruiterMetaInstructionsPrompt, getSuitabilityPrompt } from '@/utils/promptGeneration'
 import { getChatCompletionMessage } from '@/utils/openaiChat'
-import { marketAnalysis, parsedResume, location } from '@/utils/placeholders'
+import { marketAnalysis, parsedResume, location, jobDescription as defaultJD } from '@/utils/placeholders'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
   const formData = await request.formData();
   const jobTitle = formData.get('jobTitle') as string;
-  const jobDescription = formData.get('jobDescription') as string;
+  const jobDescription = (formData.get('jobDescription') as string) ?? defaultJD;
   const companyName = formData.get('companyName') as string;
   const difficulty = parseInt(formData.get('difficulty') as string);
   console.log({ jobTitle, jobDescription, companyName, difficulty })
