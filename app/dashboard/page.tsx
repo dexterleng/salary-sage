@@ -188,13 +188,13 @@ export default async function Dashboard() {
               <CardTitle>
                 <TypographyH3>Your Last Negotiation</TypographyH3>
               </CardTitle>
-              <Link
+              {lastNegotiationId ? <Link
                 href={`/negotiations/${lastNegotiationId}/feedback`}
                 className="flex items-center text-muted-foreground hover:text-foreground text-sm gap-1"
               >
                 <span>View more</span>
                 <ArrowRightIcon />
-              </Link>
+              </Link> : <></>}
             </CardHeader>
             <CardContent className="mt-2 mx-2">
               <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={false} size={84} />
