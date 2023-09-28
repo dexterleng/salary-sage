@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   }
 
   const formData = await request.formData();
+  const jobTitle = formData.get('jobTitle') as string
   const firstName = formData.get('firstName') as string
   const lastName = formData.get('lastName') as string
   const yearsOfExperience = parseInt(formData.get('yearsOfExperience') as string);
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
 
   await supabase
     .from('user')
-    .update({ firstName, lastName, yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, userId: user.id })
+    .update({ jobTitle: jobTitle ?? "Software Engineer", firstName, lastName, yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, userId: user.id })
     .eq('userId', user.id)
     .throwOnError();
 

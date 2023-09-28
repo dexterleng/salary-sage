@@ -65,7 +65,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      jobTitle: "software engineer",
+      jobTitle: userData.jobTitle ?? "Software Engineer",
       difficulty: 3,
     },
   });
@@ -181,7 +181,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
                         >
                           {field.value
                             ? jobTitles.find(
-                                (title) => title.id === field.value
+                                (title) => title.name === field.value
                               )?.name
                             : "Select job title"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -196,15 +196,15 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
                           {jobTitles.map((title) => (
                             <CommandItem
                               value={title.name}
-                              key={title.id}
+                              key={title.name}
                               onSelect={() => {
-                                form.setValue("jobTitle", title.id);
+                                form.setValue("jobTitle", title.name);
                               }}
                             >
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  title.id === field.value
+                                  title.name === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
