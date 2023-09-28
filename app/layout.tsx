@@ -16,7 +16,7 @@ const mulish = Mulish({
 });
 
 export const metadata = {
-  title: "SalarySage",
+  title: "Salary Sage",
   description: "Practice your salary negotiation skills with AI",
 };
 

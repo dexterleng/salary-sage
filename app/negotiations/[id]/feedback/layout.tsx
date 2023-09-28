@@ -4,6 +4,11 @@ import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
+export const metadata = {
+  title: "Feedback",
+  description: "Practice your salary negotiation skills with AI",
+};
+
 export default async function FeedbackLayout({
   children,
 }: {
