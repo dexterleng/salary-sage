@@ -22,27 +22,68 @@ import { Progress } from "@/components/ui/progress";
 import { User } from "@supabase/supabase-js";
 import UpdateSettingsDialog from "./UpdateSettingsDialog";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { TypographyH2 } from "@/components/ui/typography";
 import Image from "next/image";
 
 export default async function Dashboard() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = createServerComponentClient({ cookies });
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirect('/login/')
+    return redirect("/login/");
   }
 
   const { data: userData } = await supabase
-    .from('user')
+    .from("user")
     .select()
-    .eq('userId', user.id)
+    .eq("userId", user.id)
     .single()
-    .throwOnError()
+    .throwOnError();
+
+  const { data: negotiations } = await supabase
+    .from("interview")
+    .select()
+    .eq("userId", user.id)
+    .eq("hasEnded", true)
+    .order("createdAt", { ascending: false })
+    .throwOnError();
+
+  function formatRelativeDate(date: Date) {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInSeconds < 60) {
+      return "less than a minute ago";
+    } else if (diffInMinutes === 1) {
+      return "1 minute ago";
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} minutes ago`;
+    } else if (diffInHours === 1) {
+      return "1 hour ago";
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hours ago`;
+    } else if (diffInDays === 1) {
+      return "1 day ago";
+    } else if (diffInDays < 7) {
+      return `${diffInDays} days ago`;
+    } else {
+      // Return in 'dd/mm/yyyy' format if older than a week
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // January is 0!
+      const year = date.getFullYear();
+
+      return `${day}/${month}/${year}`;
+    }
+  }
+
+  console.log(negotiations);
 
   return (
     <div className="w-full flex justify-center px-4 py-8 sm:p-12 relative">
@@ -132,7 +173,7 @@ export default async function Dashboard() {
 
         <div className="pt-8 flex items-center justify-between space-y-2">
           <h3 className="text-2xl font-semibold tracking-tight">
-            Recent negotiations
+            Negotiations
           </h3>
           <div className="flex items-center space-x-2">
             <Link
@@ -148,62 +189,83 @@ export default async function Dashboard() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card
-              key={i}
-              className="group cursor-pointer flex flex-row justify-between hover:bg-slate-50/50"
-            >
-              <div>
-                <CardHeader className="space-y-0 px-6 pt-6 pb-2">
-                  <div className="space-y-1">
-                    <CardTitle className="text-lg group-hover:underline">
-                      Software Engineer
-                    </CardTitle>
-                    <CardDescription>Open Government Products</CardDescription>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex space-x-1 text-xs text-emerald-700">
-                    <div className="px-2 py-0.5 bg-emerald-50 border-emerald-400 border rounded-md">
-                      Arrogant
-                    </div>
-                    <div className="px-2 py-0.5 bg-emerald-50 border-emerald-400 border rounded-md">
-                      Difficult
-                    </div>
-                  </div>
-                  <div className="pt-4 text-xs text-muted-foreground">
-                    3 days ago
-                  </div>
-                </CardContent>
-              </div>
-              <div className="p-6">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-                    >
-                      <DotsHorizontalIcon className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-[160px]">
-                    <DropdownMenuItem>Practice again</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </Card>
-          ))}
-        </div>
+        {negotiations && negotiations.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {negotiations.map((negotiation) => {
+              let difficulty = "";
+              let difficultyColor = "";
+              if (negotiation.difficulty <= 3) {
+                difficulty = "Easy";
+                difficultyColor = "emerald";
+              } else if (negotiation.difficulty <= 5) {
+                difficulty = "Medium";
+                difficultyColor = "orange";
+              } else {
+                difficulty = "Hard";
+                difficultyColor = "red";
+              }
 
-        <Link
-          href="/"
-          className="pt-2 flex items-center gap-1 text-sm text-emerald-500 hover:text-emerald-600"
-        >
-          See all negotiations
-          <ArrowTopRightIcon />
-        </Link>
+              return (
+                <Card
+                  key={negotiation.id}
+                  className="group cursor-pointer flex flex-row justify-between hover:bg-slate-50"
+                >
+                  <div>
+                    <CardHeader className="space-y-0 px-6 pt-6 pb-2">
+                      <div className="space-y-1">
+                        <CardTitle className="text-lg group-hover:underline">
+                          {negotiation.job_title}
+                        </CardTitle>
+                        <CardDescription>
+                          {negotiation.companyName}
+                        </CardDescription>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div
+                        className={`flex space-x-1 text-xs text-${difficultyColor}-700`}
+                      >
+                        <div
+                          className={`px-2 py-0.5 bg-${difficultyColor}-50 border-${difficultyColor}-400 border rounded-md`}
+                        >
+                          {difficulty}
+                        </div>
+                      </div>
+                      <div className="pt-4 text-xs text-muted-foreground">
+                        {/* {formatRelativeDate(new Date(negotiation.createdAt))} */}
+                        {formatRelativeDate(new Date())}
+                      </div>
+                    </CardContent>
+                  </div>
+                  <div className="p-6">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                        >
+                          <DotsHorizontalIcon className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-[160px]">
+                        <DropdownMenuItem>Practice again</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        ) : (
+          <div>
+            <Card className="p-20 w-full flex flex-col items-center">
+              <p className="text-xl text-center text-muted">
+                You haven't completed any practices yet
+              </p>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
