@@ -88,7 +88,7 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
                   </p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="bg-muted-foreground/50" />
               <DropdownMenuItem
                 onClick={() => {
                   setIsUpdateSettingsDialogOpen(true);
