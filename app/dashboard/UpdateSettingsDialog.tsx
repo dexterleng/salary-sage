@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -359,7 +357,7 @@ export default function UpdateSettingsDialog({
 
               <Button
                 type="submit"
-                className="font-semibold border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80"
+                className="font-semibold border border-emerald-400 bg-emerald-600 hover:bg-emerald-600/80 w-[120px]"
                 disabled={isLoading}
               >
                 {isLoading ? (
