@@ -81,7 +81,7 @@ export async function GET(
                 transcript += m.content + "\n"
             });
             const feedbackPrompts = getFeedbackPrompts(interview.companyName, interview.job_title, interview.suitability_analysis, transcript)
-            const [qualitativeFeedbackStr, quantitativeFeedbackStr] = await Promise.all(feedbackPrompts.map(p => getChatCompletionMessage(p, "gpt-4")))
+            const [qualitativeFeedbackStr, quantitativeFeedbackStr] = await Promise.all(feedbackPrompts.map(p => getChatCompletionMessage(p, "gpt-3.5-turbo")))
             console.log("qualitativeFeedbackStr", qualitativeFeedbackStr)
             console.log("quantitativeFeedbackStr", quantitativeFeedbackStr)
             qualitativeFeedbacks = JSON.parse(qualitativeFeedbackStr!)
