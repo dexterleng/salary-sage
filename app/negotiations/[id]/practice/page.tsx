@@ -224,7 +224,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                   hint
                     ? <div className="flex items-center justify-center">            
                       <TypographySmall>{hint}</TypographySmall>
-                      <Image src="/images/salary-sage-mascot.png" width={65} height={120} alt="Salary sage mascot" className="hue-rotate-30 w-full" />
+                      <Image src="/images/salary-sage-mascot.png" width={70} height={120} alt="Salary sage mascot" className="hue-rotate-30 ml-2" />
                       </div>
                     : <div className="flex justify-center items-center">
                       Loading hints...
