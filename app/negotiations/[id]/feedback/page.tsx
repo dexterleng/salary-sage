@@ -99,7 +99,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="px-6 pb-6">
-                <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={true} />
+                <ScoresCircular metrics={quantitativeFeedbacks} isEvaluationShown={true}/>
               </div>
             </CardContent>
           </Card>

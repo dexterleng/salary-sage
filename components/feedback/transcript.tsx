@@ -59,9 +59,10 @@ export default function Transcript({ position, company, tags, transcript, citati
 
       // convert milliseconds to minutes and seconds
       const minutes = Math.floor(timeElapsed / 60000);
-      const seconds = ((timeElapsed % 60000) / 1000).toFixed(0);
+      const seconds = (timeElapsed % 60000) / 1000
+      const secondsString = seconds > 9 ? seconds.toFixed() : `0${seconds.toFixed()}`;
       const speaker = line.isUser ? "You" : "Interviewer";
-      line.timestamp = `${minutes}:${seconds} ${speaker}`;
+      line.timestamp = `${minutes}:${secondsString} ${speaker}`;
     })
   }, [transcript]);
 

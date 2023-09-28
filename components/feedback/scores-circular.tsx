@@ -1,7 +1,14 @@
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { TypographyBody } from '../ui/typography';
+import { TypographyBody, TypographySmall } from '../ui/typography';
 import { useEffect, useState } from 'react';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import { Info } from "lucide-react";
+
 
 interface QuantitativeFeedback {
   title: string,
@@ -38,12 +45,12 @@ export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCir
   }, [metrics])
 
   return (
-    <div className="flex gap-8">
+    <div className={`flex gap-8`}>
       {flatMetrics?.map(
         (flatMetric) =>
         (
-          <div key={flatMetric.title}>
-            <div style={{ width: 100, height: 100 }}>
+          <div key={flatMetric.title} className='flex flex-col items-center'>
+            <div style={{ width: 108, height: 108 }}>
               <CircularProgressbar
                 value={flatMetric.score}
                 text={`${flatMetric.score}%`}
@@ -61,8 +68,18 @@ export default function ScoresCircular({ metrics, isEvaluationShown }: ScoresCir
                 background={true}
               />
             </div>
-            <TypographyBody className="mt-2 text-center">
+            <TypographyBody className="mt-2 text-center h-full flex items-center">
               {flatMetric.title}
+              {isEvaluationShown && flatMetric.evaluation &&
+                <HoverCard openDelay={100} closeDelay={100}>
+                  <HoverCardTrigger><Info className="inline ml-1 hover:stroke-primary" size={14} /></HoverCardTrigger>
+                  <HoverCardContent>
+                    <TypographySmall className="text-center">
+                      {flatMetric.evaluation}
+                    </TypographySmall>
+                  </HoverCardContent>
+                </HoverCard>
+              }
             </TypographyBody>
           </div>
         )
