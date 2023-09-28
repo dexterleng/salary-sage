@@ -15,12 +15,9 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import {
   ArrowRightIcon,
-  ArrowTopRightIcon,
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons";
 import { Progress } from "@/components/ui/progress";
-import { User } from "@supabase/supabase-js";
-import UpdateSettingsDialog from "./UpdateSettingsDialog";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -37,13 +34,6 @@ export default async function Dashboard() {
     return redirect("/login/");
   }
 
-  const { data: userData } = await supabase
-    .from("user")
-    .select()
-    .eq("userId", user.id)
-    .single()
-    .throwOnError();
-
   const { data: negotiations } = await supabase
     .from("interview")
     .select()
@@ -51,6 +41,8 @@ export default async function Dashboard() {
     .eq("hasEnded", true)
     .order("createdAt", { ascending: false })
     .throwOnError();
+
+  const lastNegotiationId = negotiations && negotiations[0].id;
 
   function formatRelativeDate(date: Date) {
     const now = new Date();
@@ -95,14 +87,14 @@ export default async function Dashboard() {
           href="/negotiations/new"
           className="flex items-center group"
         >
-          <Card className="bg-glass shadow-glass col-span-2 w-full my-8">
+          <Card className="bg-glass shadow-glass col-span-2 w-full my-8 hover:shadow-lg duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col justify-center relative h-36">
-              <div className="flex justify-center items-center gap-16 px-12 py-4">
-                <Image src="/images/interview-clip-art.png" width={180} height={200} alt="Interview clip art image" />
+              <div className="flex justify-center items-center gap-16 px-12 pb-4">
+                <Image src="/images/interview-clip-art.png" width={160} height={160} alt="Interview clip art image" />
                 <div>
                   <TypographyH2 className="group-hover:text-primary underline-offset-4 group-hover:underline">
                     Practice an AI mock negotiation
@@ -121,7 +113,7 @@ export default async function Dashboard() {
                 Your last negotiation
               </CardTitle>
               <Link
-                href="/feedback"
+                href={`/negotiations/${lastNegotiationId}/feedback`}
                 className="flex items-center text-muted-foreground hover:text-foreground text-sm gap-1"
               >
                 <span>View more</span>
