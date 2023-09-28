@@ -181,7 +181,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                             onPause={() => setIsInterviewerSpeaking(false)}
                             onEnded={() => showAlertIfPracticeEnded()}
                             src={responseUrl}
-                            className={`${isRecording || isUserAudioPlaying ? 'pointer-events-none opacity-50' : ''}`}
+                            className={`fill-black ${isRecording || isUserAudioPlaying ? 'pointer-events-none opacity-50' : ''}`}
                           ></audio>
                         </div>
                     }
