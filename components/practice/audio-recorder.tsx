@@ -107,7 +107,7 @@ export default function AudioRecorder({ isRecording, setIsRecording, isDisabled,
           </div>
       }
 
-      {audioURL && !isRecording && (
+      {audioURL && !isRecording && (window as any).safari == undefined && (
         <div className='flex flex-col justify-center items-center'>
           <TypographySubtle className='text-xs'>Preview</TypographySubtle>
           <audio
