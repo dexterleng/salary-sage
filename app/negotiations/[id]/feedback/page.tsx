@@ -245,8 +245,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
           </CardHeader>
           <CardContent>
             <div className="px-2 pb-6">
-              <Transcript position="Software Engineer" company="Open Government Products" tags={["Arrogant", "Difficult"]}
-                transcript={transcript} citation={searchedCitation} />
+              <Transcript transcript={transcript} citation={searchedCitation} />
             </div>
           </CardContent>
         </Card>

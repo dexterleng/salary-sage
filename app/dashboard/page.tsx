@@ -155,7 +155,7 @@ export default async function Dashboard() {
 
   return (
     <div className="w-full flex justify-center px-4 py-8 sm:p-12 relative">
-      <div className="flex-1 space-y-4 max-w-5xl">
+      <div className="flex-1 space-y-4 max-w-6xl">
         <div className="flex items-center justify-between space-y-2">
           <TypographyH2>Dashboard</TypographyH2>
         </div>
@@ -169,7 +169,7 @@ export default async function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col justify-center relative h-36">
-              <div className="flex justify-center items-center gap-16 px-12 pb-4">
+              <div className="flex justify-center items-center gap-16 px-12 pb-6 pt-2">
                 <Image src="/images/interview-clip-art.png" width={160} height={160} alt="Interview clip art image" />
                 <div>
                   <TypographyH2 className="group-hover:text-primary underline-offset-4 group-hover:underline">
@@ -182,7 +182,7 @@ export default async function Dashboard() {
             </CardContent>
           </Card>
         </Link>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <Card className="flex-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>
@@ -220,7 +220,7 @@ export default async function Dashboard() {
                 </svg>
               </div>
             </CardHeader>
-            <CardContent className="pb-0">
+            <CardContent className="pb-0 flex items-center justify-center">
               <OverallScores scores={avgScoresPerInterview} />
             </CardContent>
           </Card>

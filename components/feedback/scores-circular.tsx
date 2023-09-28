@@ -45,11 +45,11 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
   }
 
   return (
-    <div className={`flex gap-8`}>
+    <div className={`flex gap-8 justify-evenly`}>
       {flatMetrics?.map(
         (flatMetric) =>
         (
-          <div key={flatMetric.title} className='flex flex-col items-center'>
+          <div key={flatMetric.title} className='flex flex-col items-center flex-1'>
             <div style={{ width: size, height: size }}>
               {flatMetric.score >= 0 && <CircularProgressbar
                 value={flatMetric.score}
