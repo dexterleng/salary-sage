@@ -87,7 +87,7 @@ export default async function Index() {
             <br></br>made easier with AI
           </h1>
           <p className="mt-6 font-normal text-lg sm:text-2xl text-neutral-600">
-            Your path to a better pay starts here.
+            Boost your wage, with Salary Sage!
           </p>
           <div className="w-full mt-8 flex flex-col items-center gap-2 sm:gap-6">
             <Link
