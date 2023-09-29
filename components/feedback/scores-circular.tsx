@@ -75,8 +75,9 @@ export default function ScoresCircular({ metrics, isEvaluationShown, size = 108 
                   <HoverCardTrigger><Info className="inline ml-1 hover:stroke-primary" size={14} /></HoverCardTrigger>
                   <HoverCardContent>
                     <TypographySmall className="text-center">
-                      <b>Why this score? </b><br />{flatMetric.evaluation}
-                      <TypographySubtle className='italic mt-4'>These are comments from your AI interviewer</TypographySubtle>
+                      <b>Why this score?</b>
+                      <br />
+                      <span className="text-muted">{flatMetric.evaluation}</span>
                     </TypographySmall>
                   </HoverCardContent>
                 </HoverCard>

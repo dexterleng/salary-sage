@@ -165,9 +165,7 @@ export default function Practice({ params }: { params: { id: string } }) {
             <CardHeader>
               <CardTitle>
                 <div className="flex items-center">
-                  <div className="rounded-full w-12 h-12 bg-secondary flex items-center justify-center">
-                    <BotIcon className="w-6 h-6 stroke-accent" />
-                  </div>
+                  <Image src="/images/ai-interviewer.jpg" width={50} height={50} alt="Interviewer pic" className="ml-2 rounded-full" />
                   <div>
                     <TypographyBody className="ml-4 text-accent">Interviewer</TypographyBody>
                   </div>
@@ -220,7 +218,7 @@ export default function Practice({ params }: { params: { id: string } }) {
             <CardHeader>
               <CardTitle>
                 <div className="flex items-center">
-                  <div className="rounded-full w-12 h-12 bg-glass flex items-center justify-center">
+                  <div className="rounded-full w-12 h-12 bg-glass flex items-center justify-center ml-2">
                     <User className="w-6 h-6 stroke-accent" />
                   </div>
                   <div>
@@ -241,7 +239,7 @@ export default function Practice({ params }: { params: { id: string } }) {
               </div>
               <Popover>
                 <PopoverTrigger className="group" disabled={isProcessing || isInterviewerSpeaking}>
-                  <TypographySubtle className="absolute right-6 bottom-0 p-2">
+                  <TypographySubtle className="absolute right-8 bottom-0 p-2">
                     Stuck?
                     <span className="text-primary underline-offset-4 group-hover:underline ml-1" >Get Hints</span>
                   </TypographySubtle>
@@ -250,7 +248,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                   hint
                     ? <div className="flex items-center justify-center">
                       <TypographySmall>{hint}</TypographySmall>
-                      <Image src="/images/salary-sage-mascot.png" width={70} height={120} alt="Salary sage mascot" className="hue-rotate-30 ml-2" />
+                      <Image src="/app-icon.svg" width={50} height={50} alt="Salary sage mascot" className="ml-2" />
                     </div>
                     : <div className="flex justify-center items-center">
                       Loading hints...
