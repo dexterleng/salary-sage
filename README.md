@@ -12,8 +12,8 @@ It is built with Next.js, Supabase, and Tailwind CSS.
 | ---- | ------------- | ------ | ---- |
 | Charisma Kausar | A0226593X | @ckcherry23 | Frontend + UI/UX |
 | Dexter Leng | A0273293Y | @dexterleng | Fullstack |
-| Sherwin | A0 | @ | Prompt Engineering + Backend |
-| Quan Teng Foong | A0 | @ | Backend |
+| Sherwin | A0218177Y | @sherrpass | Prompt Engineering + Backend |
+| Quan Teng Foong | A0223929X | @kaldius | Backend |
 
 
 ## Setup instructions
