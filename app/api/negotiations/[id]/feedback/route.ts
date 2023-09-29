@@ -28,10 +28,22 @@ export async function GET(
     try {
         const interviewId = params.id;
         const supabase = createRouteHandlerClient({ cookies })
-        // const { data: { user } } = await supabase.auth.getUser();
-        // if (!user) {
-        // return NextResponse.json({ success: false, error: "Request failed" });
-        // } 
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+        return NextResponse.json({ success: false, error: "Unauthorised" }, { status: 401 });
+        } 
+
+        const { data: interview } = await supabase
+        .from('interview')
+        .select()
+        .eq('id', interviewId)
+        .single()
+        .throwOnError();
+
+        if (user.id != interview.userId) {
+        return NextResponse.json({ success: false, error: "Unauthorised" },  { status: 401 });
+        } 
+
         const { data: chatMessages } = await supabase
         .from('interview_message')
         .select()
@@ -41,12 +53,7 @@ export async function GET(
         .limit(100)
         .throwOnError()
         console.log("chatMessages", chatMessages)
-        const { data: interview } = await supabase
-            .from('interview')
-            .select()
-            .eq('id', interviewId)
-            .single()
-            .throwOnError();
+
 
         let { data: qualitativeFeedbacksExisting } = await supabase
             .from('qualitative_feedback')

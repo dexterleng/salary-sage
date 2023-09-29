@@ -328,8 +328,8 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
             <div>
               <FormLabel
                 className={cn(
-                  form.formState.errors.minExpectedMonthlyIncome ||
-                    form.formState.errors.maxExpectedMonthlyIncome
+                  form.formState.errors.minExpectedAnnualIncome ||
+                    form.formState.errors.maxExpectedAnnualIncome
                     ? "text-destructive"
                     : null
                 )}
@@ -339,7 +339,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
               <div className="pt-2 flex items-center gap-2">
                 <FormField
                   control={form.control}
-                  name="minExpectedMonthlyIncome"
+                  name="minExpectedAnnualIncome"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl className="flex-1">
@@ -356,7 +356,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
                 <span className="text-sm">To</span>
                 <FormField
                   control={form.control}
-                  name="maxExpectedMonthlyIncome"
+                  name="maxExpectedAnnualIncome"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl className="flex-1">
@@ -371,11 +371,11 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
                   )}
                 />
               </div>
-              {form.formState.errors?.minExpectedMonthlyIncome ||
-              form.formState.errors?.maxExpectedMonthlyIncome ? (
+              {form.formState.errors?.minExpectedAnnualIncome ||
+              form.formState.errors?.maxExpectedAnnualIncome ? (
                 <FormMessage className="pt-2">
-                  {form.formState.errors.minExpectedMonthlyIncome?.message ??
-                    form.formState.errors.maxExpectedMonthlyIncome?.message ??
+                  {form.formState.errors.minExpectedAnnualIncome?.message ??
+                    form.formState.errors.maxExpectedAnnualIncome?.message ??
                     ""}
                 </FormMessage>
               ) : null}

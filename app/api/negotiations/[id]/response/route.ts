@@ -49,7 +49,7 @@ export async function GET(
         prependRoles(chatMessages!).forEach((m) => {
             transcript += m.content + "\n"
         });
-        const hintsPrompt = getHintsPrompt(transcript, interview.companyName, interview.job_title, interview.suitability_analysis, interview.market_analysis, String(profile.minExpectedMonthlyIncome));
+        const hintsPrompt = getHintsPrompt(transcript, interview.companyName, interview.job_title, interview.suitability_analysis, interview.market_analysis, String(profile.minExpectedAnnualIncome));
 
         const hint = await getChatCompletionMessage(hintsPrompt, "gpt-4") as string;
         

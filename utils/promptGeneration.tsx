@@ -216,7 +216,7 @@ export function getSuitabilityPrompt(
 }
 
 export function getHintsPrompt(
-    transcript: string, company: string, job_title: string, suitability_analysis: string, market_analysis: string, minExpectedMonthlyIncome: string
+    transcript: string, company: string, job_title: string, suitability_analysis: string, market_analysis: string, minExpectedAnnualIncome: string
 ): ChatMessage[] {
     return [
         {
@@ -246,7 +246,7 @@ export function getHintsPrompt(
                 ["You should highlight your past internship experience at Apple gave you expertise in dealing with large distributed systems that is highly relevant to this role."]
 
                 Minimum Expected Income:
-                ${minExpectedMonthlyIncome}
+                ${minExpectedAnnualIncome}
                 
                 Transcript:
                 """

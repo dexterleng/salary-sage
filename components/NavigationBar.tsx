@@ -155,15 +155,15 @@ export function NavigationBar({ user, userData }: NavigationBarProps) {
   const {
     yearsOfExperience,
     currentMonthlyIncome,
-    minExpectedMonthlyIncome,
-    maxExpectedMonthlyIncome,
+    minExpectedAnnualIncome,
+    maxExpectedAnnualIncome,
   } = userData || {};
 
   const isOnboarded =
     yearsOfExperience !== null &&
     currentMonthlyIncome !== null &&
-    minExpectedMonthlyIncome !== null &&
-    maxExpectedMonthlyIncome !== null;
+    minExpectedAnnualIncome !== null &&
+    maxExpectedAnnualIncome !== null;
   const [isUpdateSettingsDialogOpen, setIsUpdateSettingsDialogOpen] =
     React.useState(!isOnboarded);
 

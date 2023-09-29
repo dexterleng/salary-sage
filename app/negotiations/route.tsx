@@ -9,10 +9,10 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   /*
-  1. Get interview params: companyName, position, min/maxExpectedMonthlyIncome
+  1. Get interview params: companyName, position, min/maxExpectedAnnualIncome
   2. Get user's profile params: firstName, lastName, yearsOfExperience, userId
   3. Call an async function to setupInterview
-  4. Create a interview row with companyName, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, userId: user.id and the outputs of setupInterview
+  4. Create a interview row with companyName, minExpectedAnnualIncome, maxExpectedAnnualIncome, userId: user.id and the outputs of setupInterview
   5. redirect and return
   */
   const requestUrl = new URL(request.url)

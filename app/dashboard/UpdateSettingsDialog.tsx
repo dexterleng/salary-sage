@@ -43,8 +43,8 @@ const formSchema = z
     lastName: z.string().min(1),
     yearsOfExperience: z.coerce.number().gt(-1).min(0),
     currentMonthlyIncome: z.coerce.number().gt(-1).min(0),
-    minExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
-    maxExpectedMonthlyIncome: z.coerce.number().int().gt(0).min(0),
+    minExpectedAnnualIncome: z.coerce.number().int().gt(0).min(0),
+    maxExpectedAnnualIncome: z.coerce.number().int().gt(0).min(0),
     resume: z.any().refine((obj) => {
       if (!obj) {
         return true;
@@ -54,8 +54,8 @@ const formSchema = z
     }, "Only PDF resumes are supported."),
   })
   .refine(
-    (obj) => obj.minExpectedMonthlyIncome <= obj.maxExpectedMonthlyIncome,
-    { message: "Invalid income range", path: ["maxExpectedMonthlyIncome"] }
+    (obj) => obj.minExpectedAnnualIncome <= obj.maxExpectedAnnualIncome,
+    { message: "Invalid income range", path: ["maxExpectedAnnualIncome"] }
   );
 
 export default function UpdateSettingsDialog({
@@ -73,15 +73,15 @@ export default function UpdateSettingsDialog({
     lastName,
     yearsOfExperience,
     currentMonthlyIncome,
-    minExpectedMonthlyIncome,
-    maxExpectedMonthlyIncome,
+    minExpectedAnnualIncome,
+    maxExpectedAnnualIncome,
   } = userData || {};
 
   const isOnboarded =
     yearsOfExperience !== null &&
     currentMonthlyIncome !== null &&
-    minExpectedMonthlyIncome !== null &&
-    maxExpectedMonthlyIncome !== null;
+    minExpectedAnnualIncome !== null &&
+    maxExpectedAnnualIncome !== null;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -91,8 +91,8 @@ export default function UpdateSettingsDialog({
       lastName: lastName,
       yearsOfExperience: yearsOfExperience,
       currentMonthlyIncome: currentMonthlyIncome,
-      minExpectedMonthlyIncome: minExpectedMonthlyIncome,
-      maxExpectedMonthlyIncome: maxExpectedMonthlyIncome,
+      minExpectedAnnualIncome: minExpectedAnnualIncome,
+      maxExpectedAnnualIncome: maxExpectedAnnualIncome,
     },
   });
 
@@ -247,7 +247,7 @@ export default function UpdateSettingsDialog({
               name="currentMonthlyIncome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Monthly Salary</FormLabel>
+                  <FormLabel>Current Yearly Salary</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -264,18 +264,18 @@ export default function UpdateSettingsDialog({
             <div>
               <FormLabel
                 className={cn(
-                  form.formState.errors.minExpectedMonthlyIncome ||
-                    form.formState.errors.maxExpectedMonthlyIncome
+                  form.formState.errors.minExpectedAnnualIncome ||
+                    form.formState.errors.maxExpectedAnnualIncome
                     ? "text-destructive"
                     : null
                 )}
               >
-                Desired Monthly Salary
+                Desired Yearly Salary
               </FormLabel>
               <div className="pt-2 flex justify-between items-center gap-2 w-full">
                 <FormField
                   control={form.control}
-                  name="minExpectedMonthlyIncome"
+                  name="minExpectedAnnualIncome"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormControl>
@@ -292,7 +292,7 @@ export default function UpdateSettingsDialog({
                 <span className="text-sm">To</span>
                 <FormField
                   control={form.control}
-                  name="maxExpectedMonthlyIncome"
+                  name="maxExpectedAnnualIncome"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormControl>
@@ -307,11 +307,11 @@ export default function UpdateSettingsDialog({
                   )}
                 />
               </div>
-              {form.formState.errors?.minExpectedMonthlyIncome ||
-              form.formState.errors?.maxExpectedMonthlyIncome ? (
+              {form.formState.errors?.minExpectedAnnualIncome ||
+              form.formState.errors?.maxExpectedAnnualIncome ? (
                 <FormMessage className="pt-2">
-                  {form.formState.errors.minExpectedMonthlyIncome?.message ??
-                    form.formState.errors.maxExpectedMonthlyIncome?.message ??
+                  {form.formState.errors.minExpectedAnnualIncome?.message ??
+                    form.formState.errors.maxExpectedAnnualIncome?.message ??
                     ""}
                 </FormMessage>
               ) : null}

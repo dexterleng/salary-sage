@@ -25,8 +25,8 @@ export async function POST(request: Request) {
   const lastName = formData.get('lastName') as string
   const yearsOfExperience = parseInt(formData.get('yearsOfExperience') as string);
   const currentMonthlyIncome = parseInt(formData.get('currentMonthlyIncome') as string);
-  const minExpectedMonthlyIncome = parseInt(formData.get('minExpectedMonthlyIncome') as string);
-  const maxExpectedMonthlyIncome = parseInt(formData.get('maxExpectedMonthlyIncome') as string);
+  const minExpectedAnnualIncome = parseInt(formData.get('minExpectedAnnualIncome') as string);
+  const maxExpectedAnnualIncome = parseInt(formData.get('maxExpectedAnnualIncome') as string);
 
   const resumeFile: File | null = formData.get('resume') as any
   let resumeText;
@@ -39,11 +39,11 @@ export async function POST(request: Request) {
     }
   }
 
-  console.log({ yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, resumeText })
+  console.log({ yearsOfExperience, currentMonthlyIncome, minExpectedAnnualIncome, maxExpectedAnnualIncome, resumeText })
 
   await supabase
     .from('user')
-    .update({ jobTitle: jobTitle ?? "Software Engineer", firstName, lastName, yearsOfExperience, currentMonthlyIncome, minExpectedMonthlyIncome, maxExpectedMonthlyIncome, userId: user.id, resume: resumeText })
+    .update({ jobTitle: jobTitle ?? "Software Engineer", firstName, lastName, yearsOfExperience, currentMonthlyIncome, minExpectedAnnualIncome, maxExpectedAnnualIncome, userId: user.id, resume: resumeText })
     .eq('userId', user.id)
     .throwOnError();
 
