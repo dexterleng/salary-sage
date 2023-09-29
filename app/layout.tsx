@@ -61,7 +61,9 @@ export default async function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-01Z86204LT');
+            gtag('config', 'G-01Z86204LT', {
+              'user_id': ${user ? `"${user.id}"` : "null"}
+            });
           `}
       </Script>
       <body>
