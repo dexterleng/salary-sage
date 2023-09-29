@@ -218,7 +218,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
                               <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
                                 <p className="line-clamp-2">"{feedback.citation}"</p>
                               </Button>
-                              {feedback.citation &&
+                              {feedback.suggestion &&
                                 (<div>
                                   <br />
                                   <br />
