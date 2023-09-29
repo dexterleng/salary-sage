@@ -41,9 +41,10 @@ export default function Practice({ params }: { params: { id: string } }) {
   const [isUserAudioPlaying, setIsUserAudioPlaying] = useState(false);
 
   const [responseUrl, setResponseUrl] = useState<string>();
-  const [response, setResponse] = useState<string>('Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. Hi Charisma, I\'m your interviewer. This meeting is to discuss your salary and other benefits expectations from this role. ');
+  const [response, setResponse] = useState<string>('Hi! Our chat today will be about your salary expectations. What are you looking for?');
   const [hint, setHint] = useState('Thank your interviewer for the opportunity and remain confident.');
-  // const [hintCount, setHintCount] = useState(0);
+
+  const [opacityClass, setOpacityClass] = useState("opacity-100");
 
   useEffect(() => {
     fetchResponse(new FormData())
@@ -135,6 +136,23 @@ export default function Practice({ params }: { params: { id: string } }) {
     router.push(`/negotiations/${interviewId}/feedback`);
   }
 
+  useEffect(() => {
+    let timeout: any;
+    if (isProcessing) {
+      const interval = setInterval(() => {
+        setOpacityClass("opacity-0");
+        timeout = setTimeout(() => {
+          setOpacityClass("opacity-100");
+        }, 1000); // This delay matches the transition duration for fading out.
+      }, 5000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [isProcessing]);
+
   return (
     <div className="p-12 justify-center flex flex-col items-center">
       <div className="max-w-7xl w-full">
@@ -158,11 +176,15 @@ export default function Practice({ params }: { params: { id: string } }) {
             </CardHeader>
             <CardContent>
               <div className="px-2 pb-4">
-                <div className="bg-secondary w-full h-80">
+                <div className="bg-secondary/50 w-full h-80 rounded-lg">
                   <div className="flex flex-col items-center justify-center h-[calc(100%)]">
                     {
                       isProcessing
-                        ? 'Waiting for your interviewer to reply...'
+                        ? <p
+                          className={`w-full text-center text-md text-slate-600 transition-opacity duration-1000 ${opacityClass}`}
+                        >
+                          Waiting for your interviewer to reply...
+                        </p>
                         : <div className="flex flex-col gap-6 justify-evenly items-center h-full w-full p-8">
                           {response && <div className="flex overflow-y-auto w-full pr-4" id="interviewer-response">
                             {/* <TypographyBody>{response}</TypographyBody> */}
@@ -226,10 +248,10 @@ export default function Practice({ params }: { params: { id: string } }) {
                 </PopoverTrigger>
                 <PopoverContent className="bg-glass border-none" align="center">{
                   hint
-                    ? <div className="flex items-center justify-center">            
+                    ? <div className="flex items-center justify-center">
                       <TypographySmall>{hint}</TypographySmall>
                       <Image src="/images/salary-sage-mascot.png" width={70} height={120} alt="Salary sage mascot" className="hue-rotate-30 ml-2" />
-                      </div>
+                    </div>
                     : <div className="flex justify-center items-center">
                       Loading hints...
                       <div className="ml-4 animate-spin w-8 h-8 border-2 border-b-0 border-primary border-solid rounded-full"></div>
