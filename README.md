@@ -24,9 +24,9 @@ It is built with Next.js, Supabase, and Tailwind CSS.
   - Under Settings -> Advanced:
     - System
   - Allow the default Docker socket to be used
-3. supabase link
-4. supabase start
-4. Create .env. local in project root:
+3. `supabase link`
+4. `supabase start`
+4. Create .env.local in project root:
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
@@ -34,7 +34,7 @@ GOOGLE_SERVICE_ACCOUNT_JSON=
 OPENAI_API_KEY=
 INVITE_CODE=
 ```
-5. Start the project: vercel dev
+5. Start the project: `vercel dev`
 
 > Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
 
