@@ -89,6 +89,8 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
       body: formData,
     });
 
+    (window as any).gtag('event', 'create-new-negotiation')
+
     if (response.redirected) {
       router.push(response.url); // navigate to the redirected URL
     } else if (!response.ok) {

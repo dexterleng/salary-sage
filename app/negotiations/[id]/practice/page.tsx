@@ -92,6 +92,8 @@ export default function Practice({ params }: { params: { id: string } }) {
       const audioBlob = await response.blob()
       const audioResponseURL = URL.createObjectURL(audioBlob);
       setResponseUrl(audioResponseURL);
+
+      (window as any).gtag('event', 'speak')
     } catch (error) {
       console.error('Error uploading audio:', error);
     }
@@ -129,6 +131,7 @@ export default function Practice({ params }: { params: { id: string } }) {
         const response = await fetch(`/api/negotiations/${interviewId}/end`, {
           method: 'POST',
         });
+        (window as any).gtag('event', 'end-negotiation')
       } catch (error) {
         console.error('Error ending practice session:', error);
       }
