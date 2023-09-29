@@ -65,6 +65,12 @@ export async function GET(
         console.log("hint: ", outputData.hint)
         console.log("lastMessage: ", lastMessage)
 
+        await supabase
+            .from('interview')
+            .update({ hasEnded: hasEnded })
+            .eq('id', interviewId)
+            .throwOnError();
+
         return NextResponse.json(outputData, { status: 200 });
     } catch (error: any) {
         console.log(error)
