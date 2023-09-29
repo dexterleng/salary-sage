@@ -167,7 +167,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                 <div className="flex items-center">
                   <Image src="/images/ai-interviewer.jpg" width={50} height={50} alt="Interviewer pic" className="ml-2 rounded-full" />
                   <div>
-                    <TypographyBody className="ml-4 text-accent">Interviewer</TypographyBody>
+                    <TypographyBody className="ml-4 text-accent">Interviewer (AI)</TypographyBody>
                   </div>
                 </div>
               </CardTitle>
