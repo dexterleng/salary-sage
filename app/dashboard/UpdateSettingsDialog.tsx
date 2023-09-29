@@ -115,7 +115,7 @@ export default function UpdateSettingsDialog({
       body: formData,
     });
 
-    (window as any).gtag('event', 'update-user')
+    if (window && (window as any).gtag) { (window as any).gtag('event', 'update-user') }
 
     if (response.redirected) {
       window.location.href = "/dashboard/";

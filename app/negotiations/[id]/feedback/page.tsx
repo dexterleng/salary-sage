@@ -57,7 +57,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     fetchResponse();
-    (window as any).gtag('event', 'view-feedback')
+    if (window && (window as any).gtag) { (window as any).gtag('event', 'view-feedback') }
   }, [])
 
   const fetchResponse = async () => {
