@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   if (error) {
     console.log(error)
     return NextResponse.redirect(
-      `${requestUrl.origin}/login?error=${error?.message ?? "Could not authenticate user"}`,
+      `${requestUrl.origin}/login?error=${"Your password is incorrect or your account does not exist."}`,
       {
         // a 301 status is required to redirect from a POST to a GET route
         status: 301,

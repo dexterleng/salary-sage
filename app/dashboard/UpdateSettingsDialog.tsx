@@ -156,7 +156,7 @@ export default function UpdateSettingsDialog({
             </TypographyH2>
           </AlertDialogTitle>
           {!isOnboarded ? (
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-center">
               Providing these details will enhance the realism of your mock
               negotiations.
             </AlertDialogDescription>
