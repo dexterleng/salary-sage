@@ -18,12 +18,23 @@ It is built with Next.js, Supabase, and Tailwind CSS.
 
 ## Setup instructions
 
-1. Create a [new Supabase project](https://database.new)
-1. Run `npx create-next-app -e with-supabase` to create a Next.js app using the Supabase Starter template
-1. Use `cd` to change into the app's directory
-1. Run `npm install` to install dependencies
-1. Rename `.env.local.example` to `.env.local` and update the values for `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-1. Run `npm run dev` to start the local development server
+1. Clone the Repo
+2. Configure Supabase:
+  - Install Docker Desktop
+  - Under Settings -> Advanced:
+    - System
+  - Allow the default Docker socket to be used
+3. supabase link
+4. supabase start
+4. Create .env. local in project root:
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+GOOGLE_SERVICE_ACCOUNT_JSON=
+OPENAI_API_KEY=
+INVITE_CODE=
+```
+5. Start the project: vercel dev
 
 > Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
 
