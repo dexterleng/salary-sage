@@ -38,7 +38,7 @@ export default function Login() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (window && (window as any).gtag) { (window as any).gtag('event', 'login') }
-    // (formRef.current as any).submit();
+    (formRef.current as any).submit();
   }
 
   return (
