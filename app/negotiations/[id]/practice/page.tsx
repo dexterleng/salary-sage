@@ -52,10 +52,13 @@ export default function Practice({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (hasPracticeStarted && responseUrl) {
       setIsInterviewerSpeaking(true);
+
       setTimeout(() => {
         const audioElement = document.getElementById('interviewer-audio') as HTMLAudioElement;
         if (audioElement) {
           audioElement.play();
+        } else {
+          setIsInterviewerSpeaking(false);
         }
       }, 1000);
     }
@@ -156,7 +159,7 @@ export default function Practice({ params }: { params: { id: string } }) {
             <CardContent>
               <div className="px-2 pb-4">
                 <div className="bg-secondary w-full h-80">
-                  <div className="flex flex-col items-center justify-center h-[calc(50vh-80px)]">
+                  <div className="flex flex-col items-center justify-center h-[calc(100%)]">
                     {
                       isProcessing
                         ? 'Waiting for your interviewer to reply...'
@@ -179,6 +182,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                             id="interviewer-audio"
                             onPlay={() => setIsInterviewerSpeaking(true)}
                             onPause={() => setIsInterviewerSpeaking(false)}
+                            onError={() => setIsInterviewerSpeaking(false)}
                             onEnded={() => showAlertIfPracticeEnded()}
                             src={responseUrl}
                             className={`fill-black ${isRecording || isUserAudioPlaying ? 'pointer-events-none opacity-50' : ''}`}
@@ -203,7 +207,7 @@ export default function Practice({ params }: { params: { id: string } }) {
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="relative flex flex-col items-center justify-center h-[calc(50vh-80px)]">
+            <CardContent className="relative flex flex-col items-center justify-center h-80">
               <div className="px-2 pb-6">
                 <AudioRecorder
                   isRecording={isRecording}

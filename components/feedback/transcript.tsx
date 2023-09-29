@@ -1,15 +1,12 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { TypographyBody, TypographyH4, TypographySmall } from "../ui/typography";
+import { TypographyBody, TypographySmall } from "../ui/typography";
 import Fuse from 'fuse.js'
 import { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
 
 type TranscriptProps = {
-  position: string;
-  company: string;
-  tags: string[];
   transcript: TranscriptLine[];
   citation: string;
 }
@@ -21,10 +18,10 @@ type TranscriptLine = {
   timestamp?: string;
 }
 
-export default function Transcript({ position, company, tags, transcript, citation }: TranscriptProps) {
+export default function Transcript({ transcript, citation }: TranscriptProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectedElementRef = useRef<HTMLDivElement>(null);
-  const fuse = new Fuse(transcript, { keys: ['message'], ignoreLocation: true, threshold: 0.0, shouldSort: false });
+  const fuse = new Fuse(transcript, { keys: ['message'], ignoreLocation: true, ignoreFieldNorm: true, threshold: 0.0, shouldSort: false });
 
   const [searchedLine, setSearchedLine] = useState<string>('');
   const [foundResult, setFoundResult] = useState<string>('');
@@ -69,37 +66,24 @@ export default function Transcript({ position, company, tags, transcript, citati
 
   return (
     <div>
-      <div>
-        <TypographyH4>{position}</TypographyH4>
-        <TypographyBody>{company}</TypographyBody>
+      <div className="flex gap-2 pb-2">
+        <Input placeholder="Search transcript..." onChange={(e) => setSearchedLine(e.target.value)} ref={inputRef} />
+        <Button variant="outline">Search</Button>
       </div>
-      <div className="flex gap-2 py-4">
-        {tags.map(style =>
-          <Button variant={"secondary"} className="pointer-events-none shadow-none" key={style}>
-            {style}
-          </Button>
-        )}
-      </div>
-      <div>
-        <div className="flex gap-2 mt-6">
-          <Input placeholder="Search transcript..." onChange={(e) => setSearchedLine(e.target.value)} ref={inputRef} />
-          <Button variant="outline">Search</Button>
-        </div>
-        <div className="flex flex-col gap-2 mt-4 overflow-y-auto max-h-[80vh]">
-          {transcript?.length > 0
-            ? transcript.map((line) =>
-              <div className={`p-2 rounded-md ${foundResult == line.message ? "bg-secondary/50 duration-150" : ""}`}
-                key={line.message} ref={foundResult === line.message ? selectedElementRef : null}>
-                <TypographyBody className="text-accent">{line.timestamp}</TypographyBody>
-                <TypographySmall>{line.message}</TypographySmall>
-              </div>
-            )
-            : <Skeleton
-              count={20}
-              containerClassName="skeleton flex flex-col mt-4"
-              className="block flex-1"
-            />}
-        </div>
+      <div className="flex flex-col gap-2 mt-4 overflow-y-auto max-h-screen pr-2">
+        {transcript?.length > 0
+          ? transcript.map((line) =>
+            <div className={`p-2 rounded-md ${foundResult == line.message ? "bg-secondary/50 duration-150" : ""}`}
+              key={line.message} ref={foundResult === line.message ? selectedElementRef : null}>
+              <TypographyBody className="text-accent">{line.timestamp}</TypographyBody>
+              <TypographySmall>{line.message}</TypographySmall>
+            </div>
+          )
+          : <Skeleton
+            count={20}
+            containerClassName="skeleton flex flex-col mt-4"
+            className="block flex-1"
+          />}
       </div>
     </div>
   );

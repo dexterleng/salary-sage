@@ -176,6 +176,7 @@ export default function NewNegotiationForm({ userData }: { userData: any }) {
                           role="combobox"
                           className={cn(
                             "justify-between",
+                            "hover:bg-transparent hover:text-text",
                             !field.value && "text-muted-foreground"
                           )}
                         >
