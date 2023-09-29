@@ -11,7 +11,7 @@ It is built with Next.js, Supabase, and Tailwind CSS.
 | Name | Matric Number | Github | Contributions |
 | ---- | ------------- | ------ | ---- |
 | Charisma Kausar | A0226593X | @ckcherry23 | Frontend + UI/UX |
-| Dexter Leng | A0 | @ | Fullstack |
+| Dexter Leng | A0273293Y | @dexterleng | Fullstack |
 | Sherwin | A0 | @ | Prompt Engineering + Backend |
 | Quan Teng Foong | A0 | @ | Backend |
 
