@@ -159,7 +159,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
               <CardContent>
                 <div className="pb-6 px-2">
                   {positiveFeedbacks?.length > 0 || !isLoading
-                    ? positiveFeedbacks.map(feedback =>
+                    ? positiveFeedbacks?.map(feedback =>
                       <Accordion type="single" collapsible key={feedback.evaluation}>
                         <AccordionItem value="item-1">
                           <AccordionTrigger>
@@ -200,7 +200,7 @@ export default function Feedback({ params }: { params: { id: string } }) {
               <CardContent>
                 <div className="pb-6 px-2">
                   {negativeFeedbacks?.length > 0 || !isLoading
-                    ? negativeFeedbacks.map(feedback =>
+                    ? negativeFeedbacks?.map(feedback =>
                       <Accordion type="single" collapsible key={feedback.evaluation}>
                         <AccordionItem value="item-1">
                           <AccordionTrigger>
@@ -218,11 +218,14 @@ export default function Feedback({ params }: { params: { id: string } }) {
                               <Button variant="link" className="-ml-3 text-left" onClick={() => setSearchedCitation(feedback.citation)}>
                                 <p className="line-clamp-2">"{feedback.citation}"</p>
                               </Button>
-                              <br />
-                              <br />
-                              <i>Suggestion:</i>
-                              <br />
-                              <p>"{feedback.suggestion}"</p>
+                              {feedback.citation &&
+                                (<div>
+                                  <br />
+                                  <br />
+                                  <i>Suggestion:</i>
+                                  <br />
+                                  <p>"{feedback.suggestion}"</p>
+                                </div>)}
                             </TypographySubtle>
                           </AccordionContent>
                         </AccordionItem>
