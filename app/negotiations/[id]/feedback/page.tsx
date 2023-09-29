@@ -256,7 +256,6 @@ export default function Feedback({ params }: { params: { id: string } }) {
         </div>
         <div className="flex gap-4 mt-12">
           <Link href="/dashboard"><Button className="w-fit" size="lg">Return to Dashboard</Button></Link>
-          <Link href="/dashboard"><Button className="w-fit" variant="secondary" size="lg">Practice Again</Button></Link>
         </div>
       </div>
     </div>

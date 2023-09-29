@@ -244,17 +244,26 @@ export default async function Dashboard() {
         {negotiations && negotiations.length > 0 ? (
           <div className="grid gap-4 md:grid-cols-2">
             {negotiations.map((negotiation) => {
+              let textColor = "";
+              let borderColor = "";
+              let bgColor = ""
               let difficulty = "";
-              let difficultyColor = "";
+
               if (negotiation.difficulty <= 3) {
                 difficulty = "Easy";
-                difficultyColor = "emerald";
+                textColor = "text-emerald-700";
+                borderColor = "border-emerald-400";
+                bgColor = "bg-emerald-50";
               } else if (negotiation.difficulty <= 5) {
                 difficulty = "Medium";
-                difficultyColor = "orange";
+                textColor = "text-orange-700";
+                borderColor = "border-orange-400";
+                bgColor = "bg-orange-50";
               } else {
                 difficulty = "Hard";
-                difficultyColor = "red";
+                textColor = "text-red-700";
+                borderColor = "border-red-400";
+                bgColor = "bg-red-50";
               }
 
               return (
@@ -276,10 +285,10 @@ export default async function Dashboard() {
                       </CardHeader>
                       <CardContent>
                         <div
-                          className={`flex space-x-1 text-xs text-${difficultyColor}-700`}
+                          className={`flex space-x-1 text-xs ${textColor}`}
                         >
                           <div
-                            className={`px-2 py-0.5 bg-${difficultyColor}-50 border-${difficultyColor}-400 border rounded-md`}
+                            className={`px-2 py-0.5 ${bgColor} ${borderColor} border rounded-md`}
                           >
                             {difficulty}
                           </div>
@@ -289,22 +298,6 @@ export default async function Dashboard() {
                           {formatRelativeDate(new Date())}
                         </div>
                       </CardContent>
-                    </div>
-                    <div className="p-6">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-                          >
-                            <DotsHorizontalIcon className="h-4 w-4" />
-                            <span className="sr-only">Open menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[160px]">
-                          <DropdownMenuItem>Practice again</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
                     </div>
                   </Card>
                 </Link>

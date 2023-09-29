@@ -2,6 +2,8 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+const INVITE_CODE = process.env.INVITE_CODE;
+
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
@@ -14,7 +16,7 @@ export async function POST(request: Request) {
   const inviteCode = String(formData.get('inviteCode'))
   const supabase = createRouteHandlerClient({ cookies })
 
-  if (inviteCode !== "CS3216") {
+  if (inviteCode !== INVITE_CODE) {
     return NextResponse.redirect(
       `${requestUrl.origin}/sign-up?error=Invalid invite code`,
       { status: 301 }
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
   if (error || !data || !data.user) {
     console.log(error)
     return NextResponse.redirect(
-      `${requestUrl.origin}/sign-up?error=${error?.message ?? "Could not authenticate user"}`,
+    `${requestUrl.origin}/sign-up?error=${error?.message ?? "Could not authenticate user"}`,
       {
         // a 301 status is required to redirect from a POST to a GET route
         status: 301,
