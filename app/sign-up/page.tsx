@@ -39,7 +39,6 @@ export default function SignUp() {
   const formRef = useRef(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    (window as any).gtag('event', 'sign-up')
     (formRef.current as any).submit();
   }
 
