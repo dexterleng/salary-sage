@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   if (error || !data || !data.user) {
     console.log(error)
     return NextResponse.redirect(
-      `${requestUrl.origin}/sign-up?error=Could not authenticate user`,
+      `${requestUrl.origin}/sign-up?error=${error?.message ?? "Could not authenticate user"}`,
       {
         // a 301 status is required to redirect from a POST to a GET route
         status: 301,
